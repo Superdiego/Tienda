@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS Tienda;
+CREATE DATABASE IF NOT EXISTS tienda;
 USE Tienda;
 CREATE TABLE IF NOT EXISTS usuarios (
 id_usr INT PRIMARY KEY AUTO_INCREMENT,
@@ -34,9 +34,31 @@ nom_art CHAR(50),
 sub_art INT(6) REFERENCES subcategorias(id_sub),
 cat_art INT REFERENCES categorias(id_cat),
 des_art CHAR(100),
-pre_art NUM(4,2),
+pre_art NUMERIC(4,2),
 act_art CHAR(1),
-sto_art INT(6),
+sto_art INT(6)
 );
-CREATE TABLE pedidos (
+CREATE TABLE IF NOT EXISTS pedidos (
+id_ped INT PRIMARY KEY AUTO_INCREMENT,
+usr_ped INT REFERENCES usuarios(id_usr),
+fec_ped DATE
 );
+CREATE TABLE IF NOT EXISTS lineas (
+ped_lin INT REFERENCES pedidos(id_ped),
+id_lin INT(3),
+art_lin INT REFERENCES articulos(id_art),
+can_lin INT(3)
+);
+CREATE TABLE almacen (
+id_alm INT PRIMARY KEY AUTO_INCREMENT,
+art_alm INT REFERENCES articulos(id_art),
+can_alm INT(6)
+);
+INSERT INTO roles (nom_rol)
+VALUES
+("invitado"),
+("cliente"),
+("empleado"),
+("administrador");
+
+
