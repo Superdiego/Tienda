@@ -1,0 +1,42 @@
+CREATE DATABASE IF NOT EXISTS Tienda;
+USE Tienda;
+CREATE TABLE IF NOT EXISTS usuarios (
+id_usr INT PRIMARY KEY AUTO_INCREMENT,
+rol_usr INT REFERENCES roles(id_rol),
+nic_usr CHAR(25),
+nom_usr CHAR(50),
+ape_usr CHAR(50),
+dir_usr CHAR(100),
+loc_usr CHAR(50),
+pro_usr CHAR(50),
+ema_usr CHAR(30),
+tel_usr CHAR(12),
+pas_usr CHAR(10),
+act_usr CHAR(1)
+);
+CREATE TABLE IF NOT EXISTS roles (
+id_rol INT PRIMARY KEY AUTO_INCREMENT,
+nom_rol CHAR(15)
+);
+CREATE TABLE IF NOT EXISTS categorias (
+id_cat INT PRIMARY KEY AUTO_INCREMENT,
+nom_cat CHAR(50)
+);
+CREATE TABLE IF NOT EXISTS subcategorias (
+id_sub INT(6),
+rol_sub INT REFERENCES categorias(id_cat),
+nom_sub CHAR(50),
+PRIMARY KEY(id_sub,rol_sub)
+);
+CREATE TABLE IF NOT EXISTS articulos (
+id_art INT PRIMARY KEY AUTO_INCREMENT,
+nom_art CHAR(50),
+sub_art INT(6) REFERENCES subcategorias(id_sub),
+cat_art INT REFERENCES categorias(id_cat),
+des_art CHAR(100),
+pre_art NUM(4,2),
+act_art CHAR(1),
+sto_art INT(6),
+);
+CREATE TABLE pedidos (
+);
