@@ -49,11 +49,13 @@ id_lin INT(3),
 art_lin INT REFERENCES articulos(id_art),
 can_lin INT(3)
 );
-CREATE TABLE almacen (
+CREATE TABLE IF NOT EXISTS almacen (
 id_alm INT PRIMARY KEY AUTO_INCREMENT,
 art_alm INT REFERENCES articulos(id_art),
 can_alm INT(6)
 );
+CREATE TABLE IF NOT EXISTS registros(
+
 INSERT INTO roles (nom_rol)
 VALUES
 ("invitado"),
