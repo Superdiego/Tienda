@@ -55,6 +55,10 @@ art_alm INT REFERENCES articulos(id_art),
 can_alm INT(6)
 );
 CREATE TABLE IF NOT EXISTS registros(
+id_reg INT PRIMARY KEY AUTO_INCREMENT,
+usr_reg INT REFERENCES usuarios(id_usr),
+tex_reg CHAR(100)
+);
 
 INSERT INTO roles (nom_rol)
 VALUES
