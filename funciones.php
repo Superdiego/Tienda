@@ -37,7 +37,7 @@ function registrar_categoria($nom){
     try{
         $fila = $insert->execute(array(':nom'=>$nom));
         if($fila==1){
-            echo "<br>Registro completado correctamente";
+            echo '<br><span class="correcto">Registro completado correctamente</span>';
         }
     }catch(PDOException $e){
         echo "<br>Nombre de la categoría utilizado anteriormente";

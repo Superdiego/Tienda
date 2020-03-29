@@ -1,34 +1,35 @@
-<?php
-
-include("funciones.php");
-include("validaciones.php");
-
-
-$nombre = (isset ($_POST['nombre'])) ? $_POST['nombre'] : '';
-
-
-?>
-
 <!DOCTYPE html>
+
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="estilo.css">
 </head>
 <body>
-<h1>ALTA DE CATEGORIAS</h1>
-<br><br>
-<form method="POST" action="registroCategorias.php">
-Nombre nueva categoria: <input type="text" name="nombre" value="<?php echo $nombre?>">
-<br><br>
-<input type="submit" value="Insertar nueva categoria">
-</form>
-<?php 
-if($_SERVER['REQUEST_METHOD']=='POST'){
+<?php
+include ("funciones.php");
+include ("validaciones.php");
 
-    if(val_texto($nombre)){
-        registrar_categoria($nombre);   
+$nombre = (isset($_POST['nombre'])) ? $_POST['nombre'] : '';
+$res_nom = "";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (val_texto($nombre)) {
+        registrar_categoria($nombre);
+    } else {
+        $res_nom = "<span class='error'>Introduzca un nombre valido</span>";
     }
 }
 ?>
-
+<h1>ALTA DE CATEGORIAS</h1>
+	<br>
+	<br>
+	<form method="POST" action="registroCategorias.php">
+		Nombre nueva categoria: <input type="text" name="nombre"
+			value="<?php echo $nombre?>"><?php echo $res_nom ?>
+		<br><br>
+		<input type="submit" value="Insertar nueva categoria">
+	</form>
+	<br><br>
+	<a href="index.php">Volver a pagina principal</a>
 </body>
 </html>
