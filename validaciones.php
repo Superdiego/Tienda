@@ -1,5 +1,11 @@
 <?php
-
+function val_dni($dni){
+    if(preg_match("/^[0-9]{8}[a-zA-Z]$/",$dni)){
+        return true;
+    }else{
+        return false;
+    }
+}
 function val_texto($texto){
     if(preg_match("/^[a-zA-Z]+.*$/",trim($texto))){
         return true;

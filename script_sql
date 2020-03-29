@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS tienda;
 USE Tienda;
 CREATE TABLE IF NOT EXISTS usuarios (
 id_usr INT PRIMARY KEY AUTO_INCREMENT,
+dni_usr CHAR(9) UNIQUE,
 rol_usr INT REFERENCES roles(id_rol),
 nic_usr CHAR(25),
 nom_usr CHAR(50),
@@ -20,7 +21,7 @@ nom_rol CHAR(15)
 );
 CREATE TABLE IF NOT EXISTS categorias (
 id_cat INT PRIMARY KEY AUTO_INCREMENT,
-nom_cat CHAR(50)
+nom_cat CHAR(50) UNIQUE
 );
 CREATE TABLE IF NOT EXISTS subcategorias (
 id_sub INT(6),
