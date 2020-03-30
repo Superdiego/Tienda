@@ -35,13 +35,28 @@ function registrar_categoria($nom){
     $codigo = "INSERT INTO categorias (nom_cat) VALUES (:nom);";
     $insert = $conex->prepare($codigo);
     try{
-        $fila = $insert->execute(array(':nom'=>$nom));
+    $fila = $insert->execute(array(':nom'=>$nom));
         if($fila==1){
             echo '<br><span class="correcto">Registro completado correctamente</span>';
         }
     }catch(PDOException $e){
-        echo "<br>Nombre de la categoría utilizado anteriormente";
+        echo "<br>Nombre de la categoría utilizado anteriormente";     
     }
 }
+
+function leer_categoria($cat){
+        $conex = conectar();
+        $codigo = "SELECT nom_cat FROM categorias WHERE id_cat= :cat ";
+        $consulta = $conex->prepare($codigo);
+        $consulta->bindParam(':cat', $cat, PDO::PARAM_INT);
+        $consulta->execute();
+        $nombre = $consulta->fetch();
+        if ($nombre[0] != '' && $nombre[0]!=null){
+                return "<span class='correcto'>$nombre[0]</span>";
+        }else{
+            return "<span class='error'>No existe esa categoria</span>";
+        }    
+}
+
 
 ?>

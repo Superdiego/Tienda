@@ -15,6 +15,8 @@ include("funciones.php");
 <a href="registroClientes.php">Nuevo cliente</a>
 <br><br>
 <a href="registroCategorias.php">Nueva categoria</a>
+<br><br>
+<a href="registroSubcategorias.php">Nueva subcategoria</a>
 
 </body>
 
