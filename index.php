@@ -17,6 +17,8 @@ include("funciones.php");
 <a href="registroCategorias.php">Nueva categoria</a>
 <br><br>
 <a href="registroSubcategorias.php">Nueva subcategoria</a>
+<br><br>
+<a href="registroArticulos.php">Nuevo articulo</a>
 
 </body>
 

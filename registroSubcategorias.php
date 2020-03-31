@@ -45,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	<form method="POST" action="registroSubcategorias.php">
 		<?php echo $mensaje;
 		if (val_texto($res_cat)){
-		    echo '<br>Introduzca el nombre de la nueva subcategoria:
+		    echo '<br>Nueva subcategoria dentro de '. $res_cat . '::
                 <input type="text" name="subcate"><br>
-                <input type="hidden" name="idcate" value="' . $idcate . '">
+                <input type="hidden" name="idcate" readonly value="' . $idcate . '">
                 <input type="submit" value="Registrar subcategoria"><br>';
 		}?>
     </form>

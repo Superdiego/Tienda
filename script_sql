@@ -13,7 +13,7 @@ pro_usr CHAR(50),
 ema_usr CHAR(30),
 tel_usr CHAR(12),
 pas_usr CHAR(10),
-act_usr CHAR(1)
+act_usr BOOLEAN
 );
 CREATE TABLE IF NOT EXISTS roles (
 id_rol INT PRIMARY KEY AUTO_INCREMENT,
@@ -36,7 +36,7 @@ sub_art INT(6) REFERENCES subcategorias(id_sub),
 cat_art INT REFERENCES categorias(id_cat),
 des_art CHAR(100),
 pre_art NUMERIC(4,2),
-act_art CHAR(1),
+act_art BOOLEAN,
 sto_art INT(6)
 );
 CREATE TABLE IF NOT EXISTS pedidos (

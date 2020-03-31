@@ -52,10 +52,24 @@ function leer_categoria($cat){
         $consulta->execute();
         $nombre = $consulta->fetch();
         if (isset($nombre[0]) && $nombre[0] != ''){
-                return $nombre[0]; //"<span class='correcto'>$nombre[0]</span>";
+                return $nombre[0];
         }else{
-            return null; //"<span class='error'>No existe ninguna categoria con el id numero $cat";
+            return null;
         }
+}
+
+function leer_subcategoria($sub){
+    $conex = conectar();
+    $codigo = "SELECT nom_sub FROM subcategorias WHERE id_sub= :sub ";
+    $consulta = $conex->prepare($codigo);
+    $consulta->bindParam(':sub', $sub, PDO::PARAM_INT);
+    $consulta->execute();
+    $nombre = $consulta->fetch();
+    if (isset($nombre[0]) && $nombre[0] != ''){
+        return $nombre[0];
+    }else{
+        return null;
+    }
 }
 
 function registrar_subcategoria($cat,$nom){
@@ -69,6 +83,23 @@ function registrar_subcategoria($cat,$nom){
         }
     }catch(PDOException $e){
         echo "<br>Nombre de la subcategoría utilizado anteriormente";
+    }
+}
+
+function registrar_articulos($nom,$sub,$cat,$des,$pre){
+    $conex = conectar();
+    $codigo = "INSERT INTO articulos (nom_art,sub_art,cat_art,des_art,pre_art,act_art,sto_art)
+               VALUES (:nom,:sub,:cat,:des,:pre,:act,:sto);";
+    $insert = $conex->prepare($codigo);
+    try{
+        $fila = $insert->execute(array(':nom'=>$nom,':sub'=>$sub,':cat'=>$cat,':des'=>$des,
+            ':pre'=>$pre,':act'=>'0',':sto'=>'0'));
+        
+        if($fila==1){
+            echo '<br><span class="correcto">Registro completado correctamente</span>';
+        }
+    }catch(PDOException $e){
+        echo "<br><span class='error'>Error en el registro</span>";
     }
 }
 
