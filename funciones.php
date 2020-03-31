@@ -51,12 +51,25 @@ function leer_categoria($cat){
         $consulta->bindParam(':cat', $cat, PDO::PARAM_INT);
         $consulta->execute();
         $nombre = $consulta->fetch();
-        if ($nombre[0] != '' && $nombre[0]!=null){
-                return "<span class='correcto'>$nombre[0]</span>";
+        if (isset($nombre[0]) && $nombre[0] != ''){
+                return $nombre[0]; //"<span class='correcto'>$nombre[0]</span>";
         }else{
-            return "<span class='error'>No existe esa categoria</span>";
-        }    
+            return null; //"<span class='error'>No existe ninguna categoria con el id numero $cat";
+        }
 }
 
+function registrar_subcategoria($cat,$nom){
+    $conex = conectar();
+    $codigo = "INSERT INTO subcategorias(cat_sub, nom_sub) VALUES (:cat,:nom);";
+    $insert = $conex->prepare($codigo);
+    try{
+        $fila = $insert->execute(array(':cat'=>$cat,':nom'=>$nom));
+        if($fila==1){
+            echo '<br><span class="correcto">Registro completado correctamente</span>';
+        }
+    }catch(PDOException $e){
+        echo "<br>Nombre de la subcategoría utilizado anteriormente";
+    }
+}
 
 ?>

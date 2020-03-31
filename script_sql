@@ -24,10 +24,10 @@ id_cat INT PRIMARY KEY AUTO_INCREMENT,
 nom_cat CHAR(50) UNIQUE
 );
 CREATE TABLE IF NOT EXISTS subcategorias (
-id_sub INT(6),
-rol_sub INT REFERENCES categorias(id_cat),
-nom_sub CHAR(50),
-PRIMARY KEY(id_sub,rol_sub)
+id_sub INT(6) AUTO_INCREMENT,
+cat_sub INT REFERENCES categorias(id_cat),
+nom_sub CHAR(50) UNIQUE,
+PRIMARY KEY(id_sub,cat_sub)
 );
 CREATE TABLE IF NOT EXISTS articulos (
 id_art INT PRIMARY KEY AUTO_INCREMENT,
