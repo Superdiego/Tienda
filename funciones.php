@@ -51,11 +51,12 @@ function leer_categoria($cat){
         $consulta->bindParam(':cat', $cat, PDO::PARAM_INT);
         $consulta->execute();
         $nombre = $consulta->fetch();
+        if($nombre==1){
         if ($nombre[0] != '' && $nombre[0]!=null){
                 return "<span class='correcto'>$nombre[0]</span>";
         }else{
             return "<span class='error'>No existe esa categoria</span>";
-        }    
+        }}
 }
 
 
