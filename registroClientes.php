@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="estilo.css">
-</head>
-<body>
 <?php
+$nom_pag="Alta Clientes";
+include ("cabecera.php");
 
 include("validaciones.php");
 include("funciones.php");

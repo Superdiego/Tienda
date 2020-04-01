@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="estilo.css">
-</head>
-<body>
+<?php
+$nom_pag="Alta Subcabeceras";
+include("cabecera.php");
+?>
 <?php
 include ("funciones.php");
 include ("validaciones.php");
@@ -32,9 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 }
 ?>
-<h1>ALTA DE SUBCATEGORIAS</h1>
-	<br>
-	<br>
+
 	<form method="POST" action="registroSubcategorias.php">
 		Categoria a la que pertenece: 
 		<input type="number" name="idcate" value="<?php echo $idcate?>">

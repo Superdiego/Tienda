@@ -1,4 +1,5 @@
 <?php
+$nom_pag="Alta Clientes";
 include ("validaciones.php");
 
 $nick = (isset($_POST['nick'])) ? $_POST['nick'] : null;

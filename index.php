@@ -1,24 +1,28 @@
 <?php
-include("funciones.php");
-
+$nom_pag = "Inicio";
+include("cabecera.php")
 ?>
+	<div class="row">
+		<div class="col-sm-12 col-md-4"></div>
+		<div class="col-sm-12 col-md-2 text-center">
+			<a href="registroClientes.php">Nuevo cliente</a>
+		</div>
+		<div class="col-sm-12 col-md-2 text-center">
+			<a href="registroCategorias.php">Nueva categoria</a>
+		</div>
+		<div class="col-sm-12 col-md-2 text-center">
+			<a href="registroSubcategorias.php">Nueva subcategoria</a>
+		</div>
+		<div class="col-sm-12 col-md-2 text-center">
+			<a href="registroArticulos.php">Nuevo articulo</a>
+		</div>
+	</div>
 
-<!DOCTYPE html>
+	</div>
+	<br>
+	<br>
+	<br>
 
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="estilo.css">
-</head>
-<body>
-<h1>Bienvenid@s a la tienda de Diego</h1>
-<br><br><br><br>
-<a href="registroClientes.php">Nuevo cliente</a>
-<br><br>
-<a href="registroCategorias.php">Nueva categoria</a>
-<br><br>
-<a href="registroSubcategorias.php">Nueva subcategoria</a>
-<br><br>
-<a href="registroArticulos.php">Nuevo articulo</a>
 
 </body>
 
