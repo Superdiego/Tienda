@@ -14,6 +14,8 @@ function val_texto($texto){
     }
 }
 
+
+
 function val_telef($telef){
     if(preg_match("/^\d{9}$/",$telef)){
         return true;
