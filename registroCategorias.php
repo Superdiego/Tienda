@@ -1,8 +1,7 @@
 <?php
 $nom_pag="Alta Categorias";
 include("cabecera.php");
-?>
-<?php
+
 include ("funciones.php");
 include ("validaciones.php");
 
@@ -17,9 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-<h1>ALTA DE CATEGORIAS</h1>
-	<br>
-	<br>
+
 	<form method="POST" action="registroCategorias.php">
 		Nombre nueva categoria: <input type="text" name="nombre"
 			value="<?php echo $nombre?>"><?php echo $res_nom ?>

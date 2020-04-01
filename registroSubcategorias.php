@@ -1,8 +1,7 @@
 <?php
-$nom_pag="Alta Subcabeceras";
+$nom_pag="Alta Subcategorias";
 include("cabecera.php");
-?>
-<?php
+
 include ("funciones.php");
 include ("validaciones.php");
 

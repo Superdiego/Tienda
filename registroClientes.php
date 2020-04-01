@@ -1,6 +1,7 @@
 <?php
-$nom_pag="Alta Clientes";
+$nom_pag="Alta de Clientes";
 include ("cabecera.php");
+
 
 include("validaciones.php");
 include("funciones.php");
