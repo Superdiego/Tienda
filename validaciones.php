@@ -41,5 +41,4 @@ function val_pass($pass, $conf_pass){
 }
 
 
-
 ?>
