@@ -8,6 +8,7 @@ nic_usr CHAR(25),
 nom_usr CHAR(50),
 ape_usr CHAR(50),
 dir_usr CHAR(100),
+cop_usr INT (4),
 loc_usr CHAR(50),
 pro_usr CHAR(50),
 ema_usr CHAR(30),
@@ -67,5 +68,26 @@ VALUES
 ("cliente"),
 ("empleado"),
 ("administrador");
+
+INSERT INTO usuarios
+(dni_usr,rol_usr,nic_usr,nom_usr,ape_usr,dir_usr,loc_usr,pro_usr,ema_usr,tel_usr,pas_usr,act_usr)
+VALUES
+("12345678a",2,"Andy","Daniel","Diges","C/ La Alameda, 54","Pontevedra",
+"33200","dani@gmail.es","123456789","123",true),
+("98765432b",2,"Lucas","Lucas","Garcia", "C/ Olmo, 34","Lugo",
+"44100","lucas@hotmail.es","987654321","123",true);
+
+INSERT INTO categorias (nom_cat)
+VALUES
+("ordenadores"),
+("cafeteras");
+
+INSERT INTO subcategorias (cat_sub,nom_sub)
+VALUES
+(1,"torres"),
+(1,"portatiles"),
+(2,"clasicas"),
+(2,"express");
+
 
 
