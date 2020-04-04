@@ -149,4 +149,152 @@ function guardar_archivo($img)
     }
 }
 
+class articulo{
+    private $id_art;
+    private $nom_art;
+    private $sub_art;
+    private $cat_art;
+    private $des_art;
+    private $pre_art;
+    private $act_art;
+    private $sto_art;
+    /**
+     * @return mixed
+     */
+    public function getId_art()
+    {
+        return $this->id_art;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNom_art()
+    {
+        return $this->nom_art;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSub_art()
+    {
+        return $this->sub_art;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCat_art()
+    {
+        return $this->cat_art;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDes_art()
+    {
+        return $this->des_art;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPre_art()
+    {
+        return $this->pre_art;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAct_art()
+    {
+        return $this->act_art;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSto_art()
+    {
+        return $this->sto_art;
+    }
+
+    /**
+     * @param mixed $id_art
+     */
+    public function setId_art($id_art)
+    {
+        $this->id_art = $id_art;
+    }
+
+    /**
+     * @param mixed $nom_art
+     */
+    public function setNom_art($nom_art)
+    {
+        $this->nom_art = $nom_art;
+    }
+
+    /**
+     * @param mixed $sub_art
+     */
+    public function setSub_art($sub_art)
+    {
+        $this->sub_art = $sub_art;
+    }
+
+    /**
+     * @param mixed $cat_art
+     */
+    public function setCat_art($cat_art)
+    {
+        $this->cat_art = $cat_art;
+    }
+
+    /**
+     * @param mixed $des_art
+     */
+    public function setDes_art($des_art)
+    {
+        $this->des_art = $des_art;
+    }
+
+    /**
+     * @param mixed $pre_art
+     */
+    public function setPre_art($pre_art)
+    {
+        $this->pre_art = $pre_art;
+    }
+
+    /**
+     * @param mixed $act_art
+     */
+    public function setAct_art($act_art)
+    {
+        $this->act_art = $act_art;
+    }
+
+    /**
+     * @param mixed $sto_art
+     */
+    public function setSto_art($sto_art)
+    {
+        $this->sto_art = $sto_art;
+    }   
+}
+
+function mostrar_articulos(){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM articulos");
+    $consulta->execute();
+    $consulta->setFetchMode(PDO::FETCH_CLASS, 'articulos');
+    while($fila = $consulta->fetch()){
+        echo $fila->getNom_art() . " " . $fila->getPre_art();
+    }
+}
+
 ?>

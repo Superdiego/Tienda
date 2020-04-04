@@ -1,6 +1,7 @@
 <?php
 $nom_pag = "Inicio";
-include("cabecera.php")
+include("cabecera.php");
+include("funciones.php");
 ?>
 	<div class="row">
 		<div class="col-sm-12 col-md-4"></div>
@@ -18,9 +19,9 @@ include("cabecera.php")
 		</div>
 	</div>
 
-	</div>
 	<br>
 	<br>
+	<?php mostrar_articulos(); ?>
 	<br>
 
 
