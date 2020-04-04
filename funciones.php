@@ -149,7 +149,7 @@ function guardar_archivo($img)
     }
 }
 
-class articulo{
+class articulos{
     private $id_art;
     private $nom_art;
     private $sub_art;
@@ -293,8 +293,10 @@ function mostrar_articulos(){
     $consulta->execute();
     $consulta->setFetchMode(PDO::FETCH_CLASS, 'articulos');
     while($fila = $consulta->fetch()){
-        echo $fila->getNom_art() . " " . $fila->getPre_art();
+        echo '<img src="imgProductos/'.$fila->getId_art().'.jpg"><br>'. $fila->getNom_art() .
+                " " . $fila->getPre_art() . "<br>";
     }
 }
+
 
 ?>

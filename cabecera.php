@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <!-- Optional JavaScript -->
+	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
 		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -24,18 +24,27 @@
 		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
 		crossorigin="anonymous"></script>
 	<script src="bootstrap/bootstrap.js"></script>
+
 	<div class="container-fluid bg-primary">
-		<div class="container text-white py-5">
+		<div class="container text-white pt-5 pb-1">
 			<h1 class="display-4">Cachivaches</h1>
 			<p class="lead">Bienvenid@s a la tienda de Diego</p>
 		</div>
 	</div>
-	<div container>
-		<div class="row text-center">
-			<div class="col-sm-12 col-md-2"></div>
-			<div class="col-sm-12 col-md-8 py-5">
-				<h1><?php echo $nom_pag ?></h1>
+	<div class="container-fluid bg-primary">
+		<nav class="navbar navbar-expand-lg navbar-dark">
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarNav" aria-controls="navbarNav"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Nosotros</a></li>
+					<li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+				</ul>
 			</div>
-			<div class="col-sm-12 col-md-2"></div>
-		</div>
+		</nav>
 	</div>
