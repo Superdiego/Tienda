@@ -289,12 +289,13 @@ class articulos{
 
 function mostrar_articulos(){
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT * FROM articulos");
+    $consulta = $conex->prepare("SELECT * FROM articulos  ORDER BY id_art DESC");
     $consulta->execute();
     $consulta->setFetchMode(PDO::FETCH_CLASS, 'articulos');
     while($fila = $consulta->fetch()){
-        echo '<img src="imgProductos/'.$fila->getId_art().'.jpg"><br>'. $fila->getNom_art() .
-                " " . $fila->getPre_art() . "<br>";
+        echo '<div class="col-md-6 col-xl-4"><div><a href="detalleArticulo.php?art='.$fila->getId_art().'">
+                <img src="imgProductos/'.$fila->getId_art().'.jpg" width="100" height="100"></a></div><div>'. 
+                $fila->getNom_art() . ' ' . $fila->getPre_art().'</div></div>';
     }
 }
 
