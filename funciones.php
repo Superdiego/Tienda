@@ -299,5 +299,249 @@ function mostrar_articulos(){
     }
 }
 
+class usuarios{
+    private $id_usr;
+    private $dni_usr;
+    private $rol_usr;
+    private $nic_usr;
+    private $nom_usr;
+    private $ape_usr;
+    private $dir_usr;
+    private $cop_usr;
+    private $loc_usr;
+    private $pro_usr;
+    private $ema_usr;
+    private $tel_usr;
+    private $pas_usr;
+    private $act_usr;
+    /**
+     * @return mixed
+     */
+    public function getId_usr()
+    {
+        return $this->id_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDni_usr()
+    {
+        return $this->dni_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRol_usr()
+    {
+        return $this->rol_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNic_usr()
+    {
+        return $this->nic_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNom_usr()
+    {
+        return $this->nom_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApe_usr()
+    {
+        return $this->ape_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDir_usr()
+    {
+        return $this->dir_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCop_usr()
+    {
+        return $this->cop_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLoc_usr()
+    {
+        return $this->loc_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPro_usr()
+    {
+        return $this->pro_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEma_usr()
+    {
+        return $this->ema_usr;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTel_usr()
+    {
+        return $this->tel_usr;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getPas_usr()
+    {
+        return $this->pas_usr;
+    }
+
+    /**
+     * @param mixed $id_usr
+     */
+    public function setId_usr($id_usr)
+    {
+        $this->id_usr = $id_usr;
+    }
+
+    /**
+     * @param mixed $dni_usr
+     */
+    public function setDni_usr($dni_usr)
+    {
+        $this->dni_usr = $dni_usr;
+    }
+
+    /**
+     * @param mixed $rol_usr
+     */
+    public function setRol_usr($rol_usr)
+    {
+        $this->rol_usr = $rol_usr;
+    }
+
+    /**
+     * @param mixed $nic_usr
+     */
+    public function setNic_usr($nic_usr)
+    {
+        $this->nic_usr = $nic_usr;
+    }
+
+    /**
+     * @param mixed $nom_usr
+     */
+    public function setNom_usr($nom_usr)
+    {
+        $this->nom_usr = $nom_usr;
+    }
+
+    /**
+     * @param mixed $ape_usr
+     */
+    public function setApe_usr($ape_usr)
+    {
+        $this->ape_usr = $ape_usr;
+    }
+
+    /**
+     * @param mixed $dir_usr
+     */
+    public function setDir_usr($dir_usr)
+    {
+        $this->dir_usr = $dir_usr;
+    }
+
+    /**
+     * @param mixed $cop_usr
+     */
+    public function setCop_usr($cop_usr)
+    {
+        $this->cop_usr = $cop_usr;
+    }
+
+    /**
+     * @param mixed $loc_usr
+     */
+    public function setLoc_usr($loc_usr)
+    {
+        $this->loc_usr = $loc_usr;
+    }
+
+    /**
+     * @param mixed $pro_usr
+     */
+    public function setPro_usr($pro_usr)
+    {
+        $this->pro_usr = $pro_usr;
+    }
+
+    /**
+     * @param mixed $ema_usr
+     */
+    public function setEma_usr($ema_usr)
+    {
+        $this->ema_usr = $ema_usr;
+    }
+
+    /**
+     * @param mixed $tel_usr
+     */
+    public function setTel_usr($tel_usr)
+    {
+        $this->tel_usr = $tel_usr;
+    }
+
+
+    /**
+     * @param mixed $pas_usr
+     */
+    public function setPas_usr($pas_usr)
+    {
+        $this->pas_usr = $pas_usr;
+    }
+
+}
+
+
+
+function buscar_usuario($nombre,$password){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM usuarios WHERE nic_usr = :nic");
+    $consulta->execute(array(':nic'=>$nombre));
+    if($fila = $consulta->fetch()){
+        if($fila->getPas_usr()==$password){
+            return true;
+        }else{
+            echo "Password equivocado";
+        }
+    }else{
+        echo "No existe este usuario";
+    }
+}
+
 
 ?>
