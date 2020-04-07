@@ -534,7 +534,7 @@ function buscar_usuario($nombre,$password){
     $consulta->execute(array(':nic'=>$nombre));
     if($fila = $consulta->fetch()){
         if($fila->getPas_usr()==$password){
-            return true;
+            header("location:index_cliente.php");
         }else{
             echo "Password equivocado";
         }
