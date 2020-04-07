@@ -3,19 +3,22 @@ include_once("funciones.php");
 include_once("validaciones.php");
 include_once("control.php");
 
-$nombre_usr = (isset($_POST['usuario'])) ? $_POST['usuario'] : null;
-$pass_usr = (isset($_POST['password'])) ? $_POST['password'] : null;
+$nombre_usr = (isset($_GET['usr'])) ? $_GET['usr'] : null;
 $titulo = "Inicio sesion";
 
 if((isset($_GET['error']))) {
-    if($_GET['error'] == 1){
-        $titulo = "Debe introducir un nombre";
-    }else if($_GET['error'] == 2){
-        $titulo = "El password debe contener tres caracteres";
-    }else if($_GET['error'] == 3){
-        $titulo = "Password equivocado";
-    }else if($_GET['error'] == 4){
-        $titulo = "Usuario no registrado";
+    switch($_GET['error']){
+        case 1:
+            $titulo = "Debe introducir un nombre";
+            break;
+        case 2:
+            $titulo = "El password debe contener tres caracteres";
+            break;
+        case 3:
+            $titulo = "Password equivocado";
+            break;
+        case 4:
+            $titulo = "Usuario no registrado";
     }
 }
 ?>
