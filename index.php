@@ -5,6 +5,8 @@ include("cabecera.php");
 
 include("funciones.php");
 
+include("validaciones.php");
+
 ?>
 
 

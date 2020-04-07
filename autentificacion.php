@@ -1,34 +1,26 @@
-<!--
-<div class="py-2">
-<h3>Iniciar sesion</h3>
-<form action="control.php" method="POST">
-<table align="center" width="80%" cellspacing="2" cellpadding="2" border="0">
-<tr>
-<td colspan="2" class="text-left pl-2"
-<?php if (isset($_GET["errorusuario"]) && $_GET["errorusuario"]=="si"){
-echo 'bgcolor=red><span style="color:ffffff"><b>Datos incorrectos</b></span>';
-}else{
-    echo "bgcolor=#cccccc>Introduce usuario";
-}?></td>
-</tr>
-<tr>
-<td align="right">USER:</td>
-<td><input type="Text" name="usuario" size="8" maxlength="50"></td>
-</tr>
-<tr>
-<td align="right">PASSWD:</td>
-<td><input type="password" name="contrasena" size="8" maxlength="50"></td>
-</tr>
-<tr>
-<td colspan="2" align="center"><input type="Submit" value="ENTRAR"></td>
-</tr>
-</table>
-</form>
-</div>
--->
+<?php
+include_once("funciones.php");
+include_once("validaciones.php");
+
+$nombre_usr = (isset($_POST['usuario'])) ? $_POST['usuario'] : null;
+$pass_usr = (isset($_POST['password'])) ? $_POST['password'] : null;
+$texorr = null;
+
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if(!val_text($nombre_usr)){
+        $texorr = "Debe introducir un nombre";
+    }else if(!val_pass){
+        $texorr = "El password debe contener cuatro caracteres";
+    }else{
+        buscar_usuario($nombre_usr, $pass_usr);
+    }
+}
+
+?>
 <h5>Inicio sesion</h5>
-<form type="POST" action="control_usr">	
+<form type="POST" action="index.php">	
   <div class="form-group">
+  <p><?php echo $nombre_usr?></p>
     <label for="usuario">Usuario</label>
     <input type="text" class="form-control" name="usuario">
   </div>
