@@ -32,8 +32,8 @@ function val_correo($correo){
     }
 }
 
-function val_pass($pass, $conf_pass){
-    if(trim($pass)!='' && $pass!=null && $pass == $conf_pass){
+function val_pass($pass){
+    if(preg_match("/^.{4}$/",$pass)){
         return true;
     }else{
         return false;
