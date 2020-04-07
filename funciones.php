@@ -1,5 +1,4 @@
 <?php
-
 function conectar()
 {
     try {
@@ -10,7 +9,6 @@ function conectar()
         echo $e->getMessage();
     }
 }
-
 function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $pas)
 {
     $conex = conectar();
@@ -33,7 +31,6 @@ function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel
             ':pas' => $pas,
             ':act' => 1
         ));
-
         if ($fila == 1) {
             echo "<br>Registro completado";
         }
@@ -41,7 +38,6 @@ function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel
         echo "<br><span class='error'>Este DNI ya esta registrado</span>";
     }
 }
-
 function registrar_categoria($nom)
 {
     $conex = conectar();
@@ -58,7 +54,6 @@ function registrar_categoria($nom)
         echo "<br>Nombre de la categoría utilizado anteriormente";
     }
 }
-
 function leer_categoria($cat)
 {
     $conex = conectar();
@@ -74,7 +69,6 @@ function leer_categoria($cat)
         return null;
     }
 }
-
 function leer_subcategoria($sub)
 {
     $conex = conectar();
@@ -89,7 +83,6 @@ function leer_subcategoria($sub)
         return null;
     }
 }
-
 function registrar_subcategoria($cat, $nom)
 {
     $conex = conectar();
@@ -107,7 +100,6 @@ function registrar_subcategoria($cat, $nom)
         echo "<br>Nombre de la subcategoría utilizado anteriormente";
     }
 }
-
 function registrar_articulos($nom, $sub, $cat, $des, $pre)
 {
     $conex = conectar();
@@ -132,7 +124,6 @@ function registrar_articulos($nom, $sub, $cat, $des, $pre)
         echo "<br><span class='error'>Error en el registro</span>";
     }
 }
-
 function guardar_archivo($img)
 {
     $temporal = $_FILES[$img]["tmp_name"];
@@ -148,7 +139,6 @@ function guardar_archivo($img)
         echo "La imagen no tiene las medidas o el formato correcto";
     }
 }
-
 class articulos{
     private $id_art;
     private $nom_art;
@@ -286,7 +276,6 @@ class articulos{
         $this->sto_art = $sto_art;
     }   
 }
-
 function mostrar_articulos(){
     $conex = conectar();
     $consulta = $conex->prepare("SELECT * FROM articulos  ORDER BY id_art DESC");
@@ -298,7 +287,6 @@ function mostrar_articulos(){
                 $fila->getNom_art() . ' ' . $fila->getPre_art().'</div></div>';
     }
 }
-
 class usuarios{
     private $id_usr;
     private $dni_usr;
@@ -525,9 +513,6 @@ class usuarios{
     }
 
 }
-
-
-
 function buscar_usuario($nombre,$password){
     $conex = conectar();
     $consulta = $conex->prepare("SELECT * FROM usuarios WHERE nic_usr = :nic");
@@ -535,14 +520,12 @@ function buscar_usuario($nombre,$password){
     $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
     if($fila = $consulta->fetch()){
         if($fila->getPas_usr()==$password){
-            header("location:index_cliente.php");
+            return 0;
         }else{
-            return "Password equivocado";
+            return 1;
         }
     }else{
-        return "No existe este usuario";
+        return 2;
     }
 }
-
-
 ?>
