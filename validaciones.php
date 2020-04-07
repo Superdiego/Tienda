@@ -33,7 +33,7 @@ function val_correo($correo){
 }
 
 function val_pass($pass){
-    if(preg_match("/^.{4}$/",$pass)){
+    if(preg_match("/^.{3}$/",$pass)){
         return true;
     }else{
         return false;

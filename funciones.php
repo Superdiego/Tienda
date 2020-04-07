@@ -532,14 +532,15 @@ function buscar_usuario($nombre,$password){
     $conex = conectar();
     $consulta = $conex->prepare("SELECT * FROM usuarios WHERE nic_usr = :nic");
     $consulta->execute(array(':nic'=>$nombre));
+    $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
     if($fila = $consulta->fetch()){
         if($fila->getPas_usr()==$password){
             header("location:index_cliente.php");
         }else{
-            echo "Password equivocado";
+            return "Password equivocado";
         }
     }else{
-        echo "No existe este usuario";
+        return "No existe este usuario";
     }
 }
 

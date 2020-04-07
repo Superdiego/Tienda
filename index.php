@@ -1,20 +1,12 @@
 <?php
+
+include_once("funciones.php");
+include_once("validaciones.php");
 $nom_pag = "Inicio";
+include_once("cabecera.php");
 
-include("cabecera.php");
-
-include("funciones.php");
-
-include("validaciones.php");
-
+mostrar_articulos();
 ?>
-
-
-	
-
-					<?php 
-					mostrar_articulos();
-					?>
 			</div>
 			</div>
 			<div class="col-sm-12 col-md-2">

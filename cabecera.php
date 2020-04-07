@@ -1,3 +1,9 @@
+<?php
+include_once("funciones.php");
+
+include_once("cabecera.php");
+
+include_once("validaciones.php");?>
 <!doctype html>
 <html lang="en">
 <head>
