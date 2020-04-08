@@ -7,7 +7,7 @@ $titulo = "Inicio sesion";
 if((isset($_POST['usuario']))) {
     if(!val_texto($nombre_usr)){
         header("location:index.php?error=1"); //$titulo = "Debe introducir un nombre";
-    }else if(!val_pass($pass_usr)){
+    }else if(!val_pass($pass_usr,$pass_usr)){
         header("location:index.php?error=2&usr=$nombre_usr"); //$titulo = "El password debe contener tres caracteres";
     }else{
         switch(buscar_usuario($nombre_usr, $pass_usr)){

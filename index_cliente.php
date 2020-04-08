@@ -12,7 +12,7 @@ mostrar_articulos();
 </div>
 			</div>
 			<div class="col-sm-12 col-md-2">
-			<a href="edicion_cliente.php">Editar perfil</a>
+			<a href="edicion_cliente.php?nom=<?php echo $_SESSION['autenticado']?>">Editar perfil</a>
 			</div>
 		</div>
 	</div>

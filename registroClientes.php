@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<form method="post" action=""registroClientes.php">
+<form method="post" action="registroClientes.php">
 Nick: <input type="text" name="nick" value="<?php echo $nick ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nic ?><br>
 DNI: <input type="text" name="dni" value="<?php echo $dni ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dni ?><br>
 Nombre: <input type="text" name="nombre" value="<?php echo $nombre ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nom ?><br>

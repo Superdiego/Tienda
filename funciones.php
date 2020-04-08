@@ -528,4 +528,39 @@ function buscar_usuario($nombre,$password){
         return 2;
     }
 }
+function datos_usuario($nombre){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM usuarios WHERE nic_usr = :nic");
+    $consulta->execute(array(':nic'=>$nombre));
+    $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
+    if($fila = $consulta->fetch()){
+        return $fila;
+    }else{
+        return false;
+    }
+}
+function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $pas)
+{
+    $conex = conectar();
+    $codigo = "UPDATE usuarios SET nic_usr = :nic, nom_usr = :nom, ape_usr = :ape, dir_usr = :dir,
+                loc_usr = :loc, pro_usr = :pro, ema_usr = :ema, tel_usr = :tel, pas_usr = :pas WHERE dni_usr = :dni";
+    $insert = $conex->prepare($codigo);
+    $fila = $insert->execute(array(
+            ':dni' => $dni,
+            ':nic' => $nic,
+            ':nom' => $nom,
+            ':ape' => $ape,
+            ':dir' => $dir,
+            ':loc' => $loc,
+            ':pro' => $pro,
+            ':ema' => $ema,
+            ':tel' => $tel,
+            ':pas' => $pas
+        ));
+        if ($fila == 1) {
+            echo "<br>Modificacion completada";
+        }else{
+            echo "<br>Error en la modificacion<br>";
+        }
+}
 ?>
