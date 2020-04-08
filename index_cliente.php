@@ -1,7 +1,20 @@
 <?php 
 session_start();
-if(!isset($_SESSION['autenticado']))
+if(!isset($_SESSION['autenticado'])){
     header("location:index.php");
+}
+include_once("funciones.php");
+include_once("validaciones.php");
+$nom_pag = "Bienvenido {$_SESSION['autenticado']}";
+include_once("cabecera.php");
+mostrar_articulos();
 ?>
-
-<h1>Por fin!!!!! Bienvenido <?php echo $_SESSION['autenticado']; ?></h1>
+</div>
+			</div>
+			<div class="col-sm-12 col-md-2">
+			<a href="edicion_cliente.php">Editar perfil</a>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
