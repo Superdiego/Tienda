@@ -39,7 +39,7 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Nosotros</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
@@ -47,9 +47,35 @@
 			</div>
 		</nav>
 	</div>
-	<div class="container text-center mt-4"><h1><?php echo $nom_pag ?></h1></div>
-		<div class="container-fluid">
+	<div class="container text-center mt-4">
+		<h1><?php echo $nom_pag ?></h1>
+	</div>
+	<div class="container-fluid">
 		<div class="row text-center">
-			<div class="col-sm-12 col-md-2"></div>
-			<div class="col-sm-12 col-md-8 py-5">
-			<div class="row">
+			<div class="col-sm-12 col-md-2">
+
+				<ul class="nav flex-column nav-pills" id="v-pills-tab"
+					role="tablist" aria-orientation="vertical">
+		<?php
+			include_once("funciones.php");
+			$cat = mostrar_categorias();
+			$i=0;
+			while(isset($cat[$i])){
+				echo '<li class="nav-item">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
+						role="button" aria-haspopup="true" aria-expanded="false">'.$cat[$i].'</a>
+						<div class="dropdown-menu">';
+				$subcat = mostrar_subcategorias($i+1);
+				$j=0;
+				while(isset($subcat[$j])){
+					echo '<a class="dropdown-item" href="Subcategorias.php?sub='.$subcat[$j].'">'.$subcat[$j].'</a>';
+					$j++;
+				}
+				echo '</div></li>';
+				$i++;
+			}
+        ?>
+				</ul>
+			</div>
+	<div class="col-sm-12 col-md-8 py-5">
+		<div class="row">

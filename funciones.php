@@ -563,4 +563,41 @@ function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $p
             echo "<br>Error en la modificacion<br>";
         }
 }
+
+function mostrar_categorias(){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT nom_cat FROM categorias ORDER BY id_cat");
+    $consulta->execute();
+    while($fila = $consulta->fetch()){
+        $categ[]=$fila[0];
+    }
+    return $categ;   
+}
+function mostrar_subcategorias($categ){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT nom_sub FROM subcategorias WHERE cat_sub=:categ");
+    $consulta->execute(array(':categ'=>$categ));
+    while($fila = $consulta->fetch()){
+        $subcateg[] = $fila[0];
+    }
+    return $subcateg;
+}
+function ver_subcategorias($subcateg){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM articulos WHERE sub_art=:subcat ORDER BY id_art DESC");
+    $consulta->execute(array(':subcat'=>$subcateg));
+    $consulta->setFetchMode(PDO::FETCH_CLASS, 'articulos');
+    while($fila = $consulta->fetch()){
+        echo '<div class="col-md-6 col-xl-4"><div><a href="detalleArticulo.php?art='.$fila->getId_art().'">
+                <img src="imgProductos/'.$fila->getId_art().'.jpg" width="100" height="100"></a></div><div>'.
+                $fila->getNom_art() . ' ' . $fila->getPre_art().'</div></div>';
+    }
+}
+function ver_idSubcategoria($nombre_sub){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT id_sub FROM subcategorias WHERE nom_sub=:nom_sub");
+    $consulta->execute(array(':nom_sub'=>$nombre_sub));
+    $fila = $consulta->fetch();
+    return $fila[0];
+}
 ?>
