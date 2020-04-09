@@ -24,7 +24,9 @@ if((isset($_GET['error']))) {
     }
 }
 ?>
-<?php if(isset($_SESSION['autenticado'])){
+<?php
+
+if(isset($_SESSION['autenticado'])){
     $ver= "hidden";
     $nover = null;
     $titulo = $_SESSION['autenticado'];

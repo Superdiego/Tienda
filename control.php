@@ -31,7 +31,6 @@ if(isset($_POST["salir"])){
     if($_POST["salir"]==1){
         session_start();
         session_destroy();
-        setcookie('pagina','',time()-100);
         header("location:index.php");
         
         
