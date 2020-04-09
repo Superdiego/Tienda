@@ -17,7 +17,7 @@ if((isset($_POST['usuario']))) {
             case 0:
                 session_start();
                 $_SESSION['autenticado']="$nombre_usr";
-                header("location:index.php");
+                header("location:".$_SERVER['HTTP_REFERER']);
                 break;
             case 1:
                 header("location:index.php?error=3&usr=$nombre_usr");
@@ -31,9 +31,8 @@ if(isset($_POST["salir"])){
     if($_POST["salir"]==1){
         session_start();
         session_destroy();
-        header("location:index.php");
-        
-        
+        header("location:".$_SERVER['HTTP_REFERER']);
+            
     }else{
         echo "no va";
     }
