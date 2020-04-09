@@ -5,6 +5,8 @@ include_once("control.php");
 
 $nombre_usr = (isset($_GET['usr'])) ? $_GET['usr'] : null;
 $titulo = "Inicio sesion";
+$ver= null;
+$nover = "hidden";
 
 if((isset($_GET['error']))) {
     switch($_GET['error']){
@@ -22,8 +24,14 @@ if((isset($_GET['error']))) {
     }
 }
 ?>
-<h5><?php echo $titulo?></h5>
-<form method="POST" action="control.php">	
+<?php if(isset($_SESSION['autenticado'])){
+    $ver= "hidden";
+    $nover = null;
+    $titulo = $_SESSION['autenticado'];
+}
+echo "<h5> $titulo </h5>";
+?>
+<form method="POST" action="control.php" <?php echo $ver?> >	
   <div class="form-group">
  
     <label for="usuario">Usuario</label>
@@ -35,6 +43,14 @@ if((isset($_GET['error']))) {
   </div>
   
   <button type="submit" class="btn btn-primary">Enviar</button>
+</form><br>
+
+<a href="edicion_cliente.php" <?php echo $nover?>><button>Modificar datos</button></a><br><br>
+<form method="POST" action="control.php" <?php echo $nover?>>
+<input type="text" name="salir" value="1" hidden>
+<input type="submit" value="Abandonar sesion" >
 </form>
+
+
 
 

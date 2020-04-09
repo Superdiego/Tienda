@@ -75,7 +75,7 @@ Confirme su password: <input type="password" name="pass_confirm"value="<?php ech
  ?>
  </div>
  <div class="md-3">
-<a href="index_cliente.php">Volver a inicio</a>
+<a href="index.php">Volver a inicio</a>
  </div></div></div>
 </body>
 

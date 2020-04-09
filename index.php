@@ -1,9 +1,11 @@
 <?php
-
+$nom_pag = "Inicio";
 include_once("funciones.php");
 include_once("validaciones.php");
-$nom_pag = "Inicio";
 include_once("cabecera.php");
+
+
+
 
 mostrar_articulos();
 ?>

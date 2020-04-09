@@ -1,6 +1,20 @@
 <?php
+session_start();
 $sub = (isset($_GET['sub'])) ? $_GET['sub'] : 1;
 $nom_pag = $sub;
+
+
+//Guardamos nombre de la pagina para control.php
+$host= $_SERVER["HTTP_HOST"];
+$url= $_SERVER["REQUEST_URI"];
+$direccion = "http://$host$url ";
+setcookie('pagina', $direccion, time() +  24 * 60 * 60);
+
+ 
+
+
+
+
 include_once("funciones.php");
 include_once("validaciones.php");
 include_once("cabecera.php");
