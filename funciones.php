@@ -600,4 +600,12 @@ function ver_idSubcategoria($nombre_sub){
     $fila = $consulta->fetch();
     return $fila[0];
 }
+function buscar_articulo($articulo){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM articulos WHERE id_art=:art");
+    $consulta->execute(array(":art"=>$articulo));
+    $consulta->setFetchMode(PDO::FETCH_CLASS,"articulos");
+    $fila = $consulta->fetch();
+    return $fila;   
+}
 ?>
