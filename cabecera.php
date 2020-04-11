@@ -26,10 +26,24 @@
 	<script src="bootstrap/bootstrap.js"></script>
 
 	<div class="container-fluid bg-primary">
-		<div class="container text-white pt-5 pb-1">
+		<div class="container-fluid text-white pt-5 pb-1">
 			<h1 class="display-4">Cachivaches</h1>
-			<p class="lead">Bienvenid@s a la tienda de Diego</p>
-		</div>
+			<div class="row">
+				<div class="col-md-10">
+					<p class="lead">Bienvenid@s a la tienda de Diego<p>
+				</div>
+				<div class="col-md-2">
+				<a href="carro.php">
+			<button class=" bg-primary  rounded float-right ">
+				<svg class="rounded float-right " viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+    				<path d="M6 6 L30 6 27 19 9 19 M27 23 L10 23 5 2 2 2" />
+    				<circle cx="25" cy="27" r="2" />
+   		 			<circle cx="12" cy="27" r="2" />
+				</svg>
+			</button></a>
+			</div></div>
+			
+		</div>	
 	</div>
 	<div class="container-fluid bg-primary">
 		<nav class="navbar navbar-expand-lg navbar-dark">
