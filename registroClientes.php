@@ -1,10 +1,8 @@
 <?php
 $nom_pag="Alta de Clientes";
-include ("cabecera.php");
-
-
-include("validaciones.php");
-include("funciones.php");
+include_once ("cabecera.php");
+include_once("validaciones.php");
+include_once("funciones.php");
 
 $nick = (isset($_POST['nick'])) ? $_POST['nick'] : null;
 $dni = (isset($_POST['dni'])) ? $_POST['dni'] : null;

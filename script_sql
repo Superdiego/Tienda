@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 id_usr INT PRIMARY KEY AUTO_INCREMENT,
 dni_usr CHAR(9) UNIQUE,
 rol_usr INT REFERENCES roles(id_rol),
-nic_usr CHAR(25),
+nic_usr CHAR(25) UNIQUE,
 nom_usr CHAR(50),
 ape_usr CHAR(50),
 dir_usr CHAR(100),
@@ -75,7 +75,11 @@ VALUES
 ("12345678a",2,"Andy","Daniel","Diges","C/ La Alameda, 54","Pontevedra",
 "33200","dani@gmail.es","123456789","123",true),
 ("98765432b",2,"Lucas","Lucas","Garcia", "C/ Olmo, 34","Lugo",
-"44100","lucas@hotmail.es","987654321","123",true);
+"44100","lucas@hotmail.es","987654321","123",true),
+("98732145a",3,"curro","Francisco","Trabajador","C/ Doblar el Lomo, 44","Denia",
+"Alicante","curro@gmail.es","654123789","123",true),
+("65412387c",4,"diego","Diego","Candela","C/ La sabiduria,24","Elche",
+"Alicante","diego@hotmail.com","987456321","123",true);
 
 INSERT INTO categorias (nom_cat)
 VALUES

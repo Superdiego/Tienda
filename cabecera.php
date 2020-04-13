@@ -56,8 +56,8 @@
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Nosotros</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+					<li class="nav-item"><a class="nav-link" href="registroClientes.php">Registro</a></li>
 				</ul>
 			</div>
 		</nav>

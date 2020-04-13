@@ -35,7 +35,11 @@ function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel
             echo "<br>Registro completado";
         }
     } catch (PDOException $e) {
-        echo "<br><span class='error'>Este DNI ya esta registrado</span>";
+        if(preg_match("/dni_usr'$/",$e->getMessage())){
+        echo  "Este DNI ya esta registrado";
+        }else if(preg_match("/nic_usr'$/",$e->getMessage())){
+            echo "Este nick ya esta en uso, pruebe otro";
+        }
     }
 }
 function registrar_categoria($nom)
@@ -408,6 +412,14 @@ class usuarios{
     }
 
     /**
+     * @param mixed
+     */
+    public function getAct_usr()
+    {
+        return $this->act_usr;
+    }
+    
+    /**
      * @param mixed $id_usr
      */
     public function setId_usr($id_usr)
@@ -511,6 +523,13 @@ class usuarios{
     {
         $this->pas_usr = $pas_usr;
     }
+    /**
+     * @param mixed $act_usr
+     */
+    public function setAct_usr($act_usr)
+    {
+        $this->act_usr = $act_usr;
+    }
 
 }
 function buscar_usuario($nombre,$password){
@@ -519,8 +538,16 @@ function buscar_usuario($nombre,$password){
     $consulta->execute(array(':nic'=>$nombre));
     $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
     if($fila = $consulta->fetch()){
-        if($fila->getPas_usr()==$password){
-            return 0;
+        if($fila->getPas_usr()==$password  && $fila->getAct_usr()){
+            if($fila->getRol_usr()==2){
+                return 0;
+            }else if($fila->getRol_usr()==3){
+                return 3;
+            }else if($fila->getRol_usr()==4){
+                return 4;
+            }else{
+                return 5;
+            }
         }else{
             return 1;
         }

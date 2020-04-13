@@ -1,10 +1,11 @@
 <?php
-session_start();
+$nom_pag="Edicion de Clientes";
+include_once ("cabecera.php");
 if(!isset($_SESSION['autenticado'])){
     header("location:index.php");
 }
-$nom_pag="Edicion de Clientes";
-include_once ("cabecera.php");
+
+
 include_once("validaciones.php");
 include_once("funciones.php");
 

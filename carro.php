@@ -6,14 +6,15 @@ if(!isset($_COOKIE["carro"])){
 if(isset($_GET["art"])){
     $total = (isset($_COOKIE["compra"])) ? $_COOKIE["compra"] : 0;
     $art = $_GET["art"];
+    $cant = $_GET["cant"];
     $prod = buscar_articulo($art);
     $nomart = $prod->getNom_art();
     if(isset($_COOKIE["carro"]["$nomart"])){
-        setcookie("carro[$nomart]",$_COOKIE["carro"][$nomart] + 1,time()+3600);
+        setcookie("carro[$nomart]",$_COOKIE["carro"][$nomart] + $cant,time()+3600);
     }else{
-        setcookie("carro[$nomart]",1,time()+3600);
+        setcookie("carro[$nomart]",$cant,time()+3600);
     }
-    setcookie("compra",$total+1,time()+3600);
+    setcookie("compra",$total+$cant,time()+3600);
     header("location:carro.php");
 }
 if(isset($_GET["limpiar"]) && $_GET["limpiar"]==true){
