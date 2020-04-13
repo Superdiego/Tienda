@@ -1,4 +1,16 @@
-<?php session_start(); ?>
+<?php
+session_start();
+include_once('funciones.php');
+if(!isset($_SESSION['autenticado'])){
+    header("location:index.php");
+}else{
+    $usr = $_SESSION['autenticado'];
+    $admin = datos_usuario($usr);
+    if($admin->getRol_usr()!=3){
+        header("location:index.php");
+    }
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>

@@ -13,10 +13,10 @@ if((isset($_POST['usuario']))) {
     }else if(!val_pass($pass_usr,$pass_usr)){
         header("location:index.php?error=2&usr=$nombre_usr");
     }else{
+        session_start();
         switch(buscar_usuario($nombre_usr, $pass_usr)){
-            case 0:
-                session_start();
-                $_SESSION['autenticado']="$nombre_usr";
+            case 0:              
+                $_SESSION['autenticado']=$nombre_usr;
                 header("location:".$_SERVER['HTTP_REFERER']);
                 break;
             case 1:
@@ -26,9 +26,11 @@ if((isset($_POST['usuario']))) {
                 header("location:index.php?error=4&usr=$nombre_usr");
                 break;
             case 3:
+                $_SESSION['autenticado']=$nombre_usr;
                 header("location:empleado.php");
                 break;
             case 4:
+                $_SESSION['autenticado']=$nombre_usr;
                 header("location:administrador.php");
                 break;
             case 5:

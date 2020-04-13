@@ -566,6 +566,32 @@ function datos_usuario($nombre){
         return false;
     }
 }
+function mostrar_usuario(){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM usuarios");
+    $consulta->execute();
+    $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
+    while($fila = $consulta->fetch()){
+        echo "<form method='POST' action='adminusers.php'>
+            <tr><th scope='row'><input type='text' style='width:3em' name='id' value='".$fila->getId_usr()."'></th>
+            <td><input type='text' size='9' name='dni' value='".$fila->getDni_usr()."'></td>
+            <td><input type='text' size='1' name='rol' value='".$fila->getRol_usr()."'></td>
+            <td><input type='text' size='9' name='nic' value='".$fila->getNic_usr()."'></td>
+            <td><input type='text' size='9' name='nom' value='".$fila->getNom_usr()."'></td>
+            <td><input type='text' size='9' name='ape' value='".$fila->getApe_usr()."'></td>
+            <td><input type='text' size='12' name='dir' value='".$fila->getDir_usr()."'></td>
+            <td><input type='text' size='4' name='cop' value='".$fila->getCop_usr()."'></td>
+            <td><input type='text' size='9' name='loc' value='".$fila->getLoc_usr()."'></td>
+            <td><input type='text' size='9' name='pro' value='".$fila->getPro_usr()."'></td>
+            <td><input type='text' size='12' name='ema' value='".$fila->getEma_usr()."'></td>
+            <td><input type='text' size='9' name='tel' value='".$fila->getTel_usr()."'></td>
+            <td><input type='text' size='4' name='pas' value='".$fila->getPas_usr()."'></td>
+            <td><input type='text' size='1' name='act' value='".$fila->getAct_usr()."'></td>
+            <td><button type='submit' class='btn btn-primary'>Modificar</button></td></tr>
+            </form>";
+    }
+}
+
 function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $pas)
 {
     $conex = conectar();

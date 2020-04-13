@@ -11,7 +11,6 @@ if(!isset($_SESSION['autenticado'])){
     }
 }
 ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -42,11 +41,31 @@ if(!isset($_SESSION['autenticado'])){
 		<div class="container-fluid text-white pt-5 pb-1">
 			<h1 class="display-4">Cachivaches</h1>
 		</div></div>
-		<h1 class="text-center py-5">PAGINA DE ADMINISTRADOR</h1>
-		<a href="adminusers.php"><button class="bg-primary text-white"><svg class="bi bi-people-fill width="2em" height="2em" viewBox="0 0 16 16" fill="white">
-  			<path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6zm-5.784 6A2.238 2.238 0 015 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 005 9c-4 0-5 3-5 4s1 1 1 1h4.216zM4.5 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"/>
-			</svg><span class="pl-2">Administrar usuarios</span></button></a>
-		<a href="admincateg.php"><button>Administrar categorias</button></a>
-		<a href="adminartic.php"><button>Administrar articulos</button></a>
-		</body>
-</html>
+		<h1 class="text-center py-5">ADMINISTRACION USUARIOS</h1>
+
+		<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">DNI</th>
+      <th scope="col">ROL</th>
+      <th scope="col">NIC</th>
+      <th scope="col">NOMBRE</th>
+      <th scope="col">APELLIDOS</th>
+      <th scope="col">DIRECCION</th>
+      <th scope="col">C.POSTAL</th>
+      <th scope="col">LOCALIDAD</th>
+      <th scope="col">PROVINCIA</th>
+      <th scope="col">E-MAIL</th>
+      <th scope="col">TELEFONO</th>
+      <th scope="col">PASSWORD</th>
+      <th scope="col">ACTIVO</th>    
+    </tr>
+  </thead>
+  <tbody>	
+<?php mostrar_usuario(); ?>
+  </tbody>
+</table>
+</form>
+		
+		
