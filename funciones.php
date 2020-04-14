@@ -566,17 +566,54 @@ function datos_usuario($nombre){
         return false;
     }
 }
-function mostrar_usuario(){
+
+function contar_usuarios(){
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT * FROM usuarios");
+    $consulta = $conex->prepare("SELECT COUNT(*) FROM usuarios");
+    $consulta->execute();
+    $fila= $consulta->fetch();
+    return $fila[0];   
+}
+
+function mostrar_usuario(){
+    $pag = 0;
+    if (isset($_GET["desplazamiento"])){
+        $desplazamiento = $_GET["desplazamiento"];
+    }else{
+        $desplazamiento = 0;
+    }
+    $conex = conectar();   
+    $consulta = $conex->prepare("SELECT * FROM usuarios ORDER BY id_usr LIMIT $desplazamiento , 2");
     $consulta->execute();
     $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
+
     while($fila = $consulta->fetch()){
+        $inv='';
+        $cli='';
+        $emp='';
+        $adm='';
+        switch($fila->getRol_usr()){
+            case 1:
+                $inv='selected';
+                break;
+            case 2:
+                $cli='selected';
+                break;
+            case 3:
+                $emp='selected';
+                break;
+            case 4:
+                $adm='selected';
+        }
         echo "<form method='POST' action='adminusers.php'>
-            <tr><th scope='row'><input type='text' style='width:3em' name='id' value='".$fila->getId_usr()."'></th>
-            <td><input type='text' size='9' name='dni' value='".$fila->getDni_usr()."'></td>
-            <td><input type='text' size='1' name='rol' value='".$fila->getRol_usr()."'></td>
-            <td><input type='text' size='9' name='nic' value='".$fila->getNic_usr()."'></td>
+            <tr><th scope='row'><input type='text' class='bg-light text-dark' readonly style='width:2em' name='id' value='".$fila->getId_usr()."'></th>
+            <td><input type='text' size='9' class='bg-light text-dark' name='dni' readonly value='".$fila->getDni_usr()."'></td>
+            <td><input type='text' size='9' class='bg-light text-dark' name='nic' readonly value='".$fila->getNic_usr()."'></td>
+            <td><select  name='rol' value='".$fila->getRol_usr()."'>
+                    <option value=1 $inv>Invitado</option>
+                    <option value=2 $cli>Cliente</option>
+                    <option value=3 $emp>Empleado</option>
+                    <option value=4 $adm>Administrador</option> ></select></td>
             <td><input type='text' size='9' name='nom' value='".$fila->getNom_usr()."'></td>
             <td><input type='text' size='9' name='ape' value='".$fila->getApe_usr()."'></td>
             <td><input type='text' size='12' name='dir' value='".$fila->getDir_usr()."'></td>
@@ -589,6 +626,20 @@ function mostrar_usuario(){
             <td><input type='text' size='1' name='act' value='".$fila->getAct_usr()."'></td>
             <td><button type='submit' class='btn btn-primary'>Modificar</button></td></tr>
             </form>";
+    }
+    if($desplazamiento > 0) {
+        $prev = $desplazamiento - 2;
+        $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prev";
+        echo "<div class='text-center'><a href='$url'>Anterior</a>";
+    }else{
+        echo "<div class='text-center'>";
+    }
+    if(($desplazamiento+2)< contar_usuarios()){
+        $prox = $desplazamiento +2;
+        $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prox";
+        echo "<a href='$url'>Siguiente</a></div>";
+    }else{
+        echo "</div>";
     }
 }
 
@@ -611,7 +662,7 @@ function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $p
             ':pas' => $pas
         ));
         if ($fila == 1) {
-            echo "<br>Modificacion completada";
+            echo "<br><span class='valid-feedback'>Modificacion completada</span>";
         }else{
             echo "<br>Error en la modificacion<br>";
         }
@@ -661,4 +712,32 @@ function buscar_articulo($articulo){
     $fila = $consulta->fetch();
     return $fila;   
 }
+function editar_usuario($dni, $rol, $nom, $ape, $dir, $cop, $loc, $pro, $ema, $tel, $pas, $act)
+{
+    $conex = conectar();
+    $codigo = "UPDATE usuarios SET rol_usr = :rol, nom_usr = :nom, ape_usr = :ape, dir_usr = :dir,
+                cop_usr = :cop, loc_usr = :loc, pro_usr = :pro, ema_usr = :ema,
+                tel_usr = :tel, pas_usr = :pas, act_usr = :act WHERE dni_usr = :dni";
+    $insert = $conex->prepare($codigo);
+    $fila = $insert->execute(array(
+        ':dni' => $dni,
+        ':rol' => $rol,
+        ':nom' => $nom,
+        ':ape' => $ape,
+        ':dir' => $dir,
+        ':cop' => $cop,
+        ':loc' => $loc,
+        ':pro' => $pro,
+        ':ema' => $ema,
+        ':tel' => $tel,
+        ':pas' => $pas,
+        ':act' => $act
+    ));
+    if ($fila == 1) {
+        echo "<br>Modificacion completada";
+    }else{
+        echo "<br>Error en la modificacion<br>";
+    }
+}
+
 ?>

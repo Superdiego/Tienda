@@ -1,9 +1,18 @@
 <?php
+session_start();
+include_once('funciones.php');
+if(!isset($_SESSION['autenticado'])){
+    header("location:index.php");
+}else{
+    $usr = $_SESSION['autenticado'];
+    $admin = datos_usuario($usr);
+    if($admin->getRol_usr()!=4){
+        header("location:index.php");
+    }
+}
 $nom_pag="Alta Categorias";
-include("cabecera.php");
-
-include ("funciones.php");
-include ("validaciones.php");
+include_once("cabecera.php");
+include_once ("validaciones.php");
 
 $nombre = (isset($_POST['nombre'])) ? $_POST['nombre'] : '';
 $res_nom = "";
@@ -25,5 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	</form>
 	<br><br>
 	<a href="index.php">Volver a pagina principal</a>
+	
+<?php 
+if($admin->getRol_usr()==4){
+    echo "<div class='text-center'><a href='administrador.php'>Menu administrador</a></div>";
+}
+
+
+?>	
+	
 </body>
 </html>

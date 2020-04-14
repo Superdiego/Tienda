@@ -1,24 +1,27 @@
 CREATE DATABASE IF NOT EXISTS tienda;
 USE Tienda;
+CREATE TABLE IF NOT EXISTS roles (
+id_rol INT AUTO_INCREMENT,
+nom_rol CHAR(15) NOT NULL,
+PRIMARY KEY (id_rol)
+);
 CREATE TABLE IF NOT EXISTS usuarios (
-id_usr INT PRIMARY KEY AUTO_INCREMENT,
-dni_usr CHAR(9) UNIQUE,
-rol_usr INT REFERENCES roles(id_rol),
+id_usr INT AUTO_INCREMENT,
+dni_usr CHAR(9) UNIQUE NOT NULL,
+rol_usr INT,
 nic_usr CHAR(25) UNIQUE,
 nom_usr CHAR(50),
 ape_usr CHAR(50),
 dir_usr CHAR(100),
-cop_usr INT (4),
+cop_usr CHAR (5),
 loc_usr CHAR(50),
 pro_usr CHAR(50),
 ema_usr CHAR(30),
 tel_usr CHAR(12),
 pas_usr CHAR(10),
-act_usr BOOLEAN
-);
-CREATE TABLE IF NOT EXISTS roles (
-id_rol INT PRIMARY KEY AUTO_INCREMENT,
-nom_rol CHAR(15)
+act_usr BOOLEAN,
+PRIMARY KEY (id_usr),
+FOREIGN KEY (rol_usr) REFERENCES roles(id_rol)
 );
 CREATE TABLE IF NOT EXISTS categorias (
 id_cat INT PRIMARY KEY AUTO_INCREMENT,

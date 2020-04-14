@@ -4,17 +4,18 @@ if(!isset($_COOKIE["carro"])){
     header("location:index.php");
 }
 if(isset($_GET["art"])){
-    $total = (isset($_COOKIE["compra"])) ? $_COOKIE["compra"] : 0;
+    $cantotal = (isset($_COOKIE["compra"])) ? $_COOKIE["compra"] : 0;
     $art = $_GET["art"];
     $cant = $_GET["cant"];
     $prod = buscar_articulo($art);
-    $nomart = $prod->getNom_art();
-    if(isset($_COOKIE["carro"]["$nomart"])){
-        setcookie("carro[$nomart]",$_COOKIE["carro"][$nomart] + $cant,time()+3600);
+
+    $preart = $prod->getPre_art();
+    if(isset($_COOKIE["carro"]["$art"])){
+        setcookie("carro[$art]",$_COOKIE["carro"][$art] + $cant,time()+3600);
     }else{
-        setcookie("carro[$nomart]",$cant,time()+3600);
+        setcookie("carro[$art]",$cant,time()+3600);
     }
-    setcookie("compra",$total+$cant,time()+3600);
+    setcookie("compra",$cantotal+$cant,time()+3600);
     header("location:carro.php");
 }
 if(isset($_GET["limpiar"]) && $_GET["limpiar"]==true){
@@ -32,21 +33,26 @@ $nom_pag = "Su carrito de la compra";
 
 include_once("validaciones.php");
 include_once("cabecera.php");
-
-if(isset($_COOKIE["carro"])){
-    foreach($_COOKIE["carro"] as $nombre=>$valor){
-        echo "Producto: " . $nombre . " Cantidad: " . $valor . "<br>"; 
+echo "<table class='table'><thead><tr><th scope='col'>Articulo</th><th scope='col'>Cantidad</th>
+        <th scope='col'>Precio</th><th scope='col'>Importe</th></tr></thead><tbody>";
+$importotal = 0;
+if(isset($_COOKIE["carro"])){   
+    foreach($_COOKIE["carro"] as $articulo=>$cantidad){
+        $art = buscar_articulo($articulo);
+        $importe = $cantidad * $art->getPre_art();
+        $importotal += $importe;
+        echo "<tr><th scope='row'>".$art->getNom_art()."</th><td>$cantidad</td><td>".$art->getPre_art()."</td>
+            <td>$importe</td></tr>";
     }
 }
-if(isset($_COOKIE["compra"])){
-echo $_COOKIE["compra"];
-}
-
+echo "<tr><th>Totales</th><th>".$_COOKIE['compra']."</th><th>Importe</th><th>$importotal</th></tbody></table>";
 
 ?>
 <br><br>
+
+
 <a href="carro.php?limpiar=true">
-<button class=" bg-primary  rounded float-center " type="submit" name="art" >
+<button class=" bg-primary  rounded float-center text-white" type="submit" name="art" >
 Vaciar carrito</button></a>
 			</div>
 			</div>
@@ -55,6 +61,7 @@ Vaciar carrito</button></a>
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>
 

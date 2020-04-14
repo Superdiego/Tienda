@@ -23,7 +23,7 @@ if((isset($_POST['usuario']))) {
                 header("?error=3&usr=$nombre_usr");
                 break;
             case 2:
-                header("location:index.php?error=4&usr=$nombre_usr");
+                header("location:".$_SERVER['PHP_SELF']."?error=4&usr=$nombre_usr");
                 break;
             case 3:
                 $_SESSION['autenticado']=$nombre_usr;
