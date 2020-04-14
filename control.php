@@ -20,10 +20,10 @@ if((isset($_POST['usuario']))) {
                 header("location:".$_SERVER['HTTP_REFERER']);
                 break;
             case 1:
-                header("?error=3&usr=$nombre_usr");
+                header("location:index.php?error=3&usr=$nombre_usr");
                 break;
             case 2:
-                header("location:".$_SERVER['PHP_SELF']."?error=4&usr=$nombre_usr");
+                header("location:index.php?error=4&usr=$nombre_usr");
                 break;
             case 3:
                 $_SESSION['autenticado']=$nombre_usr;
