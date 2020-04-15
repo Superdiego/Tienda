@@ -42,7 +42,7 @@ if(isset($_POST["salir"])){
     if($_POST["salir"]==1){
         session_start();
         session_destroy();
-        header("location:".$_SERVER['HTTP_REFERER']);
+        header("location:index.php");
             
     }else{
         echo "no va";

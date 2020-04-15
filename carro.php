@@ -3,6 +3,8 @@ include_once("funciones.php");
 if(!isset($_COOKIE["carro"])){
     header("location:index.php");
 }
+$aviso = (isset ($_GET["autent"])) ? "Debe identificarse o registrarse antes de confirmar el pedido" : "";
+
 if(isset($_GET["art"])){
     $cantotal = (isset($_COOKIE["compra"])) ? $_COOKIE["compra"] : 0;
     $art = $_GET["art"];
@@ -52,15 +54,20 @@ echo "<tr><th>Totales</th><th>".$_COOKIE['compra']."</th><th>Importe</th><th>$im
 
 
 <a href="carro.php?limpiar=true">
-<button class=" bg-primary  rounded float-center text-white" type="submit" name="art" >
-Vaciar carrito</button></a>
+<button class=" bg-primary  rounded float-center text-white" type="submit" name="art" >Vaciar carrito</button>
+</a>
+<a href="index.php">
+<button class=" bg-primary  rounded float-center text-white">Seguir comprando</button>
+</a>
+
 			</div>
-			</div>
-			<div class="col-sm-12 col-md-2">
+			<div class="col-md-2">
 			<?php include ("autentificacion.php")?>
 			</div>
 		</div>
+		<a href="pedidos.php">Confirmar pedido</a>
 	</div>
+	<div class="container text-center text-danger"><?php echo $aviso?></div> 
 
 </body>
 </html>

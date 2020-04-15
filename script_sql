@@ -46,14 +46,17 @@ sto_art INT(6)
 CREATE TABLE IF NOT EXISTS pedidos (
 id_ped INT PRIMARY KEY AUTO_INCREMENT,
 usr_ped INT REFERENCES usuarios(id_usr),
-fec_ped DATE
+fec_ped INT
 );
 CREATE TABLE IF NOT EXISTS lineas (
-ped_lin INT REFERENCES pedidos(id_ped),
-id_lin INT(3),
+ped_lin INT,
+id_lin INT(2) AUTO_INCREMENT,
 art_lin INT REFERENCES articulos(id_art),
-can_lin INT(3)
-);
+can_lin INT(3),
+PRIMARY KEY (ped_lin, id_lin),
+FOREIGN KEY(ped_lin) REFERENCES pedidos(id_ped),
+FOREIGN KEY(art_lin) REFERENCES articulos(id_art)
+)ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS almacen (
 id_alm INT PRIMARY KEY AUTO_INCREMENT,
 art_alm INT REFERENCES articulos(id_art),

@@ -30,20 +30,29 @@
 			<h1 class="display-4">Cachivaches</h1>
 			<div class="row">
 				<div class="col-md-10">
-					<p class="lead">Bienvenid@s a la tienda de Diego<p>
+					<p class="lead">Bienvenid@s a la tienda de Diego
+					
+					
+					<p>
+				
 				</div>
 				<div class="col-md-2">
-				<a href="carro.php">
-			<button class=" bg-primary  rounded float-right ">
-				<svg class="rounded float-right " viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+					<a href="carro.php">
+						<button class=" bg-primary  rounded float-right ">
+							<svg class="rounded float-right " viewBox="0 0 32 32" width="32"
+								height="32" fill="none" stroke="white" stroke-linecap="round"
+								stroke-linejoin="round" stroke-width="2">
     				<path d="M6 6 L30 6 27 19 9 19 M27 23 L10 23 5 2 2 2" />
     				<circle cx="25" cy="27" r="2" />
    		 			<circle cx="12" cy="27" r="2" />
 				</svg>
-			</button></a>
-			</div></div>
-			
-		</div>	
+						</button>
+					</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
 	</div>
 	<div class="container-fluid bg-primary">
 		<nav class="navbar navbar-expand-lg navbar-dark">
@@ -57,7 +66,8 @@
 					<li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
-					<li class="nav-item"><a class="nav-link" href="registroClientes.php">Registro</a></li>
+					<li class="nav-item"><a class="nav-link"
+						href="registroClientes.php">Registro</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -67,30 +77,29 @@
 	</div>
 	<div class="container-fluid">
 		<div class="row text-center">
-			<div class="col-sm-12 col-md-2">
+			<div class="col-md-2">
 
 				<ul class="nav flex-column nav-pills" id="v-pills-tab"
 					role="tablist" aria-orientation="vertical">
 		<?php
-			include_once("funciones.php");
-			$cat = mostrar_categorias();
-			$i=0;
-			while(isset($cat[$i])){
-				echo '<li class="nav-item">
+include_once ("funciones.php");
+$cat = mostrar_categorias();
+$i = 0;
+while (isset($cat[$i])) {
+    echo '<li class="nav-item">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
-						role="button" aria-haspopup="true" aria-expanded="false">'.$cat[$i].'</a>
+						role="button" aria-haspopup="true" aria-expanded="false">' . $cat[$i] . '</a>
 						<div class="dropdown-menu">';
-				$subcat = mostrar_subcategorias($i+1);
-				$j=0;
-				while(isset($subcat[$j])){
-					echo '<a class="dropdown-item" href="Subcategorias.php?sub='.$subcat[$j].'">'.$subcat[$j].'</a>';
-					$j++;
-				}
-				echo '</div></li>';
-				$i++;
+    $subcat = mostrar_subcategorias($i + 1);
+    $j = 0;
+    while (isset($subcat[$j])) {
+        echo '<a class="dropdown-item" href="Subcategorias.php?sub=' . $subcat[$j] . '">' . $subcat[$j] . '</a>';
+        $j ++;
+    }
+    echo '</div></li>';
+    $i++;
 			}
         ?>
 				</ul>
 			</div>
-	<div class="col-sm-12 col-md-8 py-5">
-		<div class="row">
+			<div class="col-md-8 py-5">

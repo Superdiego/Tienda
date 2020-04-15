@@ -740,4 +740,22 @@ function editar_usuario($dni, $rol, $nom, $ape, $dir, $cop, $loc, $pro, $ema, $t
     }
 }
 
+function crear_pedido($cliente){
+    $fecha = time();
+    $usr = datos_usuario($cliente)->getId_usr();
+    $conex = conectar();
+    $insertar = $conex->prepare("INSERT INTO pedidos (usr_ped, fec_ped) VALUES (:cli, :fecha)");
+    $fila = $insertar->execute(array(':cli'=>$usr, ':fecha'=>$fecha));
+    return $conex->lastInsertId();
+}
+function crear_linea($ped,$art,$cant){
+    $conex = conectar();
+    $insertar = $conex->prepare("INSERT INTO lineas (ped_lin, art_lin, can_lin) VALUES(:ped,:art,:can)");
+    $fila = $insertar->execute(array(':ped'=>$ped, ':art'=>$art, ':can'=>$cant));   
+}
+
+
+
+
+;
 ?>
