@@ -32,21 +32,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<form method="post" action="registroClientes.php">
-Nick: <input type="text" name="nick" value="<?php echo $nick ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nic ?><br>
-DNI: <input type="text" name="dni" value="<?php echo $dni ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dni ?><br>
-Nombre: <input type="text" name="nombre" value="<?php echo $nombre ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nom ?><br>
-Apellidos: <input type="text" name="apellidos" value="<?php echo $apellidos ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_ape ?><br>
-Direccion: <input type="text" name="direccion" value="<?php echo $direccion ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dir ?><br>
-Localidad: <input type="text" name="localidad" value="<?php echo $localidad ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_loc ?><br>
-Provincia: <input type="text" name="provincia" value="<?php echo $provincia ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pro ?><br>
-E-mail: <input type="text" name="correo" value="<?php echo $email ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_ema ?><br>
-Telefono: <input type="text" name="telefono" value="<?php echo $telefono ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_tel ?><br>
-Password: <input type="password" name="password" value="<?php echo $password ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pas ?><br>
-Confirme su password: <input type="password" name="pass_confirm"value="<?php echo $confirmpass ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pas ?><br>
-<br><br>
-<input type="submit" value="Registrar">
-
+<form method="post" action="registroClientes.php" class="px-5">
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Nick:</label><div class="col-sm-10"><input class="form-control" type="text" name="nick" value="<?php echo $nick ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nic ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">DNI:</label><div class="col-sm-10"><input class="form-control" type="text" name="dni" value="<?php echo $dni ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dni ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Nombre:</label><div class="col-sm-10"><input class="form-control" type="text" name="nombre" value="<?php echo $nombre ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nom ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Apellidos:</label><div class="col-sm-10"><input class="form-control" type="text" name="apellidos" value="<?php echo $apellidos ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_ape ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Direccion:</label><div class="col-sm-10"><input class="form-control" type="text" name="direccion" value="<?php echo $direccion ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dir ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Localidad:</label><div class="col-sm-10"><input class="form-control" type="text" name="localidad" value="<?php echo $localidad ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_loc ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Provincia:</label><div class="col-sm-10"><input class="form-control" type="text" name="provincia" value="<?php echo $provincia ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pro ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">E-mail:</label><div class="col-sm-10"><input class="form-control" type="text" name="correo" value="<?php echo $email ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_ema ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Telefono:</label><div class="col-sm-10"><input class="form-control" type="text" name="telefono" value="<?php echo $telefono ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_tel ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Password:</label><div class="col-sm-10"><input class="form-control" type="password" name="password" value="<?php echo $password ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pas ?></div></div>
+<div class="form-group row">
+<label class="col-sm-2 col-form-label">Confirme su password:</label><div class="col-sm-10"><input class="form-control" type="password" name="pass_confirm"value="<?php echo $confirmpass ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pas ?></div></div>
+<div class="form-group row">
+<div class="col-sm-10">
+<button type="submit" class="btn btn-primary">Registrar</div></div>
 </form>
 
 <?php 
@@ -56,13 +67,18 @@ if(val_texto($nick)&&val_dni($dni)&&val_texto($nombre)&&val_texto($apellidos)&&v
     val_pass($password,$confirmpass)){
     
         registrar_clientes($nick,$dni,$nombre,$apellidos,$direccion,$localidad,$provincia,$email,
-            $telefono,$password);
-    
+            $telefono,$password);   
 }
 
 ?>
+
 <br><br><a href="index.php">Volver a pagina principal</a>
 
+</div>
+			<div class="col-md-2">
+			<?php include ("autentificacion.php")?>
+			</div>
+		</div>
+	</div>
 </body>
-
 </html>

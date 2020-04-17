@@ -1,5 +1,4 @@
 <?php
-
 include_once("validaciones.php");
 include_once("funciones.php");
 $nombre_usr = (isset($_POST['usuario'])) ? $_POST['usuario'] : null;

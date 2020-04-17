@@ -1,3 +1,4 @@
+
 <?php
 include_once("funciones.php");
 include_once("validaciones.php");

@@ -24,25 +24,29 @@ PRIMARY KEY (id_usr),
 FOREIGN KEY (rol_usr) REFERENCES roles(id_rol)
 );
 CREATE TABLE IF NOT EXISTS categorias (
-id_cat INT PRIMARY KEY AUTO_INCREMENT,
-nom_cat CHAR(50) UNIQUE
+id_cat INT(2) AUTO_INCREMENT,
+nom_cat CHAR(50) UNIQUE,
+PRIMARY KEY(id_cat)
 );
 CREATE TABLE IF NOT EXISTS subcategorias (
-id_sub INT(6) AUTO_INCREMENT,
-cat_sub INT REFERENCES categorias(id_cat),
+cat_sub INT(2),
+id_sub INT(2) AUTO_INCREMENT,
 nom_sub CHAR(50) UNIQUE,
-PRIMARY KEY(id_sub,cat_sub)
-);
+PRIMARY KEY(cat_sub, id_sub),
+FOREIGN KEY(cat_sub) REFERENCES categorias(id_cat)
+)ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS articulos (
-id_art INT PRIMARY KEY AUTO_INCREMENT,
+id_art INT(3) AUTO_INCREMENT,
 nom_art CHAR(50),
-sub_art INT(6) REFERENCES subcategorias(id_sub),
-cat_art INT REFERENCES categorias(id_cat),
+cat_art INT(2),
+sub_art INT(2),
 des_art CHAR(100),
 pre_art NUMERIC(9,2),
 act_art BOOLEAN,
-sto_art INT(6)
-);
+sto_art INT(6),
+PRIMARY KEY(id_art),
+FOREIGN KEY(cat_art, sub_art) REFERENCES subcategorias(cat_sub,id_sub)
+)ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS pedidos (
 id_ped INT PRIMARY KEY AUTO_INCREMENT,
 usr_ped INT REFERENCES usuarios(id_usr),
@@ -99,15 +103,15 @@ VALUES
 (2,"clasicas"),
 (2,"express");
 
-INSERT INTO articulos (nom_art,sub_art,cat_art,des_art,pre_art,act_art,sto_art)
+INSERT INTO articulos (nom_art,cat_art,sub_art,des_art,pre_art,act_art,sto_art)
 VALUES
-("Bra",3,2,"La mejor cafetera clasica del mercado",35,1,0),
-("Moulinex",4,2,"Una expreso a buen precio",74,1,0),
-("Clasic",3,2,"La de toda la vida, para dos servicios", 25,1,0),
-("Jata",4,2,"La expreso para dos tazas simultaneas",95,1,0),
+("Bra",2,1,"La mejor cafetera clasica del mercado",35,1,0),
+("Moulinex",2,2,"Una expreso a buen precio",74,1,0),
+("Clasic",2,1,"La de toda la vida, para dos servicios", 25,1,0),
+("Jata",2,2,"La expreso para dos tazas simultaneas",95,1,0),
 ("Office",1,1,"Suficiente para ofimatica",450,1,0),
 ("Gamer",1,1,"Para los mas exigente jugadores",950,1,0),
-("HP",2,1,"Perfecta portabilidad, ligero pero potente",800,1,0),
-("Acer",2,1,"Llevate el juego donde quieras",1100,1,0);
+("HP",1,2,"Perfecta portabilidad, ligero pero potente",800,1,0),
+("Acer",1,2,"Llevate el juego donde quieras",1100,1,0);
 
 

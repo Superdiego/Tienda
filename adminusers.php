@@ -1,6 +1,10 @@
 <?php
-session_start();
-include_once('funciones.php');
+
+$nom_pag= "PAGINA DE ADMINISTRACION";
+include_once("funciones.php");
+include_once("validaciones.php");
+include_once("cabecera.php");
+
 if(!isset($_SESSION['autenticado'])){
     header("location:index.php");
 }else{
@@ -36,56 +40,17 @@ editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localid
 }
 
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-<!-- Required meta tags -->
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="bootstrap/bootstrap.css">
-<!--  <link rel="stylesheet" type="text/css" href="estilo.css"> -->
-<title>Cachivaches</title>
-
-</head>
-<body>
-	<!-- Optional JavaScript -->
-	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-		crossorigin="anonymous"></script>
-	<script src="bootstrap/bootstrap.js"></script>
-
-	<div class="container-fluid bg-primary">
-		<div class="container-fluid text-white pt-5 pb-1">
-			<h1 class="display-4">Cachivaches</h1>
-		</div></div>
-		<h1 class="text-center py-5">ADMINISTRACION USUARIOS</h1>
-
-		<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">DNI</th>
-      <th scope="col">NIC</th>
-      <th scope="col">ROL</th>
-      <th scope="col">NOMBRE</th>
-      <th scope="col">APELLIDOS</th>
-      <th scope="col">DIRECCION</th>
-      <th scope="col">C.POSTAL</th>
-      <th scope="col">LOCALIDAD</th>
-      <th scope="col">PROVINCIA</th>
-      <th scope="col">E-MAIL</th>
-      <th scope="col">TELEFONO</th>
-      <th scope="col">PASSWORD</th>
-      <th scope="col">ACTIVO</th>    
-    </tr>
+	
+		<h3 class="text-center py-5">ADMINISTRACION USUARIOS</h3></div>
+<div class="col-md-2">
+			<?php include ("autentificacion.php")?>
+			</div>
+			</div>
+		<table class="table table-striped table-responsive">
+  <thead >
+    <tr><th>ID</th><th class="px-1 mx-1">DNI</th><th>NIC</th><th >ROL</th><th>NOMBRE</th><th>APELLIDOS</th>
+      <th>DIRECCION</th><th class='px-1'>C.POST.</th><th class='px-1'>LOC.</th><th class='px-1'>PROV.</th><th>E-MAIL</th>
+      <th class='px-1'>TELEFONO</th><th class='px-1'>PASS</th><th class='px-1'>ACT.</th></tr>
   </thead>
   <tbody>	
 <?php mostrar_usuario(); ?>
@@ -97,4 +62,9 @@ editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localid
 		<div class="text-center">
 <a href="administrador.php" >Volver menu administrador</a>
 </div>
+</div></div>
+		</div>
+	</div>
+</body>
+</html>
 		
