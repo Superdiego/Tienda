@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -64,8 +64,8 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+					<li class="nav-item"><a class="nav-link" href="productos.php">Productos</a></li>
+					<li class="nav-item"><a class="nav-link" href="contacto.php">Contacto</a></li>
 					<li class="nav-item"><a class="nav-link"
 						href="registroClientes.php">Registro</a></li>
 				</ul>
@@ -83,21 +83,18 @@
 					role="tablist" aria-orientation="vertical">
 		<?php
 include_once ("funciones.php");
-$cat = mostrar_categorias();
-$i = 0;
-while (isset($cat[$i])) {
+$categ = mostrar_categorias();
+foreach($categ as $cat) {
     echo '<li class="nav-item">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
-						role="button" aria-haspopup="true" aria-expanded="false">' . $cat[$i] . '</a>
+						role="button" aria-haspopup="true" aria-expanded="false">' . $cat[1] . '</a>
 						<div class="dropdown-menu">';
-    $subcat = mostrar_subcategorias($i + 1);
-    $j = 0;
-    while (isset($subcat[$j])) {
-        echo '<a class="dropdown-item" href="Subcategorias.php?sub=' . $subcat[$j] . '">' . $subcat[$j] . '</a>';
-        $j ++;
+    $subcateg = mostrar_subcategorias($cat[0]);
+    foreach($subcateg as $subcat) {
+        echo '<a class="dropdown-item" href="Subcategorias.php?sub='.$subcat[2]. '">' . $subcat[2] . '</a>';
     }
     echo '</div></li>';
-    $i++;
+
 			}
         ?>
 				</ul>

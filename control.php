@@ -30,6 +30,7 @@ if((isset($_POST['usuario']))) {
                 break;
             case 4:
                 $_SESSION['autenticado']=$nombre_usr;
+                $_SESSION['admin'] = $nombre_usr;
                 header("location:administrador.php");
                 break;
             case 5:

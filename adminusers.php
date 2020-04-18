@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $nom_pag= "PAGINA DE ADMINISTRACION";
 include_once("funciones.php");
 include_once("validaciones.php");
@@ -53,7 +53,7 @@ editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localid
       <th class='px-1'>TELEFONO</th><th class='px-1'>PASS</th><th class='px-1'>ACT.</th></tr>
   </thead>
   <tbody>	
-<?php mostrar_usuario(); ?>
+<?php mostrar_usuario(8); ?>
   </tbody>
 </table>
 

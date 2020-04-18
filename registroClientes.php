@@ -1,4 +1,5 @@
 <?php
+session_start();
 $nom_pag="Alta de Clientes";
 include_once ("cabecera.php");
 include_once("validaciones.php");
@@ -78,7 +79,8 @@ if(val_texto($nick)&&val_dni($dni)&&val_texto($nombre)&&val_texto($apellidos)&&v
 			<div class="col-md-2">
 			<?php include ("autentificacion.php")?>
 			</div>
-		</div>
-	</div>
+</div>
+</div>
+<?php include("pie.php")?>
 </body>
 </html>

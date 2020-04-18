@@ -196,18 +196,40 @@ class articulos{
         return $this->sto_art;
     }  
 }
-//Muestra articulos para index, ordenados por registros más recientes
-function mostrar_articulos(){
+//Articulos ordenados por registros más recientes (OJO, "siguiente" avanza hacia los más antiguos,)
+function mostrar_articulos($bloque){
+    if (isset($_GET["comienzo"])){
+        $comienzo = $_GET["comienzo"];
+    }else{
+        $comienzo = 0;
+    }
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT * FROM articulos  ORDER BY id_art DESC");
+    $consulta = $conex->prepare("SELECT * FROM articulos  ORDER BY id_art DESC LIMIT $comienzo , $bloque");
     $consulta->execute();
     $consulta->setFetchMode(PDO::FETCH_CLASS, 'articulos');
     while($fila = $consulta->fetch()){
-        echo '<div class="col-md-6 col-xl-4"><div><a href="detalleArticulo.php?art='.$fila->getId_art().'">
-                <img src="imgProductos/'.$fila->getId_art().'.jpg" width="100" height="100"></a></div><div>'. 
-                $fila->getNom_art() . ' ' . $fila->getPre_art().'</div></div>';
+        $articulos[]=$fila;
     }
+    $datos[]=$articulos;
+    if(($comienzo+$bloque)< contar_articulos()){
+        $prox = $comienzo + $bloque;
+        $url = $_SERVER["PHP_SELF"] . "?comienzo=$prox";
+        $datos[] =  "<a href='$url'>Anterior</a>";
+    }else{
+        $datos[] = "";
+    }
+    if($comienzo > 0) {
+        $prev = $comienzo - $bloque;
+        $url = $_SERVER["PHP_SELF"] . "?comienzo=$prev";
+        $datos[] = "<a href='$url'>Siguiente</a>";
+    }else{
+        $datos[] = "";
+    }
+
+    
+    return $datos;
 }
+
 //Clase usuarios, solo getters (debería ir en archivo aparte, clases.php)
 class usuarios{
     private $id_usr;
@@ -326,16 +348,23 @@ function contar_usuarios(){
     $fila= $consulta->fetch();
     return $fila[0];   
 }
+//Nos devuelve el total de articulos para la función de paginación
+function contar_articulos(){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT COUNT(*) FROM articulos");
+    $consulta->execute();
+    $fila= $consulta->fetch();
+    return $fila[0];
+}
 //Listado para de usuarios manipulable para uso exclusivo del administrador
-function mostrar_usuario(){
-    $pag = 0;
+function mostrar_usuario($bloque){
     if (isset($_GET["desplazamiento"])){
         $desplazamiento = $_GET["desplazamiento"];
     }else{
         $desplazamiento = 0;
     }
     $conex = conectar();   
-    $consulta = $conex->prepare("SELECT * FROM usuarios ORDER BY id_usr LIMIT $desplazamiento , 4");
+    $consulta = $conex->prepare("SELECT * FROM usuarios ORDER BY id_usr LIMIT $desplazamiento , $bloque");
     $consulta->execute();
     $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
 
@@ -380,14 +409,14 @@ function mostrar_usuario(){
             </form>";
     }
     if($desplazamiento > 0) {
-        $prev = $desplazamiento - 4;
+        $prev = $desplazamiento - $bloque;
         $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prev";
         echo "<div class='text-center'><a href='$url'>Anterior</a>";
     }else{
         echo "<div class='text-center'>";
     }
     if(($desplazamiento+4)< contar_usuarios()){
-        $prox = $desplazamiento +4;
+        $prox = $desplazamiento + $bloque;
         $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prox";
         echo "<a href='$url'>Siguiente</a></div>";
     }else{
@@ -422,10 +451,11 @@ function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $p
 //Lista todas las categorías existentes (para menú lateral)
 function mostrar_categorias(){
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT nom_cat FROM categorias ORDER BY id_cat");
+    $consulta = $conex->prepare("SELECT * FROM categorias ORDER BY id_cat");
     $consulta->execute();
+    $categ=array();
     while($fila = $consulta->fetch()){
-        $categ[]=$fila[0];
+        $categ[]=$fila;
     }
     if(isset($categ)){
     return $categ;
@@ -434,13 +464,16 @@ function mostrar_categorias(){
 //Lista todas las subcategorias de una id de categoria (para menú lateral)
 function mostrar_subcategorias($categ){
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT nom_sub FROM subcategorias WHERE cat_sub=:categ");
+    $consulta = $conex->prepare("SELECT * FROM subcategorias WHERE cat_sub=:categ");
     $consulta->execute(array(':categ'=>$categ));
+    $subcateg=array();
     while($fila = $consulta->fetch()){
-        $subcateg[] = $fila[0];
+        $subcateg[] = $fila;
     }
     if(isset($subcateg)){
         return $subcateg;
+    }else{
+        return null;
     }
 }
 //Muestra todos los articulos de una subcategoría a partir del id (para menú principal subcategoria)
@@ -559,7 +592,7 @@ function mostrar_lineas($ped){
         <td colspan='4' class='text-right'>I.V.A. 21%</td>
         <td class='text-right'>".number_format($total*21/121 , 2)."</td></tr><tr class='table-active'>
         <th colspan='4' class='text-right'>Total pedido</th>
-        <th class='text-right'>".number_format($total,2)."</th></tr>"; 
+        <th class='text-right'>".number_format($total,2)."</th></tr>";
 }
 //Menu desplegable categorias para registrar subcategorias
 function menu_categorias(){
@@ -570,5 +603,35 @@ function menu_categorias(){
         echo "<option value=".$fila[0].">".$fila[1]."</option>";
     }
 }
+function menu_subcategorias(){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM subcategorias");
+    $consulta->execute();
+    while ($fila = $consulta->fetch()){
+        echo "<option value=".$fila[1].">".$fila[2]."</option>";
+    }
+}
+function modificar_articulo($id,$nom,$cat,$sub, $des, $pre, $act, $sto){
+    $conex = conectar();
+    $codigo = "UPDATE articulos SET  nom_art = :nom, cat_art = :cat, sub_art = :sub, des_art = :des, pre_art = :pre,
+            act_art = :act, sto_art = :sto WHERE id_art = :id";
+    $insert = $conex->prepare($codigo);
+    $registro = $insert->execute(array(':nom'=>$nom, ':cat'=>$cat, ':sub'=>$sub, ':des'=>$des, ':pre'=>$pre,
+                                ':act'=>$act, ':sto'=>$sto, 'id'=>$id));
+    if ($registro==1){
+        echo "Registro modificado";
+    }
+}
+    
+    function listadesubcategorias(){
+        $conex = conectar();
+        $consulta = $conex->prepare("SELECT * FROM subcategorias");
+        $consulta->execute();
+        while($fila = $consulta->fetch()){
+            $lista_subcateg[] = $fila;
+        }
+        return $lista_subcateg;   
+    }
+
 
 ?>

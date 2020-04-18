@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once ('funciones.php');
 include_once ("validaciones.php");
 $nom_pag = "Alta Categorias";
@@ -78,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	</div>
 </div>
 <p class=pt-5>
-	<a href="index.php">Volver a pagina principal</a>
+
 </p>
 <?php
 if ($admin->getRol_usr() == 4) {

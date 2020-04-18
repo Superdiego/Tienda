@@ -10,9 +10,6 @@ $cat = (isset($_POST['cat'])) ? $_POST['cat'] : null;
 $des = (isset($_POST['descrip'])) ? $_POST['descrip'] : null;
 $pre = (isset($_POST['precio'])) ? $_POST['precio'] : null;
 
-
-
-
 $val_nom = null;
 $val_sub = null;
 $val_cat = null;
@@ -45,9 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (val_texto($nom) && val_texto(leer_subcategoria($sub)) && val_texto(leer_categoria($cat)) && val_texto($des) && ctype_digit($pre)) {
         registrar_articulos($nom, $sub, $cat, $des, $pre);
     }
-    
-
-
+  
     if(isset($_FILES["foto"]) && $_FILES["foto"]["size"]>0){
         if ($_FILES["foto"]["size"]>400000){
             echo "Archivo demasiado grande";
@@ -66,8 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
      }
-              
-
 }
 ?>
 
@@ -92,7 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <br>
 <br>
 <a href="index.php">Volver a pagina principal</a>
-
+			<div class="col-md-2">
+			<?php include ("autentificacion.php")?>
+			</div>
+</div>
+</div>
+<?php include("pie.php")?>
 </body>
-
 </html>

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once ("funciones.php");
 $id_pag = (isset($_GET['art'])) ? $_GET['art'] : null;
 $producto = buscar_articulo($id_pag);
@@ -16,7 +17,7 @@ include ("cabecera.php");
 				<label>Cantidad: </label> <input type="number" name="cant" value=1
 					min=1 style="width: 3em">
 				<button class=" bg-primary  rounded float-center align-middle"
-					type="submit" name="art" value="<?php echo $id_pag?>">
+					type="submit" name="art" value=<?php echo $id_pag?>>
 					<svg class="rounded float-right " viewBox="0 0 32 32" width="32"
 						height="32" fill="none" stroke="white" stroke-linecap="round"
 						stroke-linejoin="round" stroke-width="2">
@@ -30,14 +31,15 @@ include ("cabecera.php");
 		<div class="col-4"></div>
 	</div>
 
-</div>
+
 </div>
 </div>
 
-<div class="col-sm-12 col-md-2">
+			<div class="col-md-2">
 			<?php include ("autentificacion.php")?>
 			</div>
 </div>
-
+</div>
+<?php include("pie.php")?>
 </body>
 </html>

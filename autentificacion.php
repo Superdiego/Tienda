@@ -52,6 +52,8 @@ echo "<h5> $titulo </h5>";
 <form method="POST" action="control.php" <?php echo $nover?>>
 <input type="text" name="salir" value="1" hidden>
 <input type="submit" value="Abandonar sesion" >
+<?php 
+?>
 </form>
 
 
