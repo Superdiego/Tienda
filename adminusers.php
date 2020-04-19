@@ -3,7 +3,7 @@ session_start();
 $nom_pag= "PAGINA DE ADMINISTRACION";
 include_once("funciones.php");
 include_once("validaciones.php");
-include_once("cabecera.php");
+
 
 if(!isset($_SESSION['autenticado'])){
     header("location:index.php");
@@ -14,7 +14,7 @@ if(!isset($_SESSION['autenticado'])){
         header("location:index.php");
     }
 }
-
+include_once("cabecera.php");
 
 if(isset($_REQUEST['nic']) && $_REQUEST['nic'] != ""){
 

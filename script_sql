@@ -68,10 +68,10 @@ can_alm INT(6)
 );
 CREATE TABLE IF NOT EXISTS registros(
 id_reg INT PRIMARY KEY AUTO_INCREMENT,
+fec_reg INT,
 usr_reg INT REFERENCES usuarios(id_usr),
 tex_reg CHAR(100)
 );
-
 INSERT INTO roles (nom_rol)
 VALUES
 ("invitado"),
@@ -93,15 +93,19 @@ VALUES
 
 INSERT INTO categorias (nom_cat)
 VALUES
-("ordenadores"),
-("cafeteras");
+("ORDENADORES"),
+("CAFETERAS"),
+("IMAGEN"),
+("SONIDO");
 
 INSERT INTO subcategorias (cat_sub,nom_sub)
 VALUES
-(1,"torres"),
-(1,"portatiles"),
-(2,"clasicas"),
-(2,"express");
+(1,"Torres"),
+(1,"Portatiles"),
+(2,"Clasicas"),
+(2,"Express"),
+(3,"Television"),
+(4,"Sonido");
 
 INSERT INTO articulos (nom_art,cat_art,sub_art,des_art,pre_art,act_art,sto_art)
 VALUES
@@ -112,6 +116,8 @@ VALUES
 ("Office",1,1,"Suficiente para ofimatica",450,1,0),
 ("Gamer",1,1,"Para los mas exigente jugadores",950,1,0),
 ("HP",1,2,"Perfecta portabilidad, ligero pero potente",800,1,0),
-("Acer",1,2,"Llevate el juego donde quieras",1100,1,0);
+("Acer",1,2,"Llevate el juego donde quieras",1100,1,0),
+("LG",3,1,"Para pasar horas tumbado en el sofa",800,1,0),
+("Marshall",4,1,"Buen sonido a buen precio",200,1,0);
 
 

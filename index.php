@@ -9,7 +9,7 @@ include_once("cabecera.php");
 
 <?php
 
-$datos = mostrar_articulos(8);
+$datos = mostrar_articulos(9);
 $art = $datos[0];
 
 foreach($art as $articulo){
@@ -19,17 +19,21 @@ foreach($art as $articulo){
 }
 
 ?>
-
+</div>
 <div class='row'>
 <div class='col-sm-4'></div>
 <div class='col-sm-2 text-center'><p><?php echo $datos[1]?><p></div>
 <div class='col-sm-2 text-center'><p><?php echo $datos[2]?></p></div>
 <div class='col-sm-4'></div>
-</div></div>
+</div>
  <?php
  if(isset($_SESSION['admin'])){
     echo "<div class='text-center pt-3'><a href='administrador.php'>Volver menu administrador</a></div>";
- }?>               
+ }?> 
+ <?php
+ if(isset($_SESSION['emple'])){
+    echo "<div class='text-center pt-3'><a href='empleado.php'>Volver menu empleado</a></div>";
+ }?>              
 
 
 

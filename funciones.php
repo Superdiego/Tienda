@@ -111,21 +111,21 @@ function registrar_subcategoria($cat, $nom)
     }
 }
 //Registro nuevos articulos
-function registrar_articulos($nom, $sub, $cat, $des, $pre)
+function registrar_articulos($nom, $cat, $sub, $des, $pre, $act, $sto)
 {
     $conex = conectar();
-    $codigo = "INSERT INTO articulos (nom_art,sub_art,cat_art,des_art,pre_art,act_art,sto_art)
-               VALUES (:nom,:sub,:cat,:des,:pre,:act,:sto);";
+    $codigo = "INSERT INTO articulos (nom_art,cat_art,sub_art,des_art,pre_art,act_art,sto_art)
+               VALUES (:nom,:cat,:sub,:des,:pre,:act,:sto);";
     $insert = $conex->prepare($codigo);
     try {
         $fila = $insert->execute(array(
             ':nom' => $nom,
-            ':sub' => $sub,
             ':cat' => $cat,
+            ':sub' => $sub,
             ':des' => $des,
             ':pre' => $pre,
-            ':act' => '0',
-            ':sto' => '0'
+            ':act' => $act,
+            ':sto' => $sto
         ));
 
         if ($fila == 1) {
@@ -483,9 +483,9 @@ function ver_subcategorias($categ, $subcateg){
     $consulta->execute(array(':cat'=>$categ, ':subcat'=>$subcateg));
     $consulta->setFetchMode(PDO::FETCH_CLASS, 'articulos');
     while($fila = $consulta->fetch()){
-        echo '<div class="col-md-6 col-xl-4"><div><a href="detalleArticulo.php?art='.$fila->getId_art().'">
-                <img src="imgProductos/'.$fila->getId_art().'.jpg" width="100" height="100"></a></div><div>'.
-                $fila->getNom_art() . ' ' . $fila->getPre_art().'</div></div>';
+        echo "<div class='col-md-6 col-xl-4'><div><a href='detalleArticulo.php?art=".$fila->getId_art()."'>
+                <img src='imgProductos/".$fila->getId_art().".jpg' width='100' height='100'></a></div>".
+                $fila->getNom_art() . " " . $fila->getPre_art()."</div>";
     }
 }
 //Devuelve el id de una subcategoria a partir de su nombre

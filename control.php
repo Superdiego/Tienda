@@ -26,6 +26,7 @@ if((isset($_POST['usuario']))) {
                 break;
             case 3:
                 $_SESSION['autenticado']=$nombre_usr;
+                $_SESSION['emple']=$nombre_usr;
                 header("location:empleado.php");
                 break;
             case 4:

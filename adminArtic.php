@@ -19,8 +19,9 @@ include('cabecera.php');
 if(isset($_POST['modificar'])){
     $id = (isset($_POST['id']) && ctype_digit($_POST['id'])) ? $_POST['id'] : null;
     $nom = (isset($_POST['nombre']) && val_texto($_POST['nombre'])) ? $_POST['nombre'] : null;
-    $cat = (isset($_POST['categ']) && ctype_digit($_POST['categ'])) ? $_POST['categ'] : null;
-    $sub = (isset($_POST['subcateg']) && ctype_digit($_POST['subcateg'])) ? $_POST['subcateg'] : null;
+    $catsubcat = (isset($_POST['catsubcat'])) ? explode(",",$_POST['catsubcat']) : null;
+    $cat = $catsubcat[0];
+    $sub = $catsubcat[1];
     $desc = (isset($_POST['descripcion']) && val_texto($_POST['descripcion'])) ? $_POST['descripcion'] : null;
     $pre = (isset($_POST['precio']) && is_numeric($_POST['precio'])) ? $_POST['precio'] : null;
     $act = (isset($_POST['activo']) && ctype_digit($_POST['activo'])) ? $_POST['activo'] : null;
@@ -61,7 +62,7 @@ foreach($articulos as $artic){
     $id = $artic->getId_art();
     $nom = (isset($_POST['nombre']) && val_texto($_POST['nombre'])) ? $_POST['nombre'] : $artic->getNom_art();
     $cat = (isset($_POST['categ']) && ctype_digit($_POST['categ'])) ? $_POST['categ'] : $artic->getCat_art();
-    $sub = (isset($_POST['subcateg']) && ctype_digit($_POST['subcateg'])) ? $_POST['subcateg'] : $artic->getSub_art();
+    $subcat = (isset($_POST['subcateg']) && ctype_digit($_POST['subcateg'])) ? $_POST['subcateg'] : $artic->getSub_art();
     $desc = (isset($_POST['descripcion']) && val_texto($_POST['descripcion'])) ? $_POST['descripcion'] : $artic->getDes_art();
     $pre = (isset($_POST['precio']) && is_numeric($_POST['precio'])) ? $_POST['precio'] : $artic->getPre_art();
     $act = (isset($_POST['activo']) && is_bool($_POST['activo'])) ? $_POST['activo'] : $artic->getAct_art();
@@ -73,11 +74,12 @@ foreach($articulos as $artic){
         <div class='form-group row'><label class='col-sm-2 col-form-label'>Nombre:</label><div class='col-sm-10'>
         <input class='form-control' type='text' name='nombre' value='$nom'>$err_nom</div></div>
         <div class='form-group row'><label class='col-sm-2 col-form-label'>Categoria:</label>
-        <div class='col-sm-10''><select class='custom-select'>";
+        <div class='col-sm-10''><select class='custom-select' name='catsubcat'>";
     $lista = listadesubcategorias();
     foreach($lista as $sub){
-            $inf = array($sub[0]=>$sub[1]);
-            echo "<option value='".$sub[0]."'>".leer_categoria($sub[0])."&nbsp; &nbsp;".$sub[2]."</option>";
+            echo "<option value='".$sub[0].",".$sub[1]."'";
+            if($sub[0]==$cat && $sub[1]==$subcat){echo " selected ";}
+            echo ">".leer_categoria($sub[0])."&nbsp; &nbsp;".$sub[2]."</option>";
     }
     echo "</select></div></div>
         <div class='form-group row'><label class='col-sm-2 col-form-label'>Descripcion:</label><div class='col-sm-10'>
@@ -98,6 +100,10 @@ foreach($articulos as $artic){
 </div><?php
 if ($admin->getRol_usr() == 4) {
     echo "<div class='text-center py-2'><a href='administrador.php'>Menu administrador</a></div>";
+}
+
+if ($admin->getRol_usr() == 3) {
+    echo "<div class='text-center py-2'><a href='empleado.php'>Menu empleado</a></div>";
 }
 
 ?></div>
