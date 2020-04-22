@@ -99,4 +99,4 @@ foreach($categ as $cat) {
         ?>
 				</ul>
 			</div>
-			<div class="col-md-8 py-5">
+			<div class="col-md-8">

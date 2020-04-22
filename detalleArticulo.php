@@ -31,7 +31,16 @@ include ("cabecera.php");
 		<div class="col-4"></div>
 	</div>
 
+<?php 
+if (isset($_SESSION['autenticado'])){
+    $name = $_SESSION['autenticado'];
+    $user = datos_usuario($name);
+    if(($user->getRol_usr() == 3) || ($user->getRol_usr() == 4)) {
 
+    echo "<div class='text-center py-2'><a href='almacen.php?art=$id_pag'>Acceso a almacen</a></div>";
+    }
+}
+?>
 </div>
 </div>
 
