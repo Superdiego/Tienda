@@ -116,9 +116,10 @@ if (isset($_POST['confbajasub'])){
            borrar_subcategoria($idcat,$idsub);
            
            header("location:registroCategorias.php?okbajasub=$idsub&cat=$idcat&count=&url");
-        }else
+        }else{
             $url = count($articulos);
             header("location:registroCategorias.php?errconfbajasub=$idsub&cat=$idcat&count=$url");
+    }
 }
 
 

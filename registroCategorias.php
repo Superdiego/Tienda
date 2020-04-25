@@ -141,7 +141,7 @@ if (isset($_GET['errmodif']) && ($_GET['errmodif'] == 'cat')) {
 
                         echo "<button class='bg-primary text-white m-2 p-2' type='submit'>Confirmar</button>   
                         <button class='bg-primary text-white m-2 p-2' >
-                        <a class='text-white' href='http://localhost/php/tienda/registroCategorias.php'>
+                        <a class='text-white' href='registroCategorias.php'>
                         Cancelar</a></button><br>";
                     }
                     if (isset($_GET['bajacat'])) {
@@ -149,13 +149,13 @@ if (isset($_GET['errmodif']) && ($_GET['errmodif'] == 'cat')) {
                         echo "<button class='bg-primary text-white m-2 p-2' type='submit' name='confbajacat'>
                         Confirmar baja</button>
                         <button class='bg-primary text-white m-2 p-2' >
-                        <a class='text-white' href='http://localhost/php/tienda/registroCategorias.php'>
+                        <a class='text-white' href='registroCategorias.php'>
                         Cancelar</a></button><br>";
                         echo "</p><input type='hidden' name='idbajacat' value=$idcat>";
                         }
                         if(isset($_GET['errconfbajacat'])){                           
                             echo "<button class='bg-primary text-white m-2 p-2' >
-                            <a class='text-white' href='http://localhost/php/tienda/registroCategorias.php'>
+                            <a class='text-white' href='registroCategorias.php'>
                             Cancelar</a></button>";
                         }
 
@@ -223,7 +223,7 @@ if (isset($_GET['modifsub'])) {
         }
         echo "<button class='bg-primary text-white m-2 p-2' name ='confmodifsub' type='submit'>Confirmar</button>   
                         <button class='bg-primary text-white m-2 p-2'>
-                        <a class='text-white' href='http://localhost/php/tienda/registroCategorias.php'>
+                        <a class='text-white' href='registroCategorias.php'>
                         Cancelar</a></button><br>";
     }
     
@@ -238,7 +238,7 @@ if (isset($_GET['modifsub'])) {
             <br><p >¿Confirmar baja de la subcategoría <b>$nomsub[2]</b>?</p>
             <button class='bg-primary text-white p-2' name ='confbajasub' type='submit'>Confirmar</button>   
             <button class='bg-primary text-white p-2'>
-            <a class='text-white' href='http://localhost/php/tienda/registroCategorias.php'>
+            <a class='text-white' href='registroCategorias.php'>
             Cancelar</a></button><br>";
     }
     
@@ -272,7 +272,7 @@ if (isset($_GET['modifsub'])) {
 			    $count = $_GET['count'];
 			    echo "No puede eliminar <b> $nomsub[2] </b> de la categoría $nomcat porque contiene $count artículos
 			    <br><button class='bg-primary text-white m-2 p-2' >
-                            <a class='text-white' href='http://localhost/php/tienda/registroCategorias.php'>
+                            <a class='text-white' href='registroCategorias.php'>
                             Cancelar</a></button>";
 			}
 			if (isset($_GET['okbajasub'])){

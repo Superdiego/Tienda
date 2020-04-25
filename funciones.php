@@ -36,13 +36,13 @@ function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel
             ':act' => 1
         ));
         if ($fila == 1) {
-            echo "<br>Registro completado";
+            return "<span class='text-success'>Registro completado correctamente</span>";
         }
     } catch (PDOException $e) {
         if (preg_match("/dni_usr'$/", $e->getMessage())) {
-            echo "Este DNI ya esta registrado";
+            return "<span class='text-danger'>Este DNI ya está registrado</span>";
         } else if (preg_match("/nic_usr'$/", $e->getMessage())) {
-            echo "Este nick ya esta en uso, pruebe otro";
+            return "<span class='text-danger'>Este nick ya está en uso, pruebe otro</span>";
         }
     }
 }
@@ -136,10 +136,10 @@ function registrar_articulos($nom, $cat, $sub, $des, $pre, $act, $sto)
         ));
 
         if ($fila == 1) {
-            echo '<br><span class="correcto">Registro completado correctamente</span>';
+            return '<br><span class="correcto">Registro completado correctamente</span>';
         }
     } catch (PDOException $e) {
-        echo "<br><span class='error'>Error en el registro</span>";
+        return "<br><span class='error'>Error en el registro</span>";
     }
 }
 
@@ -222,7 +222,7 @@ class articulos
 }
 
 // Articulos ordenados por registros más recientes (OJO, "siguiente" avanza hacia los más antiguos,)
-function mostrar_articulos($bloque)
+function mostrar_articulos($bloque, $orden = 'ASC')
 {
     if (isset($_GET["comienzo"])) {
         $comienzo = $_GET["comienzo"];
@@ -230,7 +230,7 @@ function mostrar_articulos($bloque)
         $comienzo = 0;
     }
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT * FROM articulos  ORDER BY id_art DESC LIMIT $comienzo , $bloque");
+    $consulta = $conex->prepare("SELECT * FROM articulos  ORDER BY id_art $orden LIMIT $comienzo , $bloque");
     $consulta->execute();
     $consulta->setFetchMode(PDO::FETCH_CLASS, 'articulos');
     while ($fila = $consulta->fetch()) {
@@ -240,14 +240,14 @@ function mostrar_articulos($bloque)
     if (($comienzo + $bloque) < contar_articulos()) {
         $prox = $comienzo + $bloque;
         $url = $_SERVER["PHP_SELF"] . "?comienzo=$prox";
-        $datos[] = "<a href='$url'>Anterior</a>";
+        $datos[] = "<a href='$url'>Siguiente</a>";
     } else {
         $datos[] = "";
     }
     if ($comienzo > 0) {
         $prev = $comienzo - $bloque;
         $url = $_SERVER["PHP_SELF"] . "?comienzo=$prev";
-        $datos[] = "<a href='$url'>Siguiente</a>";
+        $datos[] = "<a href='$url'>Anterior</a>";
     } else {
         $datos[] = "";
     }
@@ -511,9 +511,9 @@ function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $p
         ':pas' => $pas
     ));
     if ($fila == 1) {
-        echo "<br><span class='valid-feedback'>Modificacion completada</span>";
+        return "<span class='text-success'>Modificación completada</span>";
     } else {
-        echo "<br>Error en la modificacion<br>";
+        return "<span class='text-danger'>Error en la modificacion</span>";
     }
 }
 
@@ -615,9 +615,9 @@ function editar_usuario($dni, $rol, $nom, $ape, $dir, $cop, $loc, $pro, $ema, $t
         ':act' => $act
     ));
     if ($fila == 1) {
-        echo "<br>Modificacion completada";
+        return "<br>Modificacion completada";
     } else {
-        echo "<br>Error en la modificacion<br>";
+        return "<br>Error en la modificacion<br>";
     }
 }
 
@@ -690,10 +690,11 @@ function mostrar_lineas($ped)
     ));
     $consulta->setFetchMode(PDO::FETCH_CLASS, "lineas");
     $total = 0;
+    echo "<table class='table bg-light'><th>Linea</th><th>Articulo</th><th>Cantidad</th><th>Precio(IVA incluido)</th><th>Importe</th>";
     while ($fila = $consulta->fetch()) {
         $art = buscar_articulo($fila->getArt_lin());
         $total += ($art->getPre_art() * $fila->getCan_lin());
-        echo "<tr><td>" . $fila->getId_lin() . "</td><td>" . $art->getNom_art() . "</td><td>" . $fila->getCan_lin() . "</td>
+        echo "<tr class='text-center'><td>" . $fila->getId_lin() . "</td><td>" . $art->getNom_art() . "</td><td>" . $fila->getCan_lin() . "</td>
             <td>" . $art->getPre_art() . "</td>
             <td class='text-right'>" . number_format($art->getPre_art() * $fila->getCan_lin(), 2) . "</td></tr>";
     }
@@ -702,7 +703,7 @@ function mostrar_lineas($ped)
         <td colspan='4' class='text-right'>I.V.A. 21%</td>
         <td class='text-right'>" . number_format($total * 21 / 121, 2) . "</td></tr><tr class='table-active'>
         <th colspan='4' class='text-right'>Total pedido</th>
-        <th class='text-right'>" . number_format($total, 2) . "</th></tr>";
+        <th class='text-right'>" . number_format($total, 2) . "</th></tr></table>";
 }
 
 // Menu desplegable categorias para registrar subcategorias
@@ -740,10 +741,10 @@ function modificar_articulo($id, $nom, $cat, $sub, $des, $pre, $act, $sto)
         ':pre' => $pre,
         ':act' => $act,
         ':sto' => $sto,
-        'id' => $id
+        ':id' => $id
     ));
     if ($registro == 1) {
-        echo "Registro modificado";
+        return "Modificado";
     }
 }
 
@@ -826,4 +827,59 @@ function borrar_subcategoria($idcat, $idsub){
     $consulta = $conex->prepare("DELETE FROM subcategorias WHERE cat_sub = :idcat AND id_sub = :idsub");
     $borrado = $consulta->execute(array(':idcat'=>$idcat, ':idsub'=>$idsub));
 }
+
+function datos_user($iduser){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM usuarios WHERE id_usr = :id");
+    $consulta->execute(array(
+        ':id' => $iduser
+    ));
+    $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
+    if ($fila = $consulta->fetch()) {
+        return $fila;
+    } else {
+        return false;
+    }
+}
+
+function mostrar_pedidos(){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM pedidos");
+    $consulta->execute();
+    while($fila=$consulta->fetch()){
+        $fecha = getDate($fila[2]);
+        $dia = $fecha["mday"];
+        $mes = $fecha['mon'];
+        $anyo = $fecha['year'];
+        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo - Cliente: ". datos_user($fila[1])->getNom_usr(). " " .
+        datos_user($fila[1])->getApe_usr()."</h5>";
+        mostrar_lineas($fila[0]);
+    }
+}
+function mis_pedidos($cliente){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM pedidos WHERE usr_ped = :id");
+    $consulta->execute(array(':id'=>$cliente));
+    while($fila=$consulta->fetch()){
+        $fecha = getDate($fila[2]);
+        $dia = $fecha["mday"];
+        $mes = $fecha['mon'];
+        $anyo = $fecha['year'];
+        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo - Cliente: ". datos_user($fila[1])->getNom_usr(). " " .
+            datos_user($fila[1])->getApe_usr()."</h5>";
+            mostrar_lineas($fila[0]);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 ?>

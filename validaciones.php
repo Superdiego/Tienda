@@ -32,14 +32,19 @@ function val_correo($correo){
     }
 }
 
-function val_pass($pass,$confirm_pass){
-    if(preg_match("/^.{3}$/",$pass)){
-        if($pass == $confirm_pass){
-            return true;
-        }else{
-            return false;
-        }
+function val_pass($pass){
+    if(preg_match("/^.{3}$/",$pass)){     
+        return true;
     }else{
+        return false;
+    }
+}
+
+function val_confirmpass($pass,$confirm){
+    if($pass == $confirm){
+        return true;
+    }
+    else{
         return false;
     }
 }

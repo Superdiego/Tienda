@@ -14,7 +14,8 @@ if(!isset($_SESSION['autenticado'])){
         header("location:index.php");
     }
 }
-include_once("cabecera.php");
+include_once("Nuevacabecera.php");
+include_once('Nuevolateral.php');
 
 if(isset($_REQUEST['nic']) && $_REQUEST['nic'] != ""){
 
@@ -40,12 +41,8 @@ editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localid
 }
 
 ?>
-	
-		<h3 class="text-center py-5">ADMINISTRACION USUARIOS</h3></div>
-<div class="col-md-2">
-			<?php include ("autentificacion.php")?>
-			</div>
-			</div>
+<div class='col-md-8'>	
+	<div class='row'>
 		<table class="table table-striped table-responsive">
   <thead >
     <tr><th>ID</th><th class="px-1 mx-1">DNI</th><th>NIC</th><th >ROL</th><th>NOMBRE</th><th>APELLIDOS</th>
@@ -53,18 +50,13 @@ editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localid
       <th class='px-1'>TELEFONO</th><th class='px-1'>PASS</th><th class='px-1'>ACT.</th></tr>
   </thead>
   <tbody>	
-<?php mostrar_usuario(8); ?>
+<?php mostrar_usuario(5); ?>
   </tbody>
 </table>
-
 </form>
-		
-		<div class="text-center">
-<a href="administrador.php" >Volver menu administrador</a>
-</div>
 </div></div>
-		</div>
-	</div>
-</body>
-</html>
-		
+<?php 		
+include('Nuevaautentificacion.php');
+include('Nuevopie.php');
+
+?>
