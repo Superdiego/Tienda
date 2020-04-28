@@ -17,6 +17,9 @@ if(!isset($_SESSION['autenticado'])){
 include_once("Nuevacabecera.php");
 include_once('Nuevolateral.php');
 
+
+$edicion = "";
+
 if(isset($_REQUEST['nic']) && $_REQUEST['nic'] != ""){
 
 $usuario = datos_usuario($_POST['nic']);
@@ -35,7 +38,7 @@ $telefono = (isset($_POST['tel'])) ? $_POST['tel'] :  $usuario->getTel_usr();
 $password = (isset($_POST['pas'])) ? $_POST['pas'] :  $usuario->getPas_usr();
 $activo = (isset($_POST['act'])) ? $_POST['act'] :  $usuario->getAct_usr();
 
-editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localidad, $provincia, $email,
+$edicion = editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localidad, $provincia, $email,
                 $telefono, $password, $activo);
 
 }
@@ -54,7 +57,9 @@ editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localid
   </tbody>
 </table>
 </form>
-</div></div>
+</div>
+<div class='container row text-center'><div class='col-12'><p class=' text-success'><?php echo $edicion ?></p></div></div>
+</div>
 <?php 		
 include('Nuevaautentificacion.php');
 include('Nuevopie.php');

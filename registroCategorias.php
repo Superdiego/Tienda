@@ -13,10 +13,12 @@ if (! isset($_SESSION['autenticado'])) {
         header("location:index.php");
     }
 }
-include_once ("cabecera.php");
+include_once ("Nuevacabecera.php");
+include_once("Nuevolateral.php");
 
 ?>
-<div class="row">
+ <div class='col-md-8'>
+<div class='row'>
 	<div class="col-sm-5  pt-3 bg-light">
 		<h3 class="pb-3">ALTA Categorias</h3>
 		<form method="POST" action="controlCategorias.php">
@@ -108,14 +110,14 @@ if(isset($_GET['errconfbajacat'])){
     $idcat = $_GET['errconfbajacat'];
     $nomcat = devuelve_categoria($idcat)[1];
     $count = $_GET['count'];
-    echo "No puede eliminar <span class='font-weight-bolder'>$nomcat </span><br>porque contiene $count subcategorías<br>"; 
+    echo "No puede eliminar <span class='font-weight-bolder'>$nomcat </span><br>porque contiene $count subcategorías<br>
+    <button class='bg-primary text-white m-2 p-2' >
+    <a class='text-white' href='registroCategorias.php'>
+    Volver</a></button>"; 
 }
 if(isset($_GET['okbajacat'])){
-    $idcat = $_GET['okbajacat'];
-    $nomcat = leer_categoria($idcat);
+    $nomcat = $_GET['okbajacat'];
     $vista = "hidden";
-    echo "Ha eliminado $nomcat de las categorías";
-    
 }
 ?>      
 			<p <?php echo $vista ?>></p>
@@ -153,11 +155,7 @@ if (isset($_GET['errmodif']) && ($_GET['errmodif'] == 'cat')) {
                         Cancelar</a></button><br>";
                         echo "</p><input type='hidden' name='idbajacat' value=$idcat>";
                         }
-                        if(isset($_GET['errconfbajacat'])){                           
-                            echo "<button class='bg-primary text-white m-2 p-2' >
-                            <a class='text-white' href='registroCategorias.php'>
-                            Cancelar</a></button>";
-                        }
+
 
                     ?>         
 			<br>
@@ -166,7 +164,15 @@ if (isset($_GET['errmodif']) && ($_GET['errmodif'] == 'cat')) {
 			<button <?php echo $vista ?> class="bg-primary text-white m2 p-2"
 				type="submit" name='bajacat'>Baja</button>
 		</form>
-
+		
+<?php 
+if(isset($_GET['okbajacat'])){		
+		    echo "Ha eliminado $nomcat de las categorías
+    <br><button class='bg-primary text-white m-2 p-2' >
+    <a class='text-white' href='registroCategorias.php'>
+    Volver</a></button>";    
+}
+?>
 	</div>
 	<div class="col-sm-1"></div>
 	
@@ -182,16 +188,11 @@ $mostrar = "";
 if (isset($_GET['errmodifsub']) && $_GET['errmodifsub'] == 'sub') {
     $errcatsubcat = "bg-warning";
 }
-if (isset($_GET['modifsub']) || isset($_GET['bajasub']) || isset($_GET['errconfbajasub'])){
+if (isset($_GET['modifsub']) || isset($_GET['bajasub']) || isset($_GET['errconfbajasub'])
+    || isset($_GET['okbajasub'])){
     $mostrar = "hidden";
 }
-if(isset($_GET['okbajacat'])){
-    $idcat = $_GET['okbajacat'];
-    $nomcat = leer_categoria($idcat);
-    $mostrar = "hidden";
-    echo "Ha eliminado $nomcat de las categorías";
-    
-}
+
 
 ?>
  
@@ -260,7 +261,7 @@ if (isset($_GET['modifsub'])) {
 				<button class="bg-primary text-white m-2 p-2" type="submit"
 						name="modifsub" <?php echo $mostrar?>>Modificación</button>
 					<button class="bg-primary text-white m2 p-2" type="submit" name="bajasub"
-						<?php echo $mostrar?>>Baja</button>
+						<?php echo $mostrar?>>Baja</button></form>
 			
 			
 			<?php 
@@ -277,14 +278,16 @@ if (isset($_GET['modifsub'])) {
 			}
 			if (isset($_GET['okbajasub'])){
 			    $idcat = $_GET['cat'];
-			    $idsub = $_GET['okbajasub'];
-			    $nomsub= devuelve_subcategoria($idcat, $idsub);
+			    $nomsub = $_GET['okbajasub'];
 			    $nomcat = leer_categoria($idcat);
-			    echo "La subcategoría $nomsub[2] de la categoría $nomcat ha sido eliminada"; 
+			    echo "La subcategoría $nomsub de la categoría $nomcat ha sido eliminada<br>
+                    <button class='bg-primary text-white m-2 p-2' >
+                    <a class='text-white' href='registroCategorias.php'>
+                    Volver</a></button>" ;
 			}
 			?>
 			</div>
-		</form>
+		
 	</div>
 	
 
@@ -292,11 +295,7 @@ if (isset($_GET['modifsub'])) {
 
 
 </div>
-<div class="col-md-2">
-			<?php include ("autentificacion.php")?>
-			</div>
-</div>
-</div>
-<?php include("pie.php")?>
-</body>
-</html>
+
+<?php include ("Nuevaautentificacion.php")?>
+
+<?php include("Nuevopie.php")?>

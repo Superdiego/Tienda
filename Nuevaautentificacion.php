@@ -49,7 +49,7 @@ if(isset($_SESSION['autenticado'])){
     $user = datos_usuario($nick);
     $idrol = $user->getRol_usr();
     echo "<div class='row justify-content-center pb-3'><h5>".$user->getNom_usr()."</h5></div>
-        <div class='row justify-content-center pb-3'><a href='edicion_cliente.php'><button>Modificar datos</button></a></div>
+        <div class='row justify-content-center pb-3'><a href='edicion_cliente.php'><button>Modificar perfil</button></a></div>
         <div class='row justify-content-center pb-3'><form action='control.php' method='POST'>
         <input type='submit' name='salir' value='Abandonar sesión'></form></div>
         <div class='row justify-content-center pb-3'><form action='listar_pedidos.php' method='POST'>

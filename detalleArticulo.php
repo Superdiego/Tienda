@@ -1,54 +1,63 @@
 <?php
 session_start();
 include_once ("funciones.php");
-$id_pag = (isset($_GET['art'])) ? $_GET['art'] : null;
-$producto = buscar_articulo($id_pag);
+include_once ("validaciones.php");
+if (isset($_GET['art'])) {
+    $id = $_GET['art'];
+    $producto = buscar_articulo($id);
+}
 $nom_pag = $producto->getNom_art();
-include ("cabecera.php");
+
+if (isset($_SESSION['autenticado'])) {
+    $usr = $_SESSION['autenticado'];
+    $admin = datos_usuario($usr);
+}
+
+include ('Nuevacabecera.php');
+include ('Nuevolateral.php');
+
+if (isset($_GET['art'])) {
+    $id = $_GET['art'];
+    $producto = buscar_articulo($id);
+}
+
+echo "<div class='col-md-8'>";
 ?>
-<div class="container-fluid">
-	<img src="imgProductos/<?php echo $id_pag?>.jpg">
-	<h3 class="text-center py-5 text-success"><?php echo $producto->getPre_art()?>&nbsp;Eur</h3>
-	<p><?php echo $producto->getDes_art();?></p>
-	<div class="row">
-		<div class="col-4"></div>
-		<div class="col-4">
-			<form method="GET" action="carro.php">
-				<label>Cantidad: </label> <input type="number" name="cant" value=1
-					min=1 style="width: 3em">
-				<button class=" bg-primary  rounded float-center align-middle"
-					type="submit" name="art" value=<?php echo $id_pag?>>
-					<svg class="rounded float-right " viewBox="0 0 32 32" width="32"
-						height="32" fill="none" stroke="white" stroke-linecap="round"
-						stroke-linejoin="round" stroke-width="2">
+
+<div class=" row container-fluid justify-content-center">
+	<img src="imgProductos/<?php echo $id?>.jpg">
+</div>
+<h3 class="text-center py-5 text-success"><?php echo $producto->getPre_art()?>&nbsp;Eur</h3>
+<p class='text-center'><?php echo $producto->getDes_art();?></p>
+<div class="row container-fluid justify-content-center">
+		<form method="GET" action="carro.php">
+			<label>Cantidad: </label> <input type="number" name="cant" value=1
+				min=1 style="width: 3em">
+			<button class=" bg-primary  rounded float-center align-middle"
+				type="submit" name="art" value=<?php echo $id?>>
+				<svg class="rounded float-right " viewBox="0 0 32 32" width="32"
+					height="32" fill="none" stroke="white" stroke-linecap="round"
+					stroke-linejoin="round" stroke-width="2">
     				<path d="M6 6 L30 6 27 19 9 19 M27 23 L10 23 5 2 2 2" />
     				<circle cx="25" cy="27" r="2" />
    		 			<circle cx="12" cy="27" r="2" />
 				</svg>
-				</button>
-			</form>
-		</div>
-		<div class="col-4"></div>
-	</div>
-
-<?php 
-if (isset($_SESSION['autenticado'])){
-    $name = $_SESSION['autenticado'];
-    $user = datos_usuario($name);
-    if(($user->getRol_usr() == 3) || ($user->getRol_usr() == 4)) {
-
-    echo "<div class='text-center py-2'><a href='almacen.php?art=$id_pag'>Acceso a almacen</a></div>";
+			</button>
+		</form>
+	
+</div>
+<?php
+if(isset($_SESSION['autenticado'])){
+    if (($admin->getRol_usr() == 4) || ($admin->getRol_usr() == 3)){
+    echo "<div class='row mt-3 justify-content-center'><form action='modificarArticulo.php' method='POST'>
+        <input type='hidden' name='id' value='$id'>
+        <input type='submit'  name='revisar' value='Modificar'></form></div>";
     }
 }
 ?>
-</div>
-</div>
 
-			<div class="col-md-2">
-			<?php include ("autentificacion.php")?>
-			</div>
+
+
 </div>
-</div>
-<?php include("pie.php")?>
-</body>
-</html>
+<?php include ("Nuevaautentificacion.php")?>
+<?php include("Nuevopie.php")?>

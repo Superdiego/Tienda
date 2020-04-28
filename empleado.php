@@ -11,9 +11,11 @@ if(!isset($_SESSION['autenticado'])){
     }
 }
 $nom_pag="Administracion empleados";
-include_once("cabecera.php");
+include_once("Nuevacabecera.php");
+include_once("Nuevolateral.php");
 ?>
-<div class="row">
+<div class='col-md-8'>
+<div class="row text-center">
 <div class="col-sm-6 col-xl-4 py-3">
 		<a href="registroArticulos.php"><button class="bg-primary text-white py-3">
 		<svg class="bi bi-grid-3x3-gap-fill" width="2em" height="2em" viewBox="0 0 16 16" fill="white" >
@@ -39,13 +41,21 @@ include_once("cabecera.php");
   <path fill-rule="evenodd" d="M3.188 8L.264 9.559a.5.5 0 000 .882l7.5 4a.5.5 0 00.47 0l7.5-4a.5.5 0 000-.882L12.813 8l-1.063.567L14.438 10 8 13.433 1.562 10 4.25 8.567 3.187 8z" clip-rule="evenodd"/>
   <path fill-rule="evenodd" d="M7.765 1.559a.5.5 0 01.47 0l7.5 4a.5.5 0 010 .882l-7.5 4a.5.5 0 01-.47 0l-7.5-4a.5.5 0 010-.882l7.5-4zM1.563 6L8 9.433 14.438 6 8 2.567 1.562 6z" clip-rule="evenodd"/>
 </svg><span class="pl-2">Ver pedidos</span></button></a>
-</div>	
-		</div></div>
-		<div class="col-md-2">
-			<?php include ("autentificacion.php")?>
-			</div>
+</div>
+<div class="col-sm-6 col-xl-4 py-3 ">
+		<a href="almacen.php"><button class="bg-primary text-white py-3">
+		<svg class="bi bi-archive-fill" width="2em" height="2em" viewBox="0 0 16 16" fill="white">
+  <path fill-rule="evenodd" d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM6 7a.5.5 0 000 1h4a.5.5 0 000-1H6zM.8 1a.8.8 0 00-.8.8V3a.8.8 0 00.8.8h14.4A.8.8 0 0016 3V1.8a.8.8 0 00-.8-.8H.8z" clip-rule="evenodd"/>
+</svg><span class="pl-2">Almacén</span></button></a>
+</div>
+<div class="col-sm-6 col-xl-4 py-3">
+		<a href="clientes.php"><button class="bg-primary text-white py-3">
+		<svg class="bi bi-people-fill width="2em" height="2em" viewBox="0 0 16 16" fill="white">
+  			<path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 100-6 3 3 0 000 6zm-5.784 6A2.238 2.238 0 015 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 005 9c-4 0-5 3-5 4s1 1 1 1h4.216zM4.5 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" clip-rule="evenodd"/>
+			</svg><span class="pl-2">Administrar clientes</span></button></a>
 </div>
 </div>
-<?php include("pie.php")?>
-</body>
-</html>
+</div>
+<?php
+include('Nuevaautentificacion.php');
+include("Nuevopie.php")?>

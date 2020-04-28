@@ -85,10 +85,11 @@ if (isset($_POST['bajacat'])){
 }
 if (isset($_POST['confbajacat'])){
     $id_cat = $_POST['idbajacat'];
+    $nom_cat = leer_categoria($id_cat);
     $subcat = mostrar_subcategorias($id_cat);
     if(empty($subcat)){
         borrar_categoria($id_cat);
-        header('location:registroCategorias.php?okbajacat=$id_cat');
+        header("location:registroCategorias.php?okbajacat=$nom_cat");
     }else{
         $url=count($subcat);
         header("location:registroCategorias.php?errconfbajacat=$id_cat&count=$url");
@@ -112,10 +113,11 @@ if (isset($_POST['confbajasub'])){
     $idsub= $_POST['idsub'];
     $articulos = cargar_articulos($idcat, $idsub);
         if(empty($articulos)){
-            $url = count($articulos);
+            $sub= devuelve_subcategoria($idcat, $idsub);
+            $nomsub = $sub[2];
            borrar_subcategoria($idcat,$idsub);
            
-           header("location:registroCategorias.php?okbajasub=$idsub&cat=$idcat&count=&url");
+           header("location:registroCategorias.php?okbajasub=$nomsub&cat=$idcat");
         }else{
             $url = count($articulos);
             header("location:registroCategorias.php?errconfbajasub=$idsub&cat=$idcat&count=$url");

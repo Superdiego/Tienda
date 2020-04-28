@@ -1,9 +1,10 @@
+<div class="container-fluid">
 <main role="main" class="flex-shrink-0 bg-light">
-<div class="container">
+
 	<h1 class="mt-5 py-5 text-center">Cachivaches</h1>
 
 
-	<div class="row row mx-md-n5">
+	<div class="row mx-md-n5">
 
 		<div class="col px-md-5">
 			<p class="font-weight-bold px-3">Confianza</p>

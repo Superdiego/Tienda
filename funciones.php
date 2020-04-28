@@ -4,7 +4,8 @@
 function conectar()
 {
     try {
-        $conex = new PDO("mysql:dbname=tienda;host=localhost", "jefe", "jefe");
+        //$conex = new PDO("mysql:dbname=tienda;host=localhost", "jefe", "jefe");
+        $conex = new PDO("mysql:dbname=id13325790_nubehost;host=localhost", "id13325790_jefe", "hkbSBiBo/>H3I9EB");
         $conex->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conex;
     } catch (PDOException $e) {
@@ -589,7 +590,11 @@ function buscar_articulo($articulo)
     ));
     $consulta->setFetchMode(PDO::FETCH_CLASS, "articulos");
     $fila = $consulta->fetch();
-    return $fila;
+    if(isset($fila)){
+        return $fila;
+    }else{
+        return false;
+    }
 }
 
 // Edita usuario a partir de su dni (solo para administrador, accede al rol)
@@ -871,14 +876,123 @@ function mis_pedidos($cliente){
     }
 }
 
+function informe_pedidos($cliente, $inicio, $final){
+    $totalperiodo = 0;
+    echo "<h5>Cliente: ". datos_user($cliente)->getNom_usr()." ". datos_user($cliente)->getApe_usr() . "<h5>";
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM pedidos WHERE usr_ped = :id AND fec_ped >= :inicio
+                                AND fec_ped <= :final");  
+    $consulta->execute(array(':id'=>$cliente, ':inicio'=>$inicio, ':final'=>$final));
+    while($fila=$consulta->fetch()){
+        $lineas = devuelve_lineas($fila[0]);
+        foreach($lineas as $detalle){
+            $totalperiodo += $detalle->getCan_lin() * (buscar_articulo($detalle->getArt_lin()))->getPre_art();  
+        }     
+        $fecha = getDate($fila[2]);
+        $dia = $fecha["mday"];
+        $mes = $fecha['mon'];
+        $anyo = $fecha['year'];
+        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo </h5>";
+        mostrar_lineas($fila[0]);
+    }
+    echo "<h5 class='bg-light'>Total en el periodo: ".number_format($totalperiodo,2)."</h5>";
+}
+function devuelve_lineas($id_pedido){
+    $lineas=array();
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM lineas WHERE ped_lin = :ped");
+    $consulta->execute(array(':ped'=>$id_pedido));
+    $consulta->setFetchMode(PDO::FETCH_CLASS, "lineas");
+    while($fila=$consulta->fetch()){
+        $lineas[] = $fila;
+    }
+    return $lineas;
+}
 
+function stock($articulo){
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT sto_art FROM articulos WHERE id_art = :art");
+    $consulta->execute(array(':art'=>$articulo));
+    $fila=$consulta->fetch();
+    $oldstock = $fila[0];
+    return $oldstock;
+}
 
+function descontar_stock($articulo,$cantidad){
+    $stock = stock($articulo);
+    $newstock = $stock - $cantidad;
+    $conex = conectar();
+    $consulta = $conex->prepare('UPDATE articulos SET sto_art = :sto WHERE id_art = :art');
+    $consulta->execute(array(':sto' => $newstock, ':art' => $articulo));   
+}
 
+function insertar_pedidoAlmacen($ped, $fec, $art, $cant){
+    $conex = conectar();
+    $consulta = $conex->prepare("INSERT INTO almacen (ped_alm, fec_alm, art_alm, can_alm)
+                VALUES (:ped, :fec, :art, :cant);");
+    $insertar = $consulta->execute(array(':ped'=>$ped, ':fec'=>$fec, ':art'=>$art, ':cant'=>$cant));
+    if($insertar == 1){
+        return "Insertado registro en almacén";
+    }else{
+        return "Ha ocurrido un error y no se ha podido grabar";
+    }
+}
+function busca_cliente($cliente){
+    $conex = conectar();
+    $conexion = $conex->prepare("SELECT * FROM usuarios WHERE id_usr = :usr");
+    $conexion->execute(array(':usr'=>$cliente));
+    $conexion->setFetchMode(PDO::FETCH_CLASS, 'usuarios');
+    $fila = $conexion->fetch();
+    return $fila; 
+}
+    
+// Listado para de usuarios manipulable para uso exclusivo del administrador y empleados
+function mostrar_cliente($bloque)
+{
+    if (isset($_GET["desplazamiento"])) {
+        $desplazamiento = $_GET["desplazamiento"];
+    } else {
+        $desplazamiento = 0;
+    }
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM usuarios WHERE rol_usr = '2' ORDER BY id_usr LIMIT $desplazamiento , $bloque");
+    $consulta->execute();
+    $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
+    
+    while ($fila = $consulta->fetch()) {
 
-
-
-
-
+        echo "<form method='POST' action='clientes.php'>
+            <tr><th class='px-0' scope='row'><input type='text' class='bg-light text-dark' readonly style='width:2em' name='id' value='" . $fila->getId_usr() . "'></th>
+            <td class='px-0'><input type='text' size='9' class='bg-light text-dark' name='dni' readonly value='" . $fila->getDni_usr() . "'></td>
+            <td class='px-0'><input type='text' size='9' class='bg-light text-dark' name='nic' readonly value='" . $fila->getNic_usr() . "'></td>
+            <td class='px-0'><input type='text' size='9' name='nom' value='" . $fila->getNom_usr() . "'></td>
+            <td class='px-0'><input type='text' size='9' name='ape' value='" . $fila->getApe_usr() . "'></td>
+            <td class='px-0'><input type='text' size='12' name='dir' value='" . $fila->getDir_usr() . "'></td>
+            <td class='px-0'><input type='text' size='4' name='cop' value='" . $fila->getCop_usr() . "'></td>
+            <td class='px-0'><input type='text' size='9' name='loc' value='" . $fila->getLoc_usr() . "'></td>
+            <td class='px-0'><input type='text' size='9' name='pro' value='" . $fila->getPro_usr() . "'></td>
+            <td class='px-0'><input type='text' size='12' name='ema' value='" . $fila->getEma_usr() . "'></td>
+            <td class='px-0'><input type='text' size='9' name='tel' value='" . $fila->getTel_usr() . "'></td>
+            <td class='px-0'><input type='text' size='4' name='pas' value='" . $fila->getPas_usr() . "'></td>
+            <td class='px-0'><input type='text' size='1' name='act' value='" . $fila->getAct_usr() . "'></td>
+            <td class='px-0'><button type='submit' class='btn btn-primary'>Modificar</button></td></tr>
+            </form>";
+    }
+    if ($desplazamiento > 0) {
+        $prev = $desplazamiento - $bloque;
+        $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prev";
+        echo "<div class='text-center'><a href='$url'>Anterior</a>";
+    } else {
+        echo "<div class='text-center'>";
+    }
+    if (($desplazamiento + 4) < contar_usuarios()) {
+        $prox = $desplazamiento + $bloque;
+        $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prox";
+        echo "<a href='$url'>Siguiente</a></div>";
+    } else {
+        echo "</div>";
+    }
+}
 
 
 

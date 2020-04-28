@@ -22,6 +22,8 @@ if(isset($_POST['mispedidos'])){
     mis_pedidos("$user");
 }
 
+
+
 //if((datos_user($user)->getRol_usr() == 3) || (datos_user($user)->getRol_usr() == 4)){
 //    mostrar_pedidos();}
 
