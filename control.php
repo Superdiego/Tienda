@@ -4,7 +4,7 @@ include_once("funciones.php");
 $nombre_usr = (isset($_POST['usuario'])) ? $_POST['usuario'] : null;
 $pass_usr = (isset($_POST['password'])) ? $_POST['password'] : null;
 $salir = (isset($_POST['salir'])) ? $_POST['salir'] : null;
-$titulo = "Inicio sesion";
+
 if((isset($_POST['usuario']))) {
     if(!val_texto($nombre_usr)){
         header("location:index.php?error=1");

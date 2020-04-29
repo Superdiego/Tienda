@@ -21,7 +21,9 @@ include('Nuevolateral.php');
 
 //include('Nuevocentral.php');
 
-echo "<div class='col-md-8'>
+?>
+
+<div class='col-md-8'>
 
 
 
@@ -29,8 +31,10 @@ echo "<div class='col-md-8'>
 
 
 
-</div>";
+</div>
 
+
+<?php
 //include('Nuevocentral.php');
 
 

@@ -5,7 +5,7 @@ include_once("control.php");
 
 
 $nombre_usr = (isset($_GET['usr'])) ? $_GET['usr'] : null;
-
+$titulo = "Inicio sesion";
 
 if((isset($_GET['error']))) {
     switch($_GET['error']){
@@ -27,7 +27,7 @@ echo "<div class='col-md-2'><div class='container'>";
 
 if(!isset($_SESSION['autenticado'])){
     echo "<div class='row justify-content-center'>
-    <div><h5 class='text-center'>Inicio sesión</h5></div>
+    <div><h5 class='text-center'>$titulo</h5></div>
     <div><form method='POST' action='control.php'>
     <div class='form-group'>
     <label for='usuario'>Usuario</label>

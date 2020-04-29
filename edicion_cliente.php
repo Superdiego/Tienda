@@ -5,7 +5,7 @@ if (! isset($_SESSION['autenticado'])) {
 }
 
 $nom_pag = "Edicion de Clientes";
-include_once ("cabecera.php");
+
 include_once ("validaciones.php");
 include_once ("funciones.php");
 
@@ -18,10 +18,14 @@ $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : $usuario->getA
 $direccion = (isset($_POST['direccion'])) ? $_POST['direccion'] : $usuario->getDir_usr();
 $localidad = (isset($_POST['localidad'])) ? $_POST['localidad'] : $usuario->getLoc_usr();
 $provincia = (isset($_POST['provincia'])) ? $_POST['provincia'] : $usuario->getPro_usr();
-$email = (isset($_POST['email'])) ? $_POST['email'] : $usuario->getEma_usr();
+$email = (isset($_POST['correo'])) ? $_POST['correo'] : $usuario->getEma_usr();
 $telefono = (isset($_POST['telefono'])) ? $_POST['telefono'] : $usuario->getTel_usr();
 $password = (isset($_POST['password'])) ? $_POST['password'] : null;
 $confirmpass = (isset($_POST['pass_confirm'])) ? $_POST['pass_confirm'] : null;
+$passw = (isset($_POST['passw'])) ? $_POST['passw'] : null;
+$mostrar = "";
+$msg = "";
+$nopassw = '';
 
 $modifcliente = '';
 
@@ -75,117 +79,134 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     if (empty(trim($password))) {
         $res_pas = "<span class='text-danger'>El campo password está vacio</span>";
-    } else {
-        $res_pas = !val_pass($password) ? "<span class='text-danger'>El password está formado por tres caracteres</span>" : '';
-    }
-    if (empty(trim($confirmpass))) {
-        $res_confpass = "<span class='text-danger'>El campo de confirmación del password está vacio</span>";
-    } else {
-        $res_confpass = !val_pass($confirmpass) ? "<span class='text-danger'>El password está formado por tres caracteres</span>" : '';
-    }
-    if (empty($res_pas) && empty($res_confpass)) {
-        $res_confpass = !val_confirmpass($password, $confirmpass) ? "<span class='text-danger'>No coincide con el password</span>" : '';
+    } else if(!val_pass($password)){
+        $res_pas = "<span class='text-danger'>El password está formado por tres caracteres</span>";
+    } else{
+        $res_pas = ($password != $usuario->getPas_usr()) ? "<span class='text-danger'>Password incorrecto</span>" : "";
     }
 
-
-    if (val_texto($nick) && val_dni($dni) && val_texto($nombre) && val_texto($apellidos) &&
-       val_texto($direccion)&& val_texto($localidad) && val_texto($provincia) && val_correo($email) &&
-       val_telef($telefono) && val_pass($password) && val_pass($confirmpass) &&
-       val_confirmpass($password, $confirmpass)) {
-           $modifcliente = editar_cliente($nick, $dni, $nombre, $apellidos, $direccion,
-                           $localidad, $provincia, $email, $telefono, $password);
+    if(isset($_POST['modifuser'])){ 
+        if (empty($res_nic) && empty($res_dni) && empty($res_nom) && empty($res_ape) &&
+            empty($res_dir)&& empty($res_loc) && empty($res_pro) && empty($res_ema) &&
+            empty($res_tel) && empty($res_pas)) {
+            $modifcliente = editar_cliente($nick, $dni, $nombre, $apellidos, $direccion,
+                           $localidad, $provincia, $email, $telefono);
+        }
     }
+    if(isset($_POST['bajauser']) || isset($_POST['confbaja'])){
+        $mostrar = "hidden";
+        $msg = "<div class='container'><div class='row row-cols-2'><div class='col text-right'>
+                Introduzca de nuevo su password:</div>
+                <form method='POST' action='edicion_cliente.php'>
+                <div class='col'><input type='password' name='passw'>
+                </div></div><div class='col form-group row justify-content-center mt-5'>
+                
+                <input type='submit' value='Confirmar baja' name='confbaja' class='btn btn-danger mr-5'></form>
+                <a class='btn btn-primary ml-5' href='edicion_cliente.php'>Cancelar</a></div></div>";
+    }
+    if(isset($_POST['confbaja'])){
+        if(empty($passw)){
+            $nopassw = "<p class='text-danger text-center'>El campo password está vacío</p>";
+        }else if(!val_pass($passw)){
+            $nopassw = "<p class='text-danger text-center'>El password se compone de tres caracteres</p>";
+        }else{
+            $nopassw = ($usuario->getPas_usr() != $passw) ? "<p class='text-danger text-center'>Password erróneo</p>" : "";
+        }
+        if(empty($nopassw)){
+            baja_cliente($usuario->getId_usr());
+            session_destroy();
+            header("location:despedida.php");
+        }
+    }
+
 }
+
+include_once ("Nuevacabecera.php");
+include_once('Nuevolateral.php');
 ?>
-<h4><?php echo $modifcliente?></h4>
-<form method="post" action="edicion_cliente.php" class="px-5">
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Nick:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="nick"
-				value="<?php echo $nick ?>" readonly><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nic ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">DNI:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="dni"
-				value="<?php echo $dni ?>" readonly><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dni ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Nombre:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="nombre"
-				value="<?php echo $nombre ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nom ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Apellidos:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="apellidos"
-				value="<?php echo $apellidos ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_ape ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Direccion:</label>
-		<div class="col-sm-10">
-			<input class="form-control" ype="text" name="direccion"
-				value="<?php echo $direccion ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dir ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Localidad:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="localidad"
-				value="<?php echo $localidad ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_loc ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Provincia:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="provincia"
-				value="<?php echo $provincia ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pro ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">E-mail:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="correo"
-				value="<?php echo $email ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_ema ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Telefono</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="text" name="telefono"
-				value="<?php echo $telefono ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_tel ?></div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Password:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="password" name="password"
-				value="<?php echo $password ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pas ?><br>
-		</div>
-	</div>
-	<div class="form-group row">
-		<label class="col-sm-2 col-form-label">Confirme su password:</label>
-		<div class="col-sm-10">
-			<input class="form-control" type="password" name="pass_confirm"
-				value="<?php echo $confirmpass ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_confpass ?></div>
-	</div>
-	<div class="form-group row">
-		<div class="col-sm-10 mx-auto">
-			<input type="submit" name='modifuser' value='Modificar'
-				class="btn btn-primary mr-5">
+<div class='col-md-8'>
+	<div class='row container justify-content-center mt-5'>
+		<h4><?php echo $modifcliente?></h4>
+		<form method="post" action="edicion_cliente.php" class="px-5" <?php echo $mostrar?>>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">Nick:</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="nick"
+						value="<?php echo $nick ?>" readonly><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nic ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">DNI:</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="dni"
+						value="<?php echo $dni ?>" readonly><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dni ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">Nombre:</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="nombre"
+						value="<?php echo $nombre ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_nom ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">Apellidos:</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="apellidos"
+						value="<?php echo $apellidos ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_ape ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">Direccion:</label>
+				<div class="col-sm-8">
+					<input class="form-control" ype="text" name="direccion"
+						value="<?php echo $direccion ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_dir ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">Localidad:</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="localidad"
+						value="<?php echo $localidad ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_loc ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">Provincia:</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="provincia"
+						value="<?php echo $provincia ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pro ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">E-mail:</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="correo"
+						value="<?php echo $email ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_ema ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">Telefono</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="text" name="telefono"
+						value="<?php echo $telefono ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_tel ?></div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-4 col-form-label text-right">Password:</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="password" name="password"
+						value="<?php echo $password ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pas ?><br>
+				</div>
+			</div>
 
-</form>
-<a class="btn btn-primary mr-5" href='index.php'>Cancelar</a>
-
-</div>
-</div>
-
-<?php
-
- ?>
-</div>
-<div class="col-md-2">
-<?php include ("autentificacion.php")?>
+			<div class="form-group row">
+				<input type="submit" name='modifuser' value='Modificar'
+					class="btn btn-primary mr-5"><a class="btn btn-primary mr-5"
+					href='edicion_cliente.php'>Cancelar</a>
+			</div>
+		</form>
+	</div>
+	<?php echo $nopassw ?>
+	<div class='row justify-content-end'><?php echo $msg?>
+		<form method='POST' action='edicion_cliente.php' <?php echo $mostrar?>>
+			<input type="submit" name='bajauser' value='Dar de baja'
+				class="btn btn-danger">
+		</form>
 	</div>
 </div>
-</div>
-<?php include("pie.php")?>
-</body>
-</html>
+
+
+<?php include ("Nuevaautentificacion.php")?>
+
+<?php include("Nuevopie.php")?>

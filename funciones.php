@@ -4,8 +4,8 @@
 function conectar()
 {
     try {
-        //$conex = new PDO("mysql:dbname=tienda;host=localhost", "jefe", "jefe");
-        $conex = new PDO("mysql:dbname=id13325790_nubehost;host=localhost", "id13325790_jefe", "hkbSBiBo/>H3I9EB");
+        $conex = new PDO("mysql:dbname=tienda;host=localhost", "jefe", "jefe");
+        //$conex = new PDO("mysql:dbname=id13325790_nubehost;host=localhost", "id13325790_jefe", "hkbSBiBo/>H3I9EB");
         $conex->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conex;
     } catch (PDOException $e) {
@@ -369,6 +369,9 @@ function buscar_usuario($nombre, $password)
     ));
     $consulta->setFetchMode(PDO::FETCH_CLASS, "usuarios");
     if ($fila = $consulta->fetch()) {
+        if($fila->getAct_usr()==0){
+            return 2;
+        }
         if ($fila->getPas_usr() == $password && $fila->getAct_usr()) {
             if ($fila->getRol_usr() == 2) {
                 return 0;
@@ -493,11 +496,11 @@ function mostrar_usuario($bloque)
 }
 
 //
-function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $pas)
+function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel)
 {
     $conex = conectar();
     $codigo = "UPDATE usuarios SET nic_usr = :nic, nom_usr = :nom, ape_usr = :ape, dir_usr = :dir,
-                loc_usr = :loc, pro_usr = :pro, ema_usr = :ema, tel_usr = :tel, pas_usr = :pas WHERE dni_usr = :dni";
+                loc_usr = :loc, pro_usr = :pro, ema_usr = :ema, tel_usr = :tel WHERE dni_usr = :dni";
     $insert = $conex->prepare($codigo);
     $fila = $insert->execute(array(
         ':dni' => $dni,
@@ -509,7 +512,7 @@ function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $p
         ':pro' => $pro,
         ':ema' => $ema,
         ':tel' => $tel,
-        ':pas' => $pas
+
     ));
     if ($fila == 1) {
         return "<span class='text-success'>Modificación completada</span>";
@@ -563,8 +566,8 @@ function ver_subcategorias($categ, $subcateg)
     ));
     $consulta->setFetchMode(PDO::FETCH_CLASS, 'articulos');
     while ($fila = $consulta->fetch()) {
-        echo "<div class='col-md-6 col-xl-4'><div><a href='detalleArticulo.php?art=" . $fila->getId_art() . "'>
-                <img src='imgProductos/" . $fila->getId_art() . ".jpg' width='100' height='100'></a></div>" . $fila->getNom_art() . " " . $fila->getPre_art() . "</div>";
+        echo "<div class='col-md-6 col-xl-4'><div class='row justify-content-center'><div><a href='detalleArticulo.php?art=" . $fila->getId_art() . "'>
+                <img src='imgProductos/" . $fila->getId_art() . ".jpg' width='100' height='100'></a></div></div><div class='row justify-content-center'>" . $fila->getNom_art() . " " . $fila->getPre_art() . "</div></div>";
     }
 }
 
@@ -700,15 +703,15 @@ function mostrar_lineas($ped)
         $art = buscar_articulo($fila->getArt_lin());
         $total += ($art->getPre_art() * $fila->getCan_lin());
         echo "<tr class='text-center'><td>" . $fila->getId_lin() . "</td><td>" . $art->getNom_art() . "</td><td>" . $fila->getCan_lin() . "</td>
-            <td>" . $art->getPre_art() . "</td>
-            <td class='text-right'>" . number_format($art->getPre_art() * $fila->getCan_lin(), 2) . "</td></tr>";
+            <td>" . $art->getPre_art() . " €</td>
+            <td class='text-right'>" . number_format($art->getPre_art() * $fila->getCan_lin(), 2) . " €</td></tr>";
     }
     echo "<tr><td colspan='4' class='text-right'>Base Imponible</td>
-        <td class='text-right'>" . number_format($total / 1.21, 2) . "</td></tr><tr>
+        <td class='text-right'>" . number_format($total / 1.21, 2) . " €</td></tr><tr>
         <td colspan='4' class='text-right'>I.V.A. 21%</td>
-        <td class='text-right'>" . number_format($total * 21 / 121, 2) . "</td></tr><tr class='table-active'>
+        <td class='text-right'>" . number_format($total * 21 / 121, 2) . " €</td></tr><tr class='table-active'>
         <th colspan='4' class='text-right'>Total pedido</th>
-        <th class='text-right'>" . number_format($total, 2) . "</th></tr></table>";
+        <th class='text-right'>" . number_format($total, 2) . " €</th></tr></table>";
 }
 
 // Menu desplegable categorias para registrar subcategorias
@@ -847,11 +850,16 @@ function datos_user($iduser){
     }
 }
 
-function mostrar_pedidos(){
+function mostrar_pedidos($inicio,$final){
+    $totalperiodo = 0;
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT * FROM pedidos");
-    $consulta->execute();
+    $consulta = $conex->prepare("SELECT * FROM pedidos WHERE fec_ped >= :inicio AND fec_ped <= :final");
+    $consulta->execute(array(':inicio'=>$inicio, ':final'=>$final));
     while($fila=$consulta->fetch()){
+        $lineas = devuelve_lineas($fila[0]);
+        foreach($lineas as $detalle){
+            $totalperiodo += $detalle->getCan_lin() * (buscar_articulo($detalle->getArt_lin()))->getPre_art();
+        }
         $fecha = getDate($fila[2]);
         $dia = $fecha["mday"];
         $mes = $fecha['mon'];
@@ -860,6 +868,7 @@ function mostrar_pedidos(){
         datos_user($fila[1])->getApe_usr()."</h5>";
         mostrar_lineas($fila[0]);
     }
+    echo "<h5 class='bg-light'>Total en el periodo: &nbsp;".number_format($totalperiodo,2)." €</h5>";
 }
 function mis_pedidos($cliente){
     $conex = conectar();
@@ -878,7 +887,7 @@ function mis_pedidos($cliente){
 
 function informe_pedidos($cliente, $inicio, $final){
     $totalperiodo = 0;
-    echo "<h5>Cliente: ". datos_user($cliente)->getNom_usr()." ". datos_user($cliente)->getApe_usr() . "<h5>";
+    echo "<h5 class='mt-5'>Cliente: ". datos_user($cliente)->getNom_usr()." ". datos_user($cliente)->getApe_usr() . "<h5>";
     $conex = conectar();
     $consulta = $conex->prepare("SELECT * FROM pedidos WHERE usr_ped = :id AND fec_ped >= :inicio
                                 AND fec_ped <= :final");  
@@ -895,7 +904,7 @@ function informe_pedidos($cliente, $inicio, $final){
         echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo </h5>";
         mostrar_lineas($fila[0]);
     }
-    echo "<h5 class='bg-light'>Total en el periodo: ".number_format($totalperiodo,2)."</h5>";
+    echo "<h5 class='bg-light'>Total en el periodo: ".number_format($totalperiodo,2)." €</h5>";
 }
 function devuelve_lineas($id_pedido){
     $lineas=array();
@@ -994,6 +1003,37 @@ function mostrar_cliente($bloque)
     }
 }
 
+function baja_cliente($idcliente){
+    $conexion = conectar();
+    $baja = $conexion->prepare("UPDATE usuarios SET act_usr = 0 WHERE id_usr = :id");
+    $baja->execute(array(':id'=>$idcliente));  
+}
+function movimientos_articulo($idarticulo){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT  fec_ped, ped_lin, usr_ped, can_lin FROM lineas INNER JOIN pedidos ON ped_lin=id_ped WHERE art_lin=:id");
+    $consulta->execute(array(':id' =>$idarticulo));
+    $datos = array();
+    while($fila=$consulta->fetch()){
+        $datos[]=$fila;
+    }
+    return $datos;
+}
+function movimientos_almacen($idarticulo){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT fec_alm, ped_alm, id_alm, can_alm FROM almacen WHERE art_alm = :id");
+    $consulta->execute(array(':id'=>$idarticulo));
+    while($fila = $consulta->fetch()){
+        $datos[] = $fila;
+    }
+    if(!empty($datos)){
+        return $datos;
+    }
+}
+function ordenando_fechas($a,$b){
+    return ($b[0]) - ($a[0]);
+} 
+        
+    
 
 
 ?>

@@ -51,7 +51,10 @@ if(isset($_SESSION['autenticado'])){
     if (($admin->getRol_usr() == 4) || ($admin->getRol_usr() == 3)){
     echo "<div class='row mt-3 justify-content-center'><form action='modificarArticulo.php' method='POST'>
         <input type='hidden' name='id' value='$id'>
-        <input type='submit'  name='revisar' value='Modificar'></form></div>";
+        <input class='m-3' type='submit'  name='revisar' value='Editar artículo'></form>
+        <form action='almacen.php' method='POST'>
+        <input type='hidden' name='articulo' value='$id'>
+        <input class='m-3' type='submit'  name='detalle' value='Almacén'></form></div>";
     }
 }
 ?>

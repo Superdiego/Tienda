@@ -26,8 +26,14 @@ $err_id = "";
 $err_inicio = "";
 $err_final =  "";
 
-if (isset($_POST['ver'])) {
+$iniciot = (isset($_POST['iniciot'])) ? strtotime($_POST['iniciot']) : "";
+$finalt = (isset($_POST['finalt'])) ? strtotime($_POST['finalt']) + (60 * 60 * 24) : "";
+$informet = "";
+$err_idt = "";
+$err_iniciot = "";
+$err_finalt =  "";
 
+if (isset($_POST['ver'])) {
     if(empty($idcliente)){
         $err_id = "<div class='text-danger'>El campo Id cliente está vacío</div>";
     }else{
@@ -41,13 +47,45 @@ if (isset($_POST['ver'])) {
 
     }
 }
+if (isset($_POST['vertotal'])) {
+    $err_iniciot = (empty($inicio)) ? "<div class='text-danger'>El campo fecha de inicio está vacío</div>" : "";
+    $err_finalt = (empty($final)) ? "<div class='text-danger'>El campo fecha final está vacío</div>" : "";
+    if(empty($err_idt) && empty($err_inicio) && empty($err_final)){
+        $mostrar = "hidden";
+        $informet = mostrar_pedidos($iniciot, $finalt);       
+    }
+}
+
 ?>
 
-
+<div class='row mt-5'>
+<div class='col-6'>
 
 		<?php echo $informe ?>
 			<form method='POST' action='informePedidos.php' <?php echo $mostrar?>>
-	
+	<h5 class='text-center'>Todos los clientes</h5>
+				<div class="form-group row mt-5">
+					<label class=' col-sm-5 col-form-label text-right'>Desde fecha: </label>
+					<div class='col-sm-6'>
+						<input type='date' name='iniciot'><?php echo $err_inicio ?>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class=' col-sm-5 col-form-label text-right'>Hasta fecha: </label>
+					<div class='col-sm-6'>
+						<input class='text-center' type='date' name='finalt'><?php echo $err_final ?>
+					</div>
+				</div>
+				<div class='row justify-content-center mt-5'>
+					<input type='submit' class='btn btn-primary' value='Ver informe total'
+						name='vertotal'>
+				</div>
+			</form>
+</div>
+<div class='col-6'>
+		<?php echo $informe ?>
+			<form method='POST' action='informePedidos.php' <?php echo $mostrar?>>
+	<h5 class='text-center'>Detallado por cliente</h5>
 
 				<div class="form-group row mt-5">
 					<label class=' col-sm-5 col-form-label text-right'>Id Cliente</label>
@@ -67,12 +105,13 @@ if (isset($_POST['ver'])) {
 						<input class='text-center' type='date' name='final'><?php echo $err_final ?>
 					</div>
 				</div>
-				<div class='row col-6 justify-content-center'>
-					<input type='submit' class='btn btn-primary' value='Ver informe'
+				<div class='row justify-content-center'>
+					<input type='submit' class='btn btn-primary' value='Ver informe detalle'
 						name='ver'>
 				</div>
 			</form>
 
+</div></div>
 </div>
 
 <?php
