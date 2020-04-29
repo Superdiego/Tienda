@@ -3,28 +3,25 @@ session_start();
 $nom_pag = "Gracias por su compra";
 include_once("funciones.php");
 include_once("validaciones.php");
-include_once("cabecera.php");
+include_once("Nuevacabecera.php");
+include_once("Nuevolateral.php");
 
 $pedido = (isset($_GET['ped'])) ? $_GET['ped'] : null;
 
 
 ?>
-
+<div class='col-md-8')>
 <h5 class="text-center">
 <?php echo $_SESSION['autenticado'] . ", en pocos dias recibira su pedido ".$_GET['ped']?></h5>
 <br>
-<table class="table">
-<th>Linea</th><th>Articulo</th><th>Cantidad</th><th>Precio(IVA incluido)</th><th>Importe</th>
+
 <?php mostrar_lineas($pedido)?>
-</table>
+
 <a href="index.php"><button class="btn btn-primary">Continuar</button></a>
 
 			</div>
-			<div class="col-md-2">
-			<?php include ("autentificacion.php")?>
-			</div>
-</div>
-</div>
-<?php include("pie.php")?>
-</body>
-</html>
+
+			<?php include ("Nuevaautentificacion.php")?>
+
+<?php include("Nuevopie.php")?>
+

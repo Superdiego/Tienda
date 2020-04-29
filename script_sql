@@ -63,9 +63,12 @@ FOREIGN KEY(art_lin) REFERENCES articulos(id_art)
 )ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS almacen (
 id_alm INT PRIMARY KEY AUTO_INCREMENT,
-art_alm INT REFERENCES articulos(id_art),
-can_alm INT(6)
-);
+ped_alm INT,
+fec_alm DATE,
+art_alm INT,
+can_alm INT(6),
+FOREIGN KEY(art_alm) REFERENCES articulos(id_art)
+)ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS registros(
 id_reg INT PRIMARY KEY AUTO_INCREMENT,
 fec_reg INT,
@@ -119,5 +122,12 @@ VALUES
 ("Acer",1,2,"Llevate el juego donde quieras",1100,1,0),
 ("LG",3,1,"Para pasar horas tumbado en el sofa",800,1,0),
 ("Marshall",4,1,"Buen sonido a buen precio",200,1,0);
+
+
+
+
+
+
+
 
 

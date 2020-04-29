@@ -1,9 +1,7 @@
 <?php
 session_start();
-$nom_pag = "EDICION ARTICULOS";
-include_once ("funciones.php");
-include_once ("validaciones.php");
-
+include_once("funciones.php");
+include_once("validaciones.php");
 if (! isset($_SESSION['autenticado'])) {
     header("location:index.php");
 } else {
@@ -14,8 +12,14 @@ if (! isset($_SESSION['autenticado'])) {
     }
 }
 
-include ('Nuevacabecera.php');
-include ('Nuevolateral.php');
+include_once("funciones.php");
+include_once("validaciones.php");
+$nom_pag = "Almacén";
+include('Nuevacabecera.php');
+include('Nuevolateral.php');
+
+
+echo "<div class='col-md-8'>";
 
 $mensaje='';
 $url = (isset($_GET['comienzo'])) ? "?comienzo=".$_GET['comienzo'] : "";
@@ -24,20 +28,20 @@ $err_des = "";
 $err_pre = "";
 $err_act = "";
 $err_stock = "";
-
-
-if (isset($_POST['modificar'])) {
+    
+if (isset($_POST['modificar']) || isset($_POST['revisar'])) {
+    $id = $_POST['id'];
     $articulo = buscar_articulo($_POST['id']);
-    $id = (isset($_POST['id'])) ? $_POST['id'] : $articulo->getId_art();
     $nom = (isset($_POST['nombre'])) ? $_POST['nombre'] : $articulo->getNom_art();
     $catsubcat = (isset($_POST['catsubcat'])) ? explode(",",$_POST['catsubcat']) : '';
-    $cat = $catsubcat[0];
-    $subcat = $catsubcat[1];
+    $cat = (isset($_POST['catsubcat'])) ? $catsubcat[0]: $articulo->getCat_art() ;
+    $subcat = (isset($_POST['catsubcat'])) ? $catsubcat[1]: $articulo->getSub_art();
     $desc = (isset($_POST['descripcion'])) ? $_POST['descripcion'] : $articulo->getDes_art();
     $pre = (isset($_POST['precio'])) ? $_POST['precio'] : $articulo->getPre_art();
     $act = (isset($_POST['activo'])) ? $_POST['activo'] : $articulo->getAct_art();
     $stock = (isset($_POST['stock'])) ? $_POST['stock'] : $articulo->getSto_art();
-
+}
+if (isset($_POST['modificar'])){
     if (empty(trim($nom))) {
         $err_nom = "<span class='text-danger'>El campo nombre está vacío</span>";
     } else {
@@ -61,27 +65,16 @@ if (isset($_POST['modificar'])) {
         $err_act = (($act)!=0 && ($act)!=1) ? "<span class='text-danger'>La actividad debe ser 1 (activado) o cero (desactivado)</span>" : '';
     }
     $err_stock = (! is_numeric($stock)) ? "<span class='text-danger'>El stock debe ser un número</span>" : '';
-
+    
     if (empty($err_nom) && empty($err_des) && empty($err_pre) && empty($err_act) && empty($err_stock)) {
         $mensaje = modificar_articulo($id, $nom, $cat, $subcat, $desc, $pre, $act, $stock);
     }
+    
 }
-
-
-$datos = mostrar_articulos(1);
-
 ?>
-<div class="col-md-8">
+<div class='row justify-content-center mt-5'>
+<div class='col-sm-4'></div>
 
-	<div class='row justify-content-center mt-5'>
-		<div class='col-sm-4'></div>
-		<div class='col-sm-2'>
-			<p><?php echo $datos[2]?></p>
-		
-		</div>
-		<div class='col-sm-2'>
-			<p><?php echo $datos[1]?></p>
-		</div>
 		<div class='col-sm-4'><p class='bg-success text-white text-center'><?php echo $mensaje?></p></div>
 	</div>
 
@@ -90,18 +83,10 @@ $datos = mostrar_articulos(1);
 
 <?php
 
-$articulos = $datos[0];
 
 
-foreach ($articulos as $artic) {
-    $id = $artic->getId_art();
-    $nom = (isset($_POST['nombre']))? $_POST['nombre'] : $artic->getNom_art();
-    $cat = (isset($_POST['categ'])) ? $_POST['categ'] : $artic->getCat_art();
-    $subcat = (isset($_POST['subcateg'])) ? $_POST['subcateg'] : $artic->getSub_art();
-    $desc = (isset($_POST['descripcion'])) ? $_POST['descripcion'] : $artic->getDes_art();
-    $pre = (isset($_POST['precio'])) ? $_POST['precio'] : $artic->getPre_art();
-    $act = (isset($_POST['activo'])) ? $_POST['activo'] : $artic->getAct_art();
-    $stock = (isset($_POST['stock'])) ? $_POST['stock'] : $artic->getSto_art();
+
+
 
     echo "<div class='form-group row'><label class='col-sm-4 col-form-label text-right'>Id Articulo:</label><div class='col-sm-5'>
         <input class='form-control' type='text' readonly name='id' value='$id'>";
@@ -141,7 +126,8 @@ foreach ($articulos as $artic) {
         <button type='submit' name='modificar' class='btn btn-primary'>Modificar</button></div><div class='col-6'>
         <a href='adminArtic.php$url' class='btn btn-primary'>Cancelar</a>
         <a href='index.php' class='btn btn-primary'>Salir</a></div></div></div></div>";
-}
+
+
 
 ?>
 
@@ -149,10 +135,18 @@ foreach ($articulos as $artic) {
 
 
 </form>
+    
+    
+    
+    
+    
+    
+  
+
 </div>
 
-<?php include ("Nuevaautentificacion.php")?>
-<?php include("Nuevopie.php")?>
 
-
+<?php
+include('Nuevaautentificacion.php');
+include('Nuevopie.php');
 ?>

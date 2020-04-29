@@ -14,7 +14,11 @@ if(!isset($_SESSION['autenticado'])){
         header("location:index.php");
     }
 }
-include_once("cabecera.php");
+include_once("Nuevacabecera.php");
+include_once('Nuevolateral.php');
+
+
+$edicion = "";
 
 if(isset($_REQUEST['nic']) && $_REQUEST['nic'] != ""){
 
@@ -34,18 +38,14 @@ $telefono = (isset($_POST['tel'])) ? $_POST['tel'] :  $usuario->getTel_usr();
 $password = (isset($_POST['pas'])) ? $_POST['pas'] :  $usuario->getPas_usr();
 $activo = (isset($_POST['act'])) ? $_POST['act'] :  $usuario->getAct_usr();
 
-editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localidad, $provincia, $email,
+$edicion = editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localidad, $provincia, $email,
                 $telefono, $password, $activo);
 
 }
 
 ?>
-	
-		<h3 class="text-center py-5">ADMINISTRACION USUARIOS</h3></div>
-<div class="col-md-2">
-			<?php include ("autentificacion.php")?>
-			</div>
-			</div>
+<div class='col-md-8'>	
+	<div class='row'>
 		<table class="table table-striped table-responsive">
   <thead >
     <tr><th>ID</th><th class="px-1 mx-1">DNI</th><th>NIC</th><th >ROL</th><th>NOMBRE</th><th>APELLIDOS</th>
@@ -53,18 +53,15 @@ editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codpostal, $localid
       <th class='px-1'>TELEFONO</th><th class='px-1'>PASS</th><th class='px-1'>ACT.</th></tr>
   </thead>
   <tbody>	
-<?php mostrar_usuario(8); ?>
+<?php mostrar_usuario(5); ?>
   </tbody>
 </table>
-
 </form>
-		
-		<div class="text-center">
-<a href="administrador.php" >Volver menu administrador</a>
 </div>
-</div></div>
-		</div>
-	</div>
-</body>
-</html>
-		
+<div class='container row text-center'><div class='col-12'><p class=' text-success'><?php echo $edicion ?></p></div></div>
+</div>
+<?php 		
+include('Nuevaautentificacion.php');
+include('Nuevopie.php');
+
+?>

@@ -16,7 +16,7 @@ $datos = mostrar_articulos(8);
 <?php 
 $categ = listadesubcategorias();
 foreach($categ as $cat) {
-echo "<div class='card py-5'><h2 class='text-center'><a href='Subcategorias.php?sub=".$cat[2]."'>".$cat[2]."</a></h2></div>";
+    echo "<div class='card py-5'><h2 class='text-center'><a href='Subcategorias.php?sub=".$cat[2]."'>".leer_categoria($cat[0])."<br>".$cat[2]."</a></h2></div>";
 }
 ?>
 

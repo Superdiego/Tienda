@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,12 +5,10 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="bootstrap/bootstrap.css">
 <!--  <link rel="stylesheet" type="text/css" href="estilo.css"> -->
 <title>Cachivaches</title>
-
 </head>
 <body>
 	<!-- Optional JavaScript -->
@@ -24,17 +21,12 @@
 		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
 		crossorigin="anonymous"></script>
 	<script src="bootstrap/bootstrap.js"></script>
-
 	<div class="container-fluid bg-primary">
 		<div class="container-fluid text-white pt-5 pb-1">
 			<h1 class="display-4">Cachivaches</h1>
 			<div class="row">
 				<div class="col-md-10">
-					<p class="lead">Bienvenid@s a la tienda de Diego
-					
-					
-					<p>
-				
+					<p class="lead">Bienvenid@s a la tienda de Diego</p>
 				</div>
 				<div class="col-md-2">
 					<a href="carro.php">
@@ -50,7 +42,6 @@
 					</a>
 				</div>
 			</div>
-
 		</div>
 	</div>
 	</div>
@@ -76,27 +67,4 @@
 		<h1><?php echo $nom_pag ?></h1>
 	</div>
 	<div class="container-fluid">
-		<div class="row text-center">
-			<div class="col-md-2">
-
-				<ul class="nav flex-column nav-pills" id="v-pills-tab"
-					role="tablist" aria-orientation="vertical">
-		<?php
-include_once ("funciones.php");
-$categ = mostrar_categorias();
-foreach($categ as $cat) {
-    echo '<li class="nav-item">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
-						role="button" aria-haspopup="true" aria-expanded="false">' . $cat[1] . '</a>
-						<div class="dropdown-menu">';
-    $subcateg = mostrar_subcategorias($cat[0]);
-    foreach($subcateg as $subcat) {
-        echo '<a class="dropdown-item" href="Subcategorias.php?sub='.$subcat[2]. '">' . $subcat[2] . '</a>';
-    }
-    echo '</div></li>';
-
-			}
-        ?>
-				</ul>
-			</div>
-			<div class="col-md-8 py-5">
+	<div class="row">

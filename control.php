@@ -4,7 +4,6 @@ include_once("funciones.php");
 $nombre_usr = (isset($_POST['usuario'])) ? $_POST['usuario'] : null;
 $pass_usr = (isset($_POST['password'])) ? $_POST['password'] : null;
 $salir = (isset($_POST['salir'])) ? $_POST['salir'] : null;
-$titulo = "Inicio sesion";
 
 if((isset($_POST['usuario']))) {
     if(!val_texto($nombre_usr)){
@@ -40,13 +39,10 @@ if((isset($_POST['usuario']))) {
     }
 }
 if(isset($_POST["salir"])){
-    if($_POST["salir"]==1){
         session_start();
         session_destroy();
         header("location:index.php");
-            
-    }else{
-        echo "no va";
-    }
 }
+
+
 ?>

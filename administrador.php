@@ -1,6 +1,6 @@
 <?php
 session_start();
-$nom_pag= "PAGINA DE ADMINISTRACION";
+
 include_once("funciones.php");
 include_once("validaciones.php");
 
@@ -14,9 +14,12 @@ if(!isset($_SESSION['autenticado'])){
         header("location:index.php");
     }
 }
-include_once("cabecera.php");
+$nom_pag= "PAGINA DE ADMINISTRACION";
+include_once("Nuevacabecera.php");
+include_once("Nuevolateral.php");
 ?>
-<div class="row">
+<div class="col-md-8">
+<div class="row text-center">
 <div class="col-sm-6 col-xl-4 py-3">
 		<a href="adminusers.php"><button class="bg-primary text-white py-3">
 		<svg class="bi bi-people-fill width="2em" height="2em" viewBox="0 0 16 16" fill="white">
@@ -36,12 +39,20 @@ include_once("cabecera.php");
   			<path d="M1 2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H2a1 1 0 01-1-1V2zm5 0a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1V2zm5 0a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V2zM1 7a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H2a1 1 0 01-1-1V7zm5 0a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1V7zm5 0a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1V7zM1 12a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H2a1 1 0 01-1-1v-2zm5 0a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1H7a1 1 0 01-1-1v-2zm5 0a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 01-1 1h-2a1 1 0 01-1-1v-2z"/>
 			</svg><span class="pl-2">Administrar articulos</span></button></a>
 </div>	
-		</div></div>
-		<div class="col-md-2">
-			<?php include ("autentificacion.php")?>
-			</div>
+<div class="col-sm-6 col-xl-4 py-3">
+		<a href="informePedidos.php"><button class="bg-primary text-white py-3">
+		<svg class="bi bi-layers" width="2em" height="2em" viewBox="0 0 16 16" fill="white" >
+  <path fill-rule="evenodd" d="M3.188 8L.264 9.559a.5.5 0 000 .882l7.5 4a.5.5 0 00.47 0l7.5-4a.5.5 0 000-.882L12.813 8l-1.063.567L14.438 10 8 13.433 1.562 10 4.25 8.567 3.187 8z" clip-rule="evenodd"/>
+  <path fill-rule="evenodd" d="M7.765 1.559a.5.5 0 01.47 0l7.5 4a.5.5 0 010 .882l-7.5 4a.5.5 0 01-.47 0l-7.5-4a.5.5 0 010-.882l7.5-4zM1.563 6L8 9.433 14.438 6 8 2.567 1.562 6z" clip-rule="evenodd"/>
+</svg><span class="pl-2">Informes de pedidos</span></button></a>
 </div>
+<div class="col-sm-6 col-xl-4 py-3 ">
+		<a href="almacen.php"><button class="bg-primary text-white py-3">
+		<svg class="bi bi-archive-fill" width="2em" height="2em" viewBox="0 0 16 16" fill="white">
+  <path fill-rule="evenodd" d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM6 7a.5.5 0 000 1h4a.5.5 0 000-1H6zM.8 1a.8.8 0 00-.8.8V3a.8.8 0 00.8.8h14.4A.8.8 0 0016 3V1.8a.8.8 0 00-.8-.8H.8z" clip-rule="evenodd"/>
+</svg><span class="pl-2">Almacén</span></button></a>
 </div>
-<?php include("pie.php")?>
-</body>
-</html>
+</div></div>
+
+<?php include ("Nuevaautentificacion.php")?>
+<?php include("Nuevopie.php")?>

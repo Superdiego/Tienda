@@ -9,6 +9,7 @@ $pedido = crear_pedido($cli);
 
 foreach($_COOKIE["carro"] as $nombre=>$cantidad){
     crear_linea($pedido,$nombre,$cantidad);
+    descontar_stock($nombre,$cantidad);
 }
 foreach($_COOKIE["carro"] as $nombre=>$valor){
     setcookie("carro[$nombre]",$valor,time()-100);

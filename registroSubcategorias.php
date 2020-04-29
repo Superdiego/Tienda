@@ -1,17 +1,13 @@
 <?php
 $nom_pag="Alta Subcategorias";
 include("cabecera.php");
-
 include ("funciones.php");
-include ("validaciones.php");
-
+include ("validaciones.php")
 $idcate = (isset($_POST['idcate'])) ? $_POST['idcate'] : '';
 $mensaje ='';
 $res_cat=null;
 $subcate = (isset($_POST['subcate'])) ? $_POST['subcate'] : '';
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
     if (ctype_digit($idcate)) {
         $res_cat = leer_categoria($idcate);
         if($res_cat != null){
@@ -24,11 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }else {
         $mensaje = "<span class='error'>Introduzca un codigo de categoria valido</span>";
-    }
-    
+    }   
 }
 ?>
-
 	<form method="POST" action="registroSubcategorias.php">
 		Categoria a la que pertenece: 
 		<input type="number" name="idcate" value="<?php echo $idcate?>">
@@ -45,8 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="submit" value="Registrar subcategoria"><br>';
 		}?>
     </form>
-		<br><br>
-	
+		<br><br>	
 	<br><br>
 	<a href="index.php">Volver a pagina principal</a>
 </body>
