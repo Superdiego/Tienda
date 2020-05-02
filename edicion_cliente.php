@@ -9,7 +9,11 @@ $nom_pag = "Edicion de Clientes";
 include_once ("validaciones.php");
 include_once ("funciones.php");
 
-$usuario = datos_usuario($_SESSION['autenticado']);
+if(isset($_POST['bajaadminuser'])){
+    $usuario = busca_cliente($_POST['bajaadminuser']);
+}else{
+    $usuario = (isset($_POST['modifadminuser'])) ? busca_cliente($_POST['modifadminuser']) : datos_usuario($_SESSION['autenticado']);
+}
 
 $nick = (isset($_POST['nick'])) ? $_POST['nick'] : $usuario->getNic_usr();
 $dni = (isset($_POST['dni'])) ? $_POST['dni'] : $usuario->getDni_usr();
@@ -20,16 +24,32 @@ $localidad = (isset($_POST['localidad'])) ? $_POST['localidad'] : $usuario->getL
 $provincia = (isset($_POST['provincia'])) ? $_POST['provincia'] : $usuario->getPro_usr();
 $email = (isset($_POST['correo'])) ? $_POST['correo'] : $usuario->getEma_usr();
 $telefono = (isset($_POST['telefono'])) ? $_POST['telefono'] : $usuario->getTel_usr();
-$password = (isset($_POST['password'])) ? $_POST['password'] : null;
+if (isset($_POST['modifadminuser'])) {
+    $password = $usuario->getPas_usr();
+} else {
+    $password = (isset($_POST['password'])) ? $_POST['password'] : null;
+}
 $confirmpass = (isset($_POST['pass_confirm'])) ? $_POST['pass_confirm'] : null;
 $passw = (isset($_POST['passw'])) ? $_POST['passw'] : null;
 $mostrar = "";
 $msg = "";
+$confadminbaja = '';
 $nopassw = '';
+
+$res_nic = '';
+$res_dni = '';
+$res_nom = '';
+$res_ape = '';
+$res_dir = '';
+$res_loc = '';
+$res_pro = '';
+$res_ema = '';
+$res_tel = '';
+$res_pas = '';
 
 $modifcliente = '';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if (isset($_POST['modifuser'])) {
 
     if (empty(trim($nick))) {
         $res_nic = "<span class='text-danger'>El campo Nick está vacio</span>";
@@ -79,55 +99,69 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     if (empty(trim($password))) {
         $res_pas = "<span class='text-danger'>El campo password está vacio</span>";
-    } else if(!val_pass($password)){
+    } else if (! val_pass($password)) {
         $res_pas = "<span class='text-danger'>El password está formado por tres caracteres</span>";
-    } else{
+    } else {
         $res_pas = ($password != $usuario->getPas_usr()) ? "<span class='text-danger'>Password incorrecto</span>" : "";
     }
 
-    if(isset($_POST['modifuser'])){ 
-        if (empty($res_nic) && empty($res_dni) && empty($res_nom) && empty($res_ape) &&
-            empty($res_dir)&& empty($res_loc) && empty($res_pro) && empty($res_ema) &&
-            empty($res_tel) && empty($res_pas)) {
-            $modifcliente = editar_cliente($nick, $dni, $nombre, $apellidos, $direccion,
-                           $localidad, $provincia, $email, $telefono);
-        }
+    if (empty($res_nic) && empty($res_dni) && empty($res_nom) && empty($res_ape) && empty($res_dir) && empty($res_loc) && empty($res_pro) && empty($res_ema) && empty($res_tel) && empty($res_pas)) {
+        $modifcliente = editar_cliente($nick, $dni, $nombre, $apellidos, $direccion, $localidad, $provincia, $email, $telefono);
     }
-    if(isset($_POST['bajauser']) || isset($_POST['confbaja'])){
-        $mostrar = "hidden";
-        $msg = "<div class='container'><div class='row row-cols-2'><div class='col text-right'>
-                Introduzca de nuevo su password:</div>
+}
+if (isset($_POST['bajauser']) || isset($_POST['confbaja'])) {
+    $mostrar = "style='display:none'";
+    $msg = "<div class='container'><div class='row row-cols-2'><div class='col text-right'>
                 <form method='POST' action='edicion_cliente.php'>
                 <div class='col'><input type='password' name='passw'>
                 </div></div><div class='col form-group row justify-content-center mt-5'>
                 
-                <input type='submit' value='Confirmar baja' name='confbaja' class='btn btn-danger mr-5'></form>
+                <input type='submit' value='Confirmar baja' name='confadminbaja' class='btn btn-danger mr-5'></form>
                 <a class='btn btn-primary ml-5' href='edicion_cliente.php'>Cancelar</a></div></div>";
-    }
-    if(isset($_POST['confbaja'])){
-        if(empty($passw)){
-            $nopassw = "<p class='text-danger text-center'>El campo password está vacío</p>";
-        }else if(!val_pass($passw)){
-            $nopassw = "<p class='text-danger text-center'>El password se compone de tres caracteres</p>";
-        }else{
-            $nopassw = ($usuario->getPas_usr() != $passw) ? "<p class='text-danger text-center'>Password erróneo</p>" : "";
-        }
-        if(empty($nopassw)){
-            baja_cliente($usuario->getId_usr());
-            session_destroy();
-            header("location:despedida.php");
-        }
-    }
-
+}
+if(isset($_POST['bajaadminuser'])){
+    $mostrar = "style='display:none'";
+    $confadminbaja = "</div><div><h5 class='mt-5'>¿Eliminar registro  del usuario: ". $usuario->getNom_usr()." ".
+                    $usuario->getApe_usr(). " definitivamente?</h5>
+                    <h5 class='mx-auto'>NO es nada recomendable</h5></div>
+                    <div class='row justify-content-center mt-5'>
+                    <form method='POST' action='edicion_cliente.php'>
+                    <input type='hidden' name='bajaadminuser' value=".$usuario->getId_usr().">
+                    <input type='submit' value='Confirmar baja' name='confadminbaja' class='btn btn-danger mr-5'>
+                    </form>
+                    <a class='btn btn-primary ml-5' href='adminusers.php'>Cancelar</a>";
 }
 
+if(isset($_POST['confadminbaja'])){
+    baja_usuario($usuario->getId_usr());
+    header('location:adminusers.php');
+}
+
+
+if (isset($_POST['confbaja'])) {
+    if (empty($passw)) {
+        $nopassw = "<p class='text-danger text-center'>El campo password está vacío</p>";
+    } else if (! val_pass($passw)) {
+        $nopassw = "<p class='text-danger text-center'>El password se compone de tres caracteres</p>";
+    } else {
+        $nopassw = ($usuario->getPas_usr() != $passw) ? "<p class='text-danger text-center'>Password erróneo</p>" : "";
+    }
+    if (empty($nopassw)) {
+        baja_cliente($usuario->getId_usr());
+        session_destroy();
+        header("location:despedida.php");
+    }
+}
+
+
 include_once ("Nuevacabecera.php");
-include_once('Nuevolateral.php');
+include_once ('Nuevolateral.php');
 ?>
 <div class='col-md-8'>
-	<div class='row container justify-content-center mt-5'>
+	<div class='row container justify-content-center mt-5'
+		<?php echo $mostrar?>>
 		<h4><?php echo $modifcliente?></h4>
-		<form method="post" action="edicion_cliente.php" class="px-5" <?php echo $mostrar?>>
+		<form method="post" action="edicion_cliente.php" class="px-5">
 			<div class="form-group row">
 				<label class="col-sm-4 col-form-label text-right">Nick:</label>
 				<div class="col-sm-8">
@@ -193,12 +227,12 @@ include_once('Nuevolateral.php');
 			<div class="form-group row">
 				<input type="submit" name='modifuser' value='Modificar'
 					class="btn btn-primary mr-5"><a class="btn btn-primary mr-5"
-					href='edicion_cliente.php'>Cancelar</a>
+					href='adminusers.php'>Cancelar</a>
 			</div>
 		</form>
 	</div>
 	<?php echo $nopassw ?>
-	<div class='row justify-content-end'><?php echo $msg?>
+	<div class='row justify-content-end'><?php echo $msg.$confadminbaja ?>
 		<form method='POST' action='edicion_cliente.php' <?php echo $mostrar?>>
 			<input type="submit" name='bajauser' value='Dar de baja'
 				class="btn btn-danger">

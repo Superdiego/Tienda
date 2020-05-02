@@ -1,6 +1,6 @@
 <?php
 session_start();
-$nom_pag = "ALTA ARTICULOS";
+$nom_pag = "ALTA ARTÍCULOS";
 include_once ("funciones.php");
 include_once ("validaciones.php");
 
@@ -30,6 +30,7 @@ $err_pre = null;
 $err_act = null;
 $err_stock = null;
 $mensaje = null;
+$msg_img = "";
 
 
 if(isset($_GET['ok'])){
@@ -61,32 +62,34 @@ if (isset($_POST['alta'])) {
         $err_act = ($act!= 1 && $act!=0) ? "<span class='text-danger'>La actividad debe ser uno o cero</span>" : '';
     }
     $err_stock = (! is_numeric($stock)) ? "<span class='text-danger'>El stock debe ser un número</span>" : '';
-
-    if (val_texto($nom) && ctype_digit($cat) && ctype_digit($sub) && val_texto($desc) && is_numeric($pre) && ctype_digit($act) && is_numeric($stock)) {
+    if (isset($_FILES["foto"]) && $_FILES["foto"]["size"] > 0) {
+        if ($_FILES["foto"]["size"] > 50000) {
+            $msg_img = "Archivo de imagen demasiado grande";
+        } else {
+            $temporal = $_FILES["foto"]["tmp_name"];
+            $imagen = getimagesize($temporal);
+            if($imagen[2]!=2){
+                $msg_img =  "La imagen no tiene el formato correcto";
+            }else if($imagen[0] != 300 || $imagen[1] != 300){
+                $msg_img =  "La imagen no tiene las medidas correctas";
+            }else{
+                $destino = "imgProductos/" . $_FILES["foto"]["name"];
+                if (move_uploaded_file($temporal, $destino)) {
+                    $msg_img =  "Imagen subida a servidor";
+                } else {
+                    $msg_img =  "Error en la subida de la imagen";
+                }          
+        }
+    }
+    if (empty($err_nom) && empty($err_catsubcat) && empty($err_des) && empty($err_pre) &&
+        empty($err_act) && empty($msg_img)){
         registrar_articulos($nom, $cat, $sub, $desc, $pre, $act, $stock);
         foreach ($_POST as $nombre=>$valor){
             $nombre = null;
         }
         header("location:registroArticulos.php?ok=alta");
     }
-    if (isset($_FILES["foto"]) && $_FILES["foto"]["size"] > 0) {
-        if ($_FILES["foto"]["size"] > 400000) {
-            echo "Archivo demasiado grande";
-        } else {
-            $temporal = $_FILES["foto"]["tmp_name"];
-            $imagen = getimagesize($temporal);
-            if ($imagen[0] == 300 && $imagen[1] == 300) {
-                $destino = "imgProductos/" . $_FILES["foto"]["name"];
-                if (move_uploaded_file($temporal, $destino)) {
-                    echo "Imagen subida a servidor";
-                } else {
-                    echo "Error en la subida de la imagen";
-                }
-            } else {
-                echo "La imagen no tiene las medidas o el formato correcto";
-            }
-        }
-    }
+    
 }
 include ('Nuevacabecera.php');
 include ('Nuevolateral.php');
@@ -94,6 +97,7 @@ include ('Nuevolateral.php');
 <div class="col-md-8">
 
 	<h5 class='text-center text-success'><?php echo $mensaje ?></h5>
+	<h5 class='text-center text-success'><?php echo $msg_img ?></h5>
 	<form method='post' action='registroArticulos.php' class='px-5' enctype="multipart/form-data">
 		<br>
 		<div class='form-group row'>
@@ -134,7 +138,8 @@ echo "</select>$err_catsubcat</div></div>
         <br>
         <div class='form-group row'><div class='col-9 text-center'>
         <button type='submit' name='alta' class='btn btn-primary'>Alta artículo</button></div><div class='col-3'>
-        <a href='registroArticulos.php' class='btn btn-primary'>Cancelar</a></div></div>"?>
+        <a href='adminArtic.php' class='btn btn-primary'>Cancelar</a></div></div>";
+        ?>
 
 
 	

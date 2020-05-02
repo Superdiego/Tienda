@@ -11,15 +11,19 @@ if(!isset($_SESSION['autenticado'])){
     $usr = $_SESSION['autenticado'];
     $admin = datos_usuario($usr);
     if($admin->getRol_usr()!=4){
-        header("location:index.php");
+        header("location:clientes.php");
     }
 }
-include_once("Nuevacabecera.php");
-include_once('Nuevolateral.php');
+
+
+
+
+
+
 
 
 $edicion = "";
-
+$ocultar='';
 if(isset($_REQUEST['nic']) && $_REQUEST['nic'] != ""){
 
 $usuario = datos_usuario($_POST['nic']);
@@ -43,9 +47,20 @@ $edicion = editar_usuario($dni, $rol, $nombre, $apellidos, $direccion, $codposta
 
 }
 
+if(isset($_POST['bajauser'])){
+    $ocultar = "style:'display:none'";
+}
+
+
+
+
+include_once("Nuevacabecera.php");
+include_once('Nuevolateral.php');
+
+
 ?>
 <div class='col-md-8'>	
-	<div class='row'>
+	<div class='row mt-5' <?php echo $ocultar?>>
 		<table class="table table-striped table-responsive">
   <thead >
     <tr><th>ID</th><th class="px-1 mx-1">DNI</th><th>NIC</th><th >ROL</th><th>NOMBRE</th><th>APELLIDOS</th>

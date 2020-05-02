@@ -6,7 +6,7 @@ if(!isset($_SESSION['autenticado'])){
 }else{
     $usr = $_SESSION['autenticado'];
     $admin = datos_usuario($usr);
-    if($admin->getRol_usr()==2){
+    if($admin->getRol_usr()!=3 && $admin->getRol_usr()!=4){
         header("location:index.php");
     }
 }

@@ -36,7 +36,7 @@ $act = (isset($_POST['activo'])) ? $_POST['activo'] : $art->getAct_art();
 $stock = $art->getSto_art();
 
 $nom_pag = $nom;
-
+$esconder='';
 
 
 $err_nom = null;
@@ -50,6 +50,17 @@ $mensaje = null;
 if (isset($_GET['ok'])) {
     $mensaje = "Artículo modificado correctamente";
 }
+
+if(isset($_POST['bajart'])){
+    $esconder = "style='display:none'";
+}
+
+if(isset($_POST['confbajart'])){
+    baja_articulo($idart);
+    header('location:adminArtic.php');
+}
+
+
 
 if (isset($_POST['modificar'])) {
     if (empty(trim($nom))) {
@@ -77,23 +88,25 @@ if (isset($_POST['modificar'])) {
     }
   
     if (isset($_FILES["foto"]) && $_FILES["foto"]["size"] > 0) {
-            if ($_FILES["foto"]["size"] > 400000) {
-                $msg_img = "Archivo demasiado grande";
-            } else {
-                $temporal = $_FILES["foto"]["tmp_name"];
-                $imagen = getimagesize($temporal);
-                if ($imagen[0] == 300 && $imagen[1] == 300) {
-                    $destino = "imgProductos/" . $_FILES["foto"]["name"];
-                    if (move_uploaded_file($temporal, $destino)) {
-                        $msg_img = "";
-                    }else {
-                        $msg_img = "Error en la subida de la imagen";
-                    }
+        if ($_FILES["foto"]["size"] > 50000) {
+            $msg_img = "Archivo de imagen demasiado grande";
+        } else {
+            $temporal = $_FILES["foto"]["tmp_name"];
+            $imagen = getimagesize($temporal);
+            if($imagen[2]!=2){
+                $msg_img =  "La imagen no tiene el formato correcto";
+            }else if($imagen[0] != 300 || $imagen[1] != 300){
+                $msg_img =  "La imagen no tiene las medidas correctas";
+            }else{
+                $destino = "imgProductos/" . $_FILES["foto"]["name"];
+                if (move_uploaded_file($temporal, $destino)) {
+                    $msg_img =  "";
                 } else {
-                    $msg_img = "La imagen no tiene las medidas o el formato correcto";
+                    $msg_img =  "Error en la subida de la imagen";
                 }
             }
-     }
+        }
+    }
 
      if (empty($err_nom) && empty($err_catsubcat) && empty($err_des) && empty($err_pre) &&
          empty($err_act) && empty($msg_img)) {
@@ -109,10 +122,11 @@ include ('Nuevolateral.php');
 
 ?>
 <div class="col-md-8">
-	<div class='row'>
+	<div class='row '<?php echo $esconder?>>
 		<div class='col-md-9'>
 
 			<h5 class='text-center text-success'><?php echo $mensaje ?></h5>
+			<h5 class='text-center text-success'><?php echo $msg_img ?></h5>
 			<form method='post' action='edicionArticulos.php' enctype="multipart/form-data">
 				<br>
 				<div class='form-group row'>
@@ -156,7 +170,7 @@ echo "</select>$err_catsubcat</div></div>
         <input class='form-control' type='text' readonly name='stock' value='$stock'>$err_stock</div></div>
         <div class='form-group row'><label class='col-sm-5 col-form-label text-center'>Imagen (300px x 300px JPG):</label><div class='col-sm-7'>
         <input class='form-control' type='file' name='foto'></div>
-        </div><p class='text-center text-danger'>$msg_img </p><br>       
+        </div><p class='text-center text-danger'></p><br>       
         <div class='form-group row'><div class='col-9 text-center'>
         <button type='submit' name='modificar' class='btn btn-primary'>Modificar artículo</button></form></div><div class='col-3'>
         <a href='adminArtic.php' class='btn btn-primary'>Cancelar</a></div></div>";
@@ -165,15 +179,66 @@ echo "</select>$err_catsubcat</div></div>
 
 	
 	
-	
-	
 			
 			
 		</div>
+		
+
+		
+		
+		
+		
 		<div class='col-md-3 justify-content-center'>
 			<img src="imgProductos/<?php echo $idart?>.jpg" class='img-fluid '>
+			
+<?php 
+    if (($admin->getRol_usr() == 4)) {
+       echo "<div class='row mt-5 justify-content-center'>
+			<form method='POST' action='edicionArticulos.php'>
+                <input type='hidden' name='idart' value=$idart>
+				<input type='submit' class='btn btn-danger' value='Baja artículo' name='bajart'>
+			</form>		
+		</div>";
+    }
+
+?>
+
+
+		
 		</div>
+
 	</div>
+
+		<?php 
+if(isset($_POST['bajart'])){
+    if (($admin->getRol_usr() == 4)) {
+        echo "<div class='row justify-content-center m-5'>
+            <div class='col-md-9'>
+            <div class='row justify-content-center'>
+            <h4>NO es recomendable eliminar articulos</h4>
+            </div>
+            <div class='row justify-content-center'>
+            <h5>¿Está seguro de querer eliminar $nom?</h5>
+            </div>
+            <div class='row justify-content-center mt-5'>
+            <form method='POST' action='edicionArticulos.php'>
+                <input type='hidden' name='idart' value=$idart>
+                <input type='submit' value='Confirmar baja' name='confbajart' class='btn btn-danger mr-3'>
+            </form>
+          
+            <a href='edicionArticulos.php?idart=$idart'>
+                <button class='btn btn-secondary ml-3'>Cancelar</button>
+            </a>
+            </div></div>
+            <div class='col-md-3 justify-content-center'>
+			<img src='imgProductos/$idart.jpg' class='img-fluid '>
+            </div></div>";
+    }
+}
+?>
+
+
+
 
 </div>
 

@@ -457,7 +457,7 @@ function mostrar_usuario($bloque)
             case 4:
                 $adm = 'selected';
         }
-        echo "<form method='POST' action='adminusers.php'>
+        echo "<form method='POST' action='edicion_cliente.php'>
             <tr><th class='px-0' scope='row'><input type='text' class='bg-light text-dark' readonly style='width:2em' name='id' value='" . $fila->getId_usr() . "'></th>
             <td class='px-0'><input type='text' size='9' class='bg-light text-dark' name='dni' readonly value='" . $fila->getDni_usr() . "'></td>
             <td class='px-0'><input type='text' size='9' class='bg-light text-dark' name='nic' readonly value='" . $fila->getNic_usr() . "'></td>
@@ -476,7 +476,8 @@ function mostrar_usuario($bloque)
             <td class='px-0'><input type='text' size='9' name='tel' value='" . $fila->getTel_usr() . "'></td>
             <td class='px-0'><input type='text' size='4' name='pas' value='" . $fila->getPas_usr() . "'></td>
             <td class='px-0'><input type='text' size='1' name='act' value='" . $fila->getAct_usr() . "'></td>
-            <td class='px-0'><button type='submit' class='btn btn-primary'>Modificar</button></td></tr>
+            <td class='px-0'><button type='submit' name='modifadminuser' value='" . $fila->getId_usr()."' class='btn btn-primary'>Modificar</button></td>
+            <td class='px-0'><button type='submit' name='bajaadminuser' value='" . $fila->getId_usr()."'class='btn btn-danger'>Baja</button></td></tr>
             </form>";
     }
     if ($desplazamiento > 0) {
@@ -1055,4 +1056,15 @@ function baja_almacen($id_ent){
     $consulta->execute(array('id'=>$id_ent));
 
 }
+function baja_articulo($idart){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("DELETE FROM articulos WHERE id_art = :id");
+    $consulta->execute(array(':id'=>$idart));
+}
+function baja_usuario($id_user){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("DELETE FROM usuarios WHERE id_usr = :id");
+    $consulta->execute(array(':id'=>$id_user));
+}
+
 ?>
