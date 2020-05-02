@@ -6,8 +6,12 @@ $pass_usr = (isset($_POST['password'])) ? $_POST['password'] : null;
 $salir = (isset($_POST['salir'])) ? $_POST['salir'] : null;
 
 if((isset($_POST['usuario']))) {
-    if(!val_texto($nombre_usr)){
+    if(empty($nombre_usr)){
+        header('location:index.php?error=6');
+    }else if(!val_texto($nombre_usr)){
         header("location:index.php?error=1");
+    }else if(empty($pass_usr)){
+        header('location:index.php?error=7');
     }else if(!val_pass($pass_usr,$pass_usr)){
         header("location:index.php?error=2&usr=$nombre_usr");
     }else{

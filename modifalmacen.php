@@ -16,22 +16,28 @@ if (! isset($_SESSION['autenticado'])) {
 
 // - - - - - - - - - - - - - - - - -
 
-$err_ped = "";
+$err_ref = "";
 $err_fec = "";
 $err_art = "";
 $err_cant = "";
 $apunte = "";
+$oculta = '';
+$msg_baja="";
 
-
-$pedido = (isset($_POST['pedido'])) ? ($_POST['pedido']) : "";
-$fecha = (isset($_POST['fecha'])) ? $_POST['fecha'] : "";
-$idart = (isset($_REQUEST['articulo'])) ? $_REQUEST['articulo'] : "";
-$cant = (isset($_POST['cantidad'])) ? $_POST['cantidad'] : "";
+$id_ent = (isset($_REQUEST['ent_alm'])) ? $_REQUEST['ent_alm'] : "";
+$ent_alm = devuelve_entrada($id_ent);
+$referencia = (isset($_POST['modificacion'])) ? $_POST['referencia'] : $ent_alm[1];
+$fecha = (isset($_POST['modificacion'])) ? $_POST['fecha'] : $ent_alm[2];
+$idart = (isset($_REQUEST['modificacion'])) ? $_REQUEST['articulo'] : $ent_alm[3];
+$cant = (isset($_POST['modificacion'])) ? $_POST['cantidad'] : $ent_alm[4];
+$old_cant = $ent_alm[4];
 $producto = buscar_articulo($idart);
+if(isset($_GET['ent_alm'])){
+    $apunte = "Registro modificado";
+}
 
-
-if (isset($_POST['almacen'])) {
-    $err_ped = (empty($pedido)) ? "<div class='text-danger'>El campo referencia está vacío</div>" : "";
+if (isset($_POST['modificacion'])) {
+    $err_ref = (empty($referencia)) ? "<div class='text-danger'>El campo referencia está vacío</div>" : "";
     $err_fec = (empty($fecha)) ? "<div class='text-danger'>El campo fecha está vacío</div>" : "";
     if (empty($idart)) {
         $err_art = "<div class='text-danger'>El campo Id artículo está vacío</div>";
@@ -41,14 +47,35 @@ if (isset($_POST['almacen'])) {
     if (empty($cant)){
         $err_cant = "<div class='text-danger'>El campo cantidad no puede estar vacío</div>";
     }else{
-        $err_cant = (! is_numeric($cant)) ? "<div class='text-danger'>El campo cantidad debe ser un número</div>" :"";     
+        $err_cant = (! is_numeric($cant)) ? "<div class='text-danger'>El campo cantidad debe ser un número</div>" :"";
     }
-    if (empty($err_ped) && empty($err_fec) && empty($err_art) && empty($err_cant)) {      
-        $apunte = insertar_pedidoAlmacen($pedido, $fecha, $idart, $cant);
-        descontar_stock($idart, - $cant); 
-        header("location:controlAlmacen.php?art=$idart");
+    if (empty($err_ref) && empty($err_fec) && empty($err_art) && empty($err_cant)) {
+        $apunte = modificar_pedidoAlmacen($id_ent, $fecha, $referencia, $cant);
+        descontar_stock($idart, $old_cant);
+        descontar_stock($idart, - $cant);
+        header("location:controlAlmacen.php?artic=$idart");
     }
 }
+
+if (isset($_POST['baja'])){
+    $oculta = "none";
+    $msg_baja = "¿Seguro que quiere borrar el apunte?<form method='POST' action='modifalmacen.php'>
+                <div class='form-row row col-12 justify-content-center '>
+                <input type='submit' class='btn btn-danger mr-3' name='confbaja' value='Confirmar baja'>
+                <input type='hidden' name='ent_alm' value=$id_ent></form>
+                <form action='almacen.php' method='POST'>
+                <input type='hidden' name='articulo' value='$idart'>
+                <input class='btn btn-secondary' type='submit'  name='detalle' value='Cancelar'></form></div>";
+}
+if (isset($_POST['cancelbaja'])){
+    header("location:almacen.php?articulo=$idart");
+}
+if (isset($_POST['confbaja'])){
+     descontar_stock($idart, $old_cant);
+     $baja = baja_almacen($id_ent);
+     header("location:almacen.php?articulo=$idart");
+}
+
 $nom_pag = $producto->getNom_art();
 include ('Nuevacabecera.php');
 include ('Nuevolateral.php');
@@ -64,19 +91,21 @@ include ('Nuevolateral.php');
 	<div class='col-md-12'>
 	<div class='container-fluid'>
 	<p  class='text-success'><?php echo $apunte ?></p>
-	<form method='POST' action='almacen.php' >	
-	<div class='row' ><div class='col-md-7   bg-light'>
-	<h4>Entrada almacén</h4>
+	<form method='POST' action='modifalmacen.php' >	
+	<div class='row' ><div class='col-md-7'>
+	<h4>Modificación entrada almacén</h4>
+	<input class="form-control" readonly type='text' name='ent_alm'
+					value='<?php echo $id_ent?>'><?php echo $err_art?>
 		<div class='form-row'>
 		
-			<div class='form-group col-md-2'><label>Art.: </label>
+			<div class='form-group col-md-2'><label>Art: </label>
 				<input class="form-control" readonly type='text' name='articulo'
 					value='<?php echo $idart?>'><?php echo $err_art?>
 				</div>
 			<div class='form-group col-md-4'>
 				<label>Referencia: </label>
-				<input class="form-control" type='text' name='pedido'
-					value='<?php echo $pedido?>'><?php echo $err_ped?>
+				<input class="form-control" type='text' name='referencia'
+					value='<?php echo $referencia?>'><?php echo $err_ref?>
 			</div>
 			<div class='form-group col-md-6'>
 				<label>Fecha: </label>
@@ -91,11 +120,11 @@ include ('Nuevolateral.php');
 					value='<?php echo $cant?>'><?php echo $err_cant?>
 			</div>
 		</div>
-		<div class='form-row'>
-			<div class='form-row row col-12 justify-content-center mb-5'>
-				<input type='submit' name='almacen' value='Confirmar' class='btn btn-success mr-5'></form>
-				
-				<form action='index.php'><input type='submit'class='btn btn-secondary ml-5' value='Salir'></form>
+		<div class='form-row' ><?php echo $msg_baja ?>
+			<div class='form-row row col-12 justify-content-center mb-5' style='display:<?php echo $oculta?>'>
+				<input type='submit' name='modificacion' value='Modificar' class='btn btn-success mr-5'>
+				<input type='submit' name='baja' value='Baja' class='btn btn-danger'></form>
+				<form action='index.php'><input type='submit' value='Salir'class='btn btn-secondary ml-5'></form>
 			</div>
 		</div>
 	</div>
@@ -123,7 +152,7 @@ if(isset($alm)){
     $todo[] = $fila;
     }
 }
-if(isset($mov)){
+if(isset($alm)){
     foreach($mov as $fila){   
         $cliente = busca_cliente($fila[2]);
         $fila[2] = $cliente->getNom_usr() . " ".$cliente->getApe_usr();
@@ -174,4 +203,3 @@ if(isset($todo)){
 include ('Nuevaautentificacion.php');
 include('Nuevopie.php');
 ?>
-

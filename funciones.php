@@ -735,25 +735,21 @@ function menu_subcategorias()
     }
 }
 
-function modificar_articulo($id, $nom, $cat, $sub, $des, $pre, $act, $sto)
+function modificar_articulo($id, $nom, $cat, $sub, $des, $pre, $act)
 {
     $conex = conectar();
     $codigo = "UPDATE articulos SET  nom_art = :nom, cat_art = :cat, sub_art = :sub, des_art = :des, pre_art = :pre,
-            act_art = :act, sto_art = :sto WHERE id_art = :id";
-    $insert = $conex->prepare($codigo);
-    $registro = $insert->execute(array(
+            act_art = :act WHERE id_art = :id";
+    $consulta = $conex->prepare($codigo);
+    $consulta->execute(array(
         ':nom' => $nom,
         ':cat' => $cat,
         ':sub' => $sub,
         ':des' => $des,
         ':pre' => $pre,
         ':act' => $act,
-        ':sto' => $sto,
         ':id' => $id
     ));
-    if ($registro == 1) {
-        return "Modificado";
-    }
 }
 
 function listadesubcategorias()
@@ -872,7 +868,7 @@ function mostrar_pedidos($inicio,$final){
 }
 function mis_pedidos($cliente){
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT * FROM pedidos WHERE usr_ped = :id");
+    $consulta = $conex->prepare("SELECT * FROM pedidos WHERE usr_ped = :id ORDER BY id_ped DESC");
     $consulta->execute(array(':id'=>$cliente));
     while($fila=$consulta->fetch()){
         $fecha = getDate($fila[2]);
@@ -1033,7 +1029,30 @@ function ordenando_fechas($a,$b){
     return ($b[0]) - ($a[0]);
 } 
         
-    
+function devuelve_entrada($id_entrada){
+    $conexion = conectar();
+    $consulta=$conexion->prepare("SELECT * from almacen WHERE id_alm = :id");
+    $consulta->execute(array(':id'=>$id_entrada));
+    $entrada = $consulta->fetch();
+    if (isset($entrada)){
+        return $entrada;
+    }
+}
+function modificar_pedidoAlmacen($id_ped, $fec, $ref, $cant){
+    $conex = conectar();
+    $consulta = $conex->prepare("UPDATE almacen SET ped_alm = :ped, fec_alm = :fec, can_alm = :can
+                                 WHERE id_alm = :id");
+    $modificar = $consulta->execute(array( ':ped'=>$ref, ':fec'=>$fec,':can'=>$cant, ':id'=>$id_ped));
+    if($modificar == 1){
+        return "Insertado registro en almacén";
+    }else{
+        return "Ha ocurrido un error y no se ha podido grabar";
+    }
+}
+function baja_almacen($id_ent){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("DELETE FROM almacen WHERE id_alm = :id");
+    $consulta->execute(array('id'=>$id_ent));
 
-
+}
 ?>

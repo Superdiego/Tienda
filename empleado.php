@@ -15,7 +15,7 @@ include_once("Nuevacabecera.php");
 include_once("Nuevolateral.php");
 ?>
 <div class='col-md-8'>
-<div class="row text-center">
+<div class="row text-center justify-content-center">
 <div class="col-sm-6 col-xl-4 py-3">
 		<a href="registroArticulos.php"><button class="bg-primary text-white py-3">
 		<svg class="bi bi-grid-3x3-gap-fill" width="2em" height="2em" viewBox="0 0 16 16" fill="white" >
@@ -42,12 +42,7 @@ include_once("Nuevolateral.php");
   <path fill-rule="evenodd" d="M7.765 1.559a.5.5 0 01.47 0l7.5 4a.5.5 0 010 .882l-7.5 4a.5.5 0 01-.47 0l-7.5-4a.5.5 0 010-.882l7.5-4zM1.563 6L8 9.433 14.438 6 8 2.567 1.562 6z" clip-rule="evenodd"/>
 </svg><span class="pl-2">Ver pedidos</span></button></a>
 </div>
-<div class="col-sm-6 col-xl-4 py-3 ">
-		<a href="almacen.php"><button class="bg-primary text-white py-3">
-		<svg class="bi bi-archive-fill" width="2em" height="2em" viewBox="0 0 16 16" fill="white">
-  <path fill-rule="evenodd" d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM6 7a.5.5 0 000 1h4a.5.5 0 000-1H6zM.8 1a.8.8 0 00-.8.8V3a.8.8 0 00.8.8h14.4A.8.8 0 0016 3V1.8a.8.8 0 00-.8-.8H.8z" clip-rule="evenodd"/>
-</svg><span class="pl-2">Almacén</span></button></a>
-</div>
+
 <div class="col-sm-6 col-xl-4 py-3">
 		<a href="clientes.php"><button class="bg-primary text-white py-3">
 		<svg class="bi bi-people-fill width="2em" height="2em" viewBox="0 0 16 16" fill="white">

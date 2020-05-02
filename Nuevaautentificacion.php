@@ -20,6 +20,12 @@ if((isset($_GET['error']))) {
             break;
         case 4:
             $titulo = "Usuario no registrado";
+            break;
+        case 6:
+            $titulo = "El campo usuario está vacío";
+            break;
+        case 7:
+            $titulo = "El campo password está vacío";
     }
 }
 

@@ -63,7 +63,7 @@ FOREIGN KEY(art_lin) REFERENCES articulos(id_art)
 )ENGINE=MyISAM;
 CREATE TABLE IF NOT EXISTS almacen (
 id_alm INT PRIMARY KEY AUTO_INCREMENT,
-ped_alm INT,
+ped_alm CHAR(20),
 fec_alm DATE,
 art_alm INT,
 can_alm INT(6),
@@ -112,18 +112,45 @@ VALUES
 
 INSERT INTO articulos (nom_art,cat_art,sub_art,des_art,pre_art,act_art,sto_art)
 VALUES
-("Bra",2,1,"La mejor cafetera clasica del mercado",35,1,0),
-("Moulinex",2,2,"Una expreso a buen precio",74,1,0),
-("Clasic",2,1,"La de toda la vida, para dos servicios", 25,1,0),
-("Jata",2,2,"La expreso para dos tazas simultaneas",95,1,0),
-("Office",1,1,"Suficiente para ofimatica",450,1,0),
-("Gamer",1,1,"Para los mas exigente jugadores",950,1,0),
-("HP",1,2,"Perfecta portabilidad, ligero pero potente",800,1,0),
-("Acer",1,2,"Llevate el juego donde quieras",1100,1,0),
-("LG",3,1,"Para pasar horas tumbado en el sofa",800,1,0),
-("Marshall",4,1,"Buen sonido a buen precio",200,1,0);
+("Bra",2,1,"La mejor cafetera clasica del mercado",35,1,17),
+("Moulinex",2,2,"Una expreso a buen precio",74,1,16),
+("Clasic",2,1,"La de toda la vida, para dos servicios", 25,1,6),
+("Jata",2,2,"La expreso para dos tazas simultaneas",95,1,14),
+("Office",1,1,"Suficiente para ofimatica",450,1,2),
+("Gamer",1,1,"Para los mas exigente jugadores",950,1,13),
+("HP",1,2,"Perfecta portabilidad, ligero pero potente",800,1,13),
+("Acer",1,2,"Llevate el juego donde quieras",1100,1,14),
+("LG",3,1,"Para pasar horas tumbado en el sofa",800,1,11),
+("Marshall",4,1,"Buen sonido a buen precio",200,1,8);
 
+INSERT INTO almacen (ped_alm, fec_alm, art_alm, can_alm)
+VALUES
+("Stock inicial","2020/01/01",1,20),
+("Stock inicial","2020/01/01",2,20),
+("Stock inicial","2020/01/01",3,20),
+("Stock inicial","2020/01/01",4,20),
+("Stock inicial","2020/01/01",5,20),
+("Stock inicial","2020/01/01",6,20),
+("Stock inicial","2020/01/01",7,20),
+("Stock inicial","2020/01/01",8,20),
+("Stock inicial","2020/01/01",9,20),
+("Stock inicial","2020/01/01",10,20);
 
+INSERT INTO pedidos (usr_ped, fec_ped)
+VALUES
+(1,1588244888),(2,1588250500),(3,1588251000),(4,1588252000),
+(1,1588052500),(2,1588144888),(3,1588254000),(4,1588274888);
+
+INSERT INTO lineas (ped_lin, id_lin, art_lin, can_lin)
+VALUES
+(1,1,1,1),(1,2,2,2),(1,3,3,3),(1,4,4,2),(1,5,5,4),(1,6,6,2),
+(2,1,7,1),(2,2,8,1),(2,3,9,1),(2,4,10,3),
+(3,1,1,2),(3,2,2,1),(3,3,3,2),(3,4,4,1),(3,5,5,1),
+(4,1,6,1),(4,2,7,3),(4,3,8,1),(4,4,9,2),(4,5,10,1),(4,6,2,1),
+(5,1,3,3),(5,2,6,1),(5,3,8,1),(5,4,9,3),
+(6,1,5,3),
+(7,1,10,8),(6,2,8,3),(6,3,6,3),(6,4,4,3),(6,5,3,3),
+(8,1,3,3),(8,2,7,3),(8,3,9,3),(8,4,5,10);
 
 
 

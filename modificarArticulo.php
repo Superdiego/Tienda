@@ -29,9 +29,9 @@ $err_pre = "";
 $err_act = "";
 $err_stock = "";
     
-if (isset($_POST['modificar']) || isset($_POST['revisar'])) {
-    $id = $_POST['id'];
-    $articulo = buscar_articulo($_POST['id']);
+if (isset($_POST['editar']) || isset($_POST['revisar'])) {
+    $id = $_POST['idart'];
+    $articulo = buscar_articulo($_POST['idart']);
     $nom = (isset($_POST['nombre'])) ? $_POST['nombre'] : $articulo->getNom_art();
     $catsubcat = (isset($_POST['catsubcat'])) ? explode(",",$_POST['catsubcat']) : '';
     $cat = (isset($_POST['catsubcat'])) ? $catsubcat[0]: $articulo->getCat_art() ;

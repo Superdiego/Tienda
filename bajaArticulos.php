@@ -1,6 +1,6 @@
 <?php
 session_start();
-$nom_pag = "ALTA ARTICULOS";
+$nom_pag = "BAJA ARTICULOS";
 include_once ("funciones.php");
 include_once ("validaciones.php");
 
@@ -14,6 +14,13 @@ if (! isset($_SESSION['autenticado'])) {
     }
 }
 
+
+
+?>
+
+
+<?php
+
 $nom = (isset($_POST['nombre'])) ? $_POST['nombre'] : null;
 $catsubcat = (isset($_POST['catsubcat'])) ? explode(",", $_POST['catsubcat']) : null;
 $cat = (isset($_POST['catsubcat'])) ? $catsubcat[0] : null;
@@ -21,7 +28,7 @@ $sub = (isset($_POST['catsubcat'])) ? $catsubcat[1] : null;
 $desc = (isset($_POST['descripcion'])) ? $_POST['descripcion'] : null;
 $pre = (isset($_POST['precio'])) ? $_POST['precio'] : null;
 $act = (isset($_POST['activo'])) ? $_POST['activo'] : 1;
-$stock = 0;
+$stock = (isset($_POST['stock'])) ? $_POST['stock'] : null;
 
 $err_nom = null;
 $err_catsubcat = null;
@@ -30,11 +37,6 @@ $err_pre = null;
 $err_act = null;
 $err_stock = null;
 $mensaje = null;
-
-
-if(isset($_GET['ok'])){
-    $mensaje = "Artículo grabado correctamente";
-}
 
 if (isset($_POST['alta'])) {
     if (empty(trim($nom))) {
@@ -63,11 +65,11 @@ if (isset($_POST['alta'])) {
     $err_stock = (! is_numeric($stock)) ? "<span class='text-danger'>El stock debe ser un número</span>" : '';
 
     if (val_texto($nom) && ctype_digit($cat) && ctype_digit($sub) && val_texto($desc) && is_numeric($pre) && ctype_digit($act) && is_numeric($stock)) {
-        registrar_articulos($nom, $cat, $sub, $desc, $pre, $act, $stock);
-        foreach ($_POST as $nombre=>$valor){
-            $nombre = null;
+        $mensaje = registrar_articulos($nom, $cat, $sub, $desc, $pre, $act, $stock);
+        foreach($_POST as $valor=>$dato){
+            $valor = "";
         }
-        header("location:registroArticulos.php?ok=alta");
+        
     }
     if (isset($_FILES["foto"]) && $_FILES["foto"]["size"] > 0) {
         if ($_FILES["foto"]["size"] > 400000) {
@@ -94,7 +96,7 @@ include ('Nuevolateral.php');
 <div class="col-md-8">
 
 	<h5 class='text-center text-success'><?php echo $mensaje ?></h5>
-	<form method='post' action='registroArticulos.php' class='px-5' enctype="multipart/form-data">
+	<form method='post' action='registroArticulos.php' class='px-5'>
 		<br>
 		<div class='form-group row'>
 			<label class='col-sm-2 col-form-label'>Nombre:</label>
@@ -127,8 +129,7 @@ echo "</select>$err_catsubcat</div></div>
         <input class='form-control' type='text' name='precio' value='$pre'>$err_pre</div></div>
         <div class='form-group row'><label class='col-sm-2 col-form-label'>Activo:</label><div class='col-sm-10'>
         <input class='form-control' type='bool' name='activo' value='$act'>$err_act</div></div>
-        <div class='form-group row'><label class='col-sm-2 col-form-label'>Stock:</label><div class='col-sm-10'>
-        <input class='form-control' type='text' readonly name='stock' value='$stock'>$err_stock</div></div>
+
         <div class='form-group row'><label class='col-sm-5 col-form-label text-center'>Imagen (300px x 300px JPG):</label><div class='col-sm-7'>
         <input class='form-control' type='file' name='foto'></div></div>
         <br>
@@ -146,6 +147,3 @@ echo "</select>$err_catsubcat</div></div>
 
 <?php include ("Nuevaautentificacion.php")?>
 <?php include("Nuevopie.php")?>
-
-
-
