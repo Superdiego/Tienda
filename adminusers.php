@@ -64,8 +64,7 @@ include_once('Nuevolateral.php');
 		<table class="table table-striped table-responsive">
   <thead >
     <tr><th>ID</th><th class="px-1 mx-1">DNI</th><th>NIC</th><th >ROL</th><th>NOMBRE</th><th>APELLIDOS</th>
-      <th>DIRECCION</th><th class='px-1'>C.POST.</th><th class='px-1'>LOC.</th><th class='px-1'>PROV.</th><th>E-MAIL</th>
-      <th class='px-1'>TELEFONO</th><th class='px-1'>PASS</th><th class='px-1'>ACT.</th></tr>
+      <th class='px-1'>PASS</th><th class='px-1'>ACT.</th></tr>
   </thead>
   <tbody>	
 <?php mostrar_usuario(5); ?>

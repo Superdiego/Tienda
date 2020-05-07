@@ -28,13 +28,14 @@ $id_ent = (isset($_REQUEST['ent_alm'])) ? $_REQUEST['ent_alm'] : "";
 $ent_alm = devuelve_entrada($id_ent);
 $referencia = (isset($_POST['modificacion'])) ? $_POST['referencia'] : $ent_alm[1];
 $fecha = (isset($_POST['modificacion'])) ? $_POST['fecha'] : $ent_alm[2];
-$idart = (isset($_REQUEST['modificacion'])) ? $_REQUEST['articulo'] : $ent_alm[3];
+$idart = (isset($_REQUEST['articulo'])) ? $_REQUEST['articulo'] : $ent_alm[3];
 $cant = (isset($_POST['modificacion'])) ? $_POST['cantidad'] : $ent_alm[4];
 $old_cant = $ent_alm[4];
 $producto = buscar_articulo($idart);
 if(isset($_GET['ent_alm'])){
     $apunte = "Registro modificado";
 }
+
 
 if (isset($_POST['modificacion'])) {
     $err_ref = (empty($referencia)) ? "<div class='text-danger'>El campo referencia está vacío</div>" : "";
@@ -53,7 +54,7 @@ if (isset($_POST['modificacion'])) {
         $apunte = modificar_pedidoAlmacen($id_ent, $fecha, $referencia, $cant);
         descontar_stock($idart, $old_cant);
         descontar_stock($idart, - $cant);
-        header("location:controlAlmacen.php?artic=$idart");
+        header("location:controlAlmacen.php?alm=$id_ent");
     }
 }
 
@@ -75,7 +76,7 @@ if (isset($_POST['confbaja'])){
      $baja = baja_almacen($id_ent);
      header("location:almacen.php?articulo=$idart");
 }
-
+$producto = buscar_articulo($idart);
 $nom_pag = $producto->getNom_art();
 include ('Nuevacabecera.php');
 include ('Nuevolateral.php');
@@ -124,7 +125,9 @@ include ('Nuevolateral.php');
 			<div class='form-row row col-12 justify-content-center mb-5' style='display:<?php echo $oculta?>'>
 				<input type='submit' name='modificacion' value='Modificar' class='btn btn-success mr-5'>
 				<input type='submit' name='baja' value='Baja' class='btn btn-danger'></form>
-				<form action='index.php'><input type='submit' value='Salir'class='btn btn-secondary ml-5'></form>
+				<form action='almacen.php' method='POST'>
+        <input type='hidden' name='articulo' value=<?php echo $idart ?>>
+        <input class='btn btn-secondary mx-5' type='submit'  name='detalle' value='Atrás'></form>
 			</div>
 		</div>
 	</div>
@@ -172,22 +175,32 @@ if(isset($todo)){
     	</tr></thead>
 <?php
 if(isset($todo)){
-    $stock = $producto->getSto_art();
+    $stock = 0;
     foreach($todo as $fila){
         $fila[0] = date('d/m/y', $fila[0]);
-        $todo[] = $fila;        
+        $todo[] = $fila;
+        $stock+=$fila[3];
         echo "<tr><td>$fila[0]</td><td>$fila[1]</td>
 		  <td>$fila[2]</td><td>$fila[3]</td><td>$stock</td>";
         if(ctype_digit($fila[2])){
           echo "<form method='POST' action='modifalmacen.php'><td class='px-0'>
           <input type='hidden' name='ent_alm' value=$fila[2]>
+          <input type='hidden' name='articulo' value=$idart>
           <button type='submit' name='entrada' class='btn btn-primary'>
           <svg class='bi bi-pencil-square' width='1em' height='1em' viewBox='0 0 16 16' fill='white'>
           <path d='M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z'/>
           <path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z' clip-rule='evenodd'/>
           </svg></button></td></tr></form>";
+        }else{
+            echo "<form method='POST' action='modificarPedidos.php'><td class='px-0'>
+          <input type='hidden' name='idpedido' value=$fila[1]>
+          <button type='submit' name='numped' class='btn btn-primary'>
+          <svg class='bi bi-pencil-square' width='1em' height='1em' viewBox='0 0 16 16' fill='white'>
+          <path d='M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z'/>
+          <path fill-rule='evenodd' d='M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z' clip-rule='evenodd'/>
+          </svg></button></td></tr></form>";
+            
         }
-        $stock-= $fila[3];
     }
 }
 ?>

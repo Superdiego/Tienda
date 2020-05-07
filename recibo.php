@@ -12,7 +12,7 @@ $pedido = (isset($_GET['ped'])) ? $_GET['ped'] : null;
 ?>
 <div class='col-md-8')>
 <h5 class="text-center">
-<?php echo $_SESSION['autenticado'] . ", en pocos dias recibira su pedido ".$_GET['ped']?></h5>
+<?php echo $_SESSION['autenticado'] . ", en pocos dias recibirá su pedido ".$_GET['ped']?></h5>
 <br>
 
 <?php mostrar_lineas($pedido)?>

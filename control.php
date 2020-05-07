@@ -6,7 +6,7 @@ $pass_usr = (isset($_POST['password'])) ? $_POST['password'] : null;
 $salir = (isset($_POST['salir'])) ? $_POST['salir'] : null;
 
 if((isset($_POST['usuario']))) {
-    if(empty($nombre_usr)){
+    if(empty(trim($nombre_usr))){
         header('location:index.php?error=6');
     }else if(!val_texto($nombre_usr)){
         header("location:index.php?error=1");

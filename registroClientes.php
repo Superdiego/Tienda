@@ -11,6 +11,7 @@ $apellidos = (isset($_POST['apellidos'])) ? $_POST['apellidos'] : null;
 $direccion = (isset($_POST['direccion'])) ? $_POST['direccion'] : null;
 $localidad = (isset($_POST['localidad'])) ? $_POST['localidad'] : null;
 $provincia = (isset($_POST['provincia'])) ? $_POST['provincia'] : null;
+$cop = (isset($_POST['cop'])) ? $_POST['cop'] : null;
 $email = (isset($_POST['correo'])) ? $_POST['correo'] : null;
 $telefono = (isset($_POST['telefono'])) ? $_POST['telefono'] : null;
 $password = (isset($_POST['password'])) ? $_POST['password'] : null;
@@ -54,12 +55,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $res_pro = ! val_texto($provincia) ? "<span class='text-danger'>Introduzca una provincia debe empezar por una letra</span>" : '';
     }
+    if (empty(trim($cop))) {
+        $res_cop = "<span class='text-danger'>El campo código postal está vacio</span>";
+    }else if(!ctype_digit($cop)){
+        $res_cop = "<span class='text-danger'>El código postal deben ser números</span>";
+    }else{
+        $res_cop = (!preg_match("/^[0-9]{5}$/",$cop)) ? "<span class='text-danger'>El código postal son cinco números</span>" : '';
+    }
     if (empty(trim($email))) {
         $res_ema = "<span class='text-danger'>El campo email está vacio</span>";
     } else {
         $res_ema = ! val_correo($email) ? "<span class='text-danger'>Introduzca un email válido</span>" : '';
     }
-
     if (empty(trim($telefono))) {
         $res_tel = "<span class='text-danger'>El campo telefono está vacio</span>";
     } else {
@@ -78,11 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if(empty($res_pas) && empty($res_confpass)){
         $res_confpass = !val_confirmpass($password, $confirmpass) ? "<span class='text-danger'>No coincide con el password</span>" : '';
     }
-    if (val_texto($nick) && val_dni($dni) && val_texto($nombre) && val_texto($apellidos) && val_texto($direccion) && val_texto($localidad) && val_texto($provincia) && val_correo($email) &&
-        val_telef($telefono) && val_pass($password) &&val_pass($confirmpass) && val_confirmpass($password, $confirmpass) ) {
+    if (empty($res_nic) && empty($res_dni) && empty($res_nom) && empty($res_ape) && empty($res_dir) &&
+        empty($res_loc) && empty($res_pro) && empty($res_cop) && empty($res_ema) && empty($res_tel) &&
+        empty($res_confpas) && empty($res_confpass) ) {
             
-            $altacliente = registrar_clientes($nick, $dni, $nombre, $apellidos, $direccion, $localidad, $provincia,
-                $email, $telefono, $password);
+            $altacliente = registrar_clientes($nick, $dni, $nombre, $apellidos, $direccion, $localidad,
+                                        $provincia, $cop, $email, $telefono, $password);
         }
 }
 $nom_pag = "Alta de Clientes";
@@ -135,6 +143,12 @@ include_once("Nuevolateral.php");
 				value="<?php echo $provincia ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_pro ?></div>
 	</div>
 	<div class="form-group row">
+		<label class="col-sm-4 col-form-label text-right">C.Postal:</label>
+		<div class="col-sm-8">
+			<input class="form-control" type="text" name="cop"
+				value="<?php echo $cop ?>"><?php if ($_SERVER['REQUEST_METHOD'] == 'POST') echo $res_cop ?></div>
+	</div>
+	<div class="form-group row">
 		<label class="col-sm-4 col-form-label text-right">E-mail:</label>
 		<div class="col-sm-8">
 			<input class="form-control" type="text" name="correo"
@@ -168,20 +182,8 @@ include_once("Nuevolateral.php");
 </div>
 </div>
 
-<?php
 
-if (val_texto($nick) && val_dni($dni) && val_texto($nombre) && val_texto($apellidos) && val_texto($direccion) && val_texto($localidad) && val_texto($provincia) && val_correo($email) &&
-    val_telef($telefono) && val_pass($password) &&val_pass($confirmpass) && val_confirmpass($password, $confirmpass) ) {
-        
-       $altacliente = registrar_clientes($nick, $dni, $nombre, $apellidos, $direccion, $localidad, $provincia,
-                          $email, $telefono, $password);
-}
 
-?>
-
-<br>
-<br>
-<a href="index.php">Volver a pagina principal</a>
 
 </div>
 

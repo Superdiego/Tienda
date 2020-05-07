@@ -8,7 +8,9 @@ $cli = $_SESSION["autenticado"];
 $pedido = crear_pedido($cli);
 
 foreach($_COOKIE["carro"] as $nombre=>$cantidad){
-    crear_linea($pedido,$nombre,$cantidad);
+    $articulo = buscar_articulo($nombre);
+    $precio = $articulo->getPre_art();
+    crear_linea($pedido,$nombre,$cantidad,$precio);
     descontar_stock($nombre,$cantidad);
 }
 foreach($_COOKIE["carro"] as $nombre=>$valor){

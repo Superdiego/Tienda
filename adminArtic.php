@@ -30,7 +30,6 @@ $datos = mostrar_articulos(5);
 					<th>Id.Art.</th>
 					<th class="px-1 mx-1">Nombre</th>
 					<th>Categoría</th>
-					<th>Descripción</th>
 					<th>Precio</th>
 					<th>Activo</th>
 					<th>Stock</th>

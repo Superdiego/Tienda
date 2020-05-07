@@ -19,7 +19,7 @@ if((isset($_GET['error']))) {
             $titulo = "Password equivocado";
             break;
         case 4:
-            $titulo = "Usuario no registrado";
+            $titulo = "Usuario no registrado (distinguir mayús. y minús.)";
             break;
         case 6:
             $titulo = "El campo usuario está vacío";
@@ -54,7 +54,7 @@ if(isset($_SESSION['autenticado'])){
     $nick = $_SESSION['autenticado'];
     $user = datos_usuario($nick);
     $idrol = $user->getRol_usr();
-    echo "<div class='row justify-content-center pb-3'><h5>".$user->getNom_usr()."</h5></div>
+    echo "<div class='row justify-content-center pb-3'><h5>".$user->getNic_usr()."</h5></div>
         <div class='row justify-content-center pb-3'><a href='edicion_cliente.php'><button>Modificar perfil</button></a></div>
         <div class='row justify-content-center pb-3'><form action='control.php' method='POST'>
         <input type='submit' name='salir' value='Abandonar sesión'></form></div>

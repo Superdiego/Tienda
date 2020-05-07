@@ -5,7 +5,7 @@ function conectar()
 {
     try {
         $conex = new PDO("mysql:dbname=tienda;host=localhost", "jefe", "jefe");
-        //$conex = new PDO("mysql:dbname=id13325790_nubehost;host=localhost", "id13325790_jefe", "hkbSBiBo/>H3I9EB");
+        //$conex = new PDO("mysql:dbname=id13325790_comercio;host=localhost", "id13325790_diego", "PU1d~hm3<V]Rpx8c");
         $conex->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $conex;
     } catch (PDOException $e) {
@@ -14,12 +14,12 @@ function conectar()
 }
 
 // Formulario para registro clientes (son únicos: id,dni y nic)
-function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel, $pas)
+function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $cop, $ema, $tel, $pas)
 {
     $conex = conectar();
     $codigo = "INSERT INTO usuarios (rol_usr,nic_usr,dni_usr,nom_usr,ape_usr,dir_usr,loc_usr,pro_usr,
-                                     ema_usr,tel_usr,pas_usr,act_usr) 
-               VALUES (:rol,:nic,:dni,:nom,:ape,:dir,:loc,:pro,:ema,:tel,:pas,:act);";
+                                     cop_usr,ema_usr,tel_usr,pas_usr,act_usr) 
+               VALUES (:rol,:nic,:dni,:nom,:ape,:dir,:loc,:pro,:cop,:ema,:tel,:pas,:act);";
     $insert = $conex->prepare($codigo);
     try {
         $fila = $insert->execute(array(
@@ -31,6 +31,7 @@ function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel
             ':dir' => $dir,
             ':loc' => $loc,
             ':pro' => $pro,
+            ':cop' => $cop,
             ':ema' => $ema,
             ':tel' => $tel,
             ':pas' => $pas,
@@ -363,7 +364,7 @@ class usuarios
 function buscar_usuario($nombre, $password)
 {
     $conex = conectar();
-    $consulta = $conex->prepare("SELECT * FROM usuarios WHERE nic_usr = :nic");
+    $consulta = $conex->prepare("SELECT * FROM usuarios WHERE nic_usr = BINARY :nic");
     $consulta->execute(array(
         ':nic' => $nombre
     ));
@@ -415,6 +416,14 @@ function contar_usuarios()
     $fila = $consulta->fetch();
     return $fila[0];
 }
+function contar_clientes()
+{
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT COUNT(*) FROM usuarios WHERE rol_usr = '2'");
+    $consulta->execute();
+    $fila = $consulta->fetch();
+    return $fila[0];
+}
 
 // Nos devuelve el total de articulos para la función de paginación
 function contar_articulos()
@@ -461,21 +470,15 @@ function mostrar_usuario($bloque)
             <tr><th class='px-0' scope='row'><input type='text' class='bg-light text-dark' readonly style='width:2em' name='id' value='" . $fila->getId_usr() . "'></th>
             <td class='px-0'><input type='text' size='9' class='bg-light text-dark' name='dni' readonly value='" . $fila->getDni_usr() . "'></td>
             <td class='px-0'><input type='text' size='9' class='bg-light text-dark' name='nic' readonly value='" . $fila->getNic_usr() . "'></td>
-            <td class='px-0'><select  name='rol' value='" . $fila->getRol_usr() . "'>
+            <td class='px-0'><select disabled  name='rol' value='" . $fila->getRol_usr() . "'>
                     <option value=1 $inv>Invitado</option>
                     <option value=2 $cli>Cliente</option>
                     <option value=3 $emp>Empleado</option>
                     <option value=4 $adm>Administrador</option> ></select></td>
-            <td class='px-0'><input type='text' size='9' name='nom' value='" . $fila->getNom_usr() . "'></td>
-            <td class='px-0'><input type='text' size='9' name='ape' value='" . $fila->getApe_usr() . "'></td>
-            <td class='px-0'><input type='text' size='12' name='dir' value='" . $fila->getDir_usr() . "'></td>
-            <td class='px-0'><input type='text' size='4' name='cop' value='" . $fila->getCop_usr() . "'></td>
-            <td class='px-0'><input type='text' size='9' name='loc' value='" . $fila->getLoc_usr() . "'></td>
-            <td class='px-0'><input type='text' size='9' name='pro' value='" . $fila->getPro_usr() . "'></td>
-            <td class='px-0'><input type='text' size='12' name='ema' value='" . $fila->getEma_usr() . "'></td>
-            <td class='px-0'><input type='text' size='9' name='tel' value='" . $fila->getTel_usr() . "'></td>
-            <td class='px-0'><input type='text' size='4' name='pas' value='" . $fila->getPas_usr() . "'></td>
-            <td class='px-0'><input type='text' size='1' name='act' value='" . $fila->getAct_usr() . "'></td>
+            <td class='px-0'><input readonly type='text' size='9' name='nom' value='" . $fila->getNom_usr() . "'></td>
+            <td class='px-0'><input readonly type='text' size='9' name='ape' value='" . $fila->getApe_usr() . "'></td>
+            <td class='px-0'><input readonly type='text' size='4' name='pas' value='" . $fila->getPas_usr() . "'></td>
+            <td class='px-0'><input readonly type='text' size='1' name='act' value='" . $fila->getAct_usr() . "'></td>
             <td class='px-0'><button type='submit' name='modifadminuser' value='" . $fila->getId_usr()."' class='btn btn-primary'>Modificar</button></td>
             <td class='px-0'><button type='submit' name='bajaadminuser' value='" . $fila->getId_usr()."'class='btn btn-danger'>Baja</button></td></tr>
             </form>";
@@ -487,7 +490,7 @@ function mostrar_usuario($bloque)
     } else {
         echo "<div class='text-center'>";
     }
-    if (($desplazamiento + 4) < contar_usuarios()) {
+    if (($desplazamiento + $bloque) < contar_usuarios()) {
         $prox = $desplazamiento + $bloque;
         $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prox";
         echo "<a href='$url'>Siguiente</a></div>";
@@ -497,22 +500,25 @@ function mostrar_usuario($bloque)
 }
 
 //
-function editar_cliente($nic, $dni, $nom, $ape, $dir, $loc, $pro, $ema, $tel)
+function editar_cliente($dni, $rol, $nom, $ape, $dir, $loc, $pro, $cop, $ema, $tel, $act)
 {
     $conex = conectar();
-    $codigo = "UPDATE usuarios SET nic_usr = :nic, nom_usr = :nom, ape_usr = :ape, dir_usr = :dir,
-                loc_usr = :loc, pro_usr = :pro, ema_usr = :ema, tel_usr = :tel WHERE dni_usr = :dni";
+    $codigo = "UPDATE usuarios SET rol_usr = :rol, nom_usr = :nom, ape_usr = :ape, dir_usr = :dir,
+                loc_usr = :loc, pro_usr = :pro, cop_usr = :cop, ema_usr = :ema,
+                tel_usr = :tel, act_usr = :act WHERE dni_usr = :dni";
     $insert = $conex->prepare($codigo);
     $fila = $insert->execute(array(
         ':dni' => $dni,
-        ':nic' => $nic,
+        ':rol' => $rol,
         ':nom' => $nom,
         ':ape' => $ape,
         ':dir' => $dir,
         ':loc' => $loc,
         ':pro' => $pro,
+        ':cop' => $cop,
         ':ema' => $ema,
         ':tel' => $tel,
+        ':act' => $act
 
     ));
     if ($fila == 1) {
@@ -645,14 +651,15 @@ function crear_pedido($cliente)
 }
 
 // Registra una linea en un pedido
-function crear_linea($ped, $art, $cant)
+function crear_linea($ped, $art, $cant, $precio)
 {
     $conex = conectar();
-    $insertar = $conex->prepare("INSERT INTO lineas (ped_lin, art_lin, can_lin) VALUES(:ped,:art,:can)");
+    $insertar = $conex->prepare("INSERT INTO lineas (ped_lin, art_lin, can_lin, pre_lin) VALUES(:ped,:art,:can,:pre)");
     $fila = $insertar->execute(array(
         ':ped' => $ped,
         ':art' => $art,
-        ':can' => $cant
+        ':can' => $cant,
+        ':pre' => $precio
     ));
 }
 
@@ -667,6 +674,8 @@ class lineas
     private $art_lin;
 
     private $can_lin;
+
+    private $pre_lin;
 
     public function getPed_lin()
     {
@@ -687,6 +696,11 @@ class lineas
     {
         return $this->can_lin;
     }
+    
+    public function getPre_lin()
+    {
+        return $this->pre_lin;
+    }
 }
 
 // Lista las lineas de un pedido a partir de su id
@@ -704,8 +718,8 @@ function mostrar_lineas($ped)
         $art = buscar_articulo($fila->getArt_lin());
         $total += ($art->getPre_art() * $fila->getCan_lin());
         echo "<tr class='text-center'><td>" . $fila->getId_lin() . "</td><td>" . $art->getNom_art() . "</td><td>" . $fila->getCan_lin() . "</td>
-            <td>" . $art->getPre_art() . " €</td>
-            <td class='text-right'>" . number_format($art->getPre_art() * $fila->getCan_lin(), 2) . " €</td></tr>";
+            <td>". $fila->getPre_lin()." €</td>
+            <td class='text-right'>" . number_format($fila->getPre_lin() * $fila->getCan_lin(), 2) . " €</td></tr>";
     }
     echo "<tr><td colspan='4' class='text-right'>Base Imponible</td>
         <td class='text-right'>" . number_format($total / 1.21, 2) . " €</td></tr><tr>
@@ -952,7 +966,7 @@ function busca_cliente($cliente){
     return $fila; 
 }
     
-// Listado para de usuarios manipulable para uso exclusivo del administrador y empleados
+// Listado para de usuarios manipulable para uso exclusivo de empleados
 function mostrar_cliente($bloque)
 {
     if (isset($_GET["desplazamiento"])) {
@@ -991,7 +1005,7 @@ function mostrar_cliente($bloque)
     } else {
         echo "<div class='text-center'>";
     }
-    if (($desplazamiento + 4) < contar_usuarios()) {
+    if (($desplazamiento + $bloque) < contar_clientes()) {
         $prox = $desplazamiento + $bloque;
         $url = $_SERVER["PHP_SELF"] . "?desplazamiento=$prox";
         echo "<a href='$url'>Siguiente</a></div>";
@@ -1027,7 +1041,7 @@ function movimientos_almacen($idarticulo){
     }
 }
 function ordenando_fechas($a,$b){
-    return ($b[0]) - ($a[0]);
+    return ($a[0]) - ($b[0]);
 } 
         
 function devuelve_entrada($id_entrada){
@@ -1066,5 +1080,87 @@ function baja_usuario($id_user){
     $consulta = $conexion->prepare("DELETE FROM usuarios WHERE id_usr = :id");
     $consulta->execute(array(':id'=>$id_user));
 }
+function cambiar_password($idusr,$pass){
+    $conexion = conectar();
+    $consulta = $conexion->prepare('UPDATE usuarios SET pas_usr = :pass WHERE id_usr = :id');
+    $consulta->execute(array(':id'=>$idusr, ':pass'=>$pass));
+    return "Password cambiado";
+}
+function mostrar_pedido($idpedido){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT * FROM pedidos WHERE id_ped = :id");
+    $consulta->execute(array(':id'=>$idpedido));
+    $pedido = $consulta->fetch();
+    if($pedido){
+        return $pedido;
+    }else{
+        return false;
+    }
+    
+}
+function modificar_lineas($ped)
+{
+    $conex = conectar();
+    $consulta = $conex->prepare("SELECT * FROM lineas WHERE ped_lin = :id_ped");
+    $consulta->execute(array(
+        ':id_ped' => $ped
+    ));
+    $consulta->setFetchMode(PDO::FETCH_CLASS, "lineas");
+    $total = 0;
+    echo "<table class='table bg-light'><tr><th>Linea</th><th>Id.Art.</th><th>Articulo</th><th>Cantidad</th><th>Precio(IVA incluido)</th><th>Importe</th></tr>";
+    while ($fila = $consulta->fetch()) {        
+        $art = buscar_articulo($fila->getArt_lin());
+        $total += ($fila->getPre_lin() * $fila->getCan_lin());
+        echo "<form method='POST' action='modificarPedidos.php'><tr class='text-center'><td>" . $fila->getId_lin() . "</td>
+            <td><input type='text' size=4 name='idart' value=".$art->getId_art()."></td>
+            <td>" . $art->getNom_art() . "</td>
+            <td><input type='text' size=4 name='cantart' value=" . $fila->getCan_lin() . "></td>
+            <td><input type='text' size=4 name='preart' value=" . $fila->getPre_lin() . " €></td>
+            <td class='text-right'>" .number_format(($fila->getPre_lin() * $fila->getCan_lin()),2) . " €</td>
+            <input type='hidden' name='idpedido' value=$ped>
+            <input type='hidden' name='idlinea' value=".$fila->getId_lin().">
+            <td><input type='submit' value='Modificar' class='btn btn-primary btn-sm' name='modiflin'></td>
+            <td><input type='submit' value='Baja' class='btn btn-danger btn-sm' name='bajalin'></td>
+            </tr></form>";
+    }
+    echo "<tr><td colspan='5' class='text-right'>Base Imponible</td>
+        <td class='text-right'>" . number_format($total / 1.21, 2) . " €</td></tr><tr>
+        <td colspan='5' class='text-right'>I.V.A. 21%</td>
+        <td class='text-right'>" . number_format($total * 21 / 121, 2) . " €</td></tr><tr class='table-active'>
+        <th colspan='5' class='text-right'>Total pedido</th>
+        <th class='text-right'>" . number_format($total, 2) . " €</th></tr></table>";
+}
 
+function modificar_linea($idped, $idlinea, $idart, $cantidad, $precio){
+    $conex = conectar();
+    $consulta = $conex->prepare("UPDATE lineas SET art_lin = :idart, can_lin = :can, pre_lin = :pre WHERE
+                                    ped_lin= :ped AND id_lin = :lin");
+    $consulta->execute(array(':idart' => $idart, ':can' => $cantidad, 'pre' => $precio, ':ped' => $idped, ':lin' => $idlinea ));
+}
+
+function devuelve_linea($idped, $idlin){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT * FROM lineas WHERE ped_lin = :ped AND id_lin=:lin");
+    $consulta->execute(array(':ped'=>$idped, ':lin'=>$idlin));
+    $consulta->setFetchMode(PDO::FETCH_CLASS,'lineas');
+    $linea = $consulta->fetch();
+    return $linea;
+}
+function baja_linea($id_ped, $id_lin){
+    $conexion = conectar();
+    $baja = $conexion->prepare("DELETE FROM lineas WHERE ped_lin=:ped AND id_lin=:lin");
+    $baja->execute(array(':ped'=>$id_ped, ':lin'=>$id_lin));
+}
+function cuenta_lineas($id_ped){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT COUNT(*) from lineas WHERE ped_lin = :ped");
+    $consulta->execute(array(':ped'=>$id_ped));
+    $num = $consulta->fetch();
+    return $num[0];
+}
+function baja_pedido($id_ped){
+    $conexion =conectar();
+    $baja = $conexion->prepare("DELETE FROM pedidos WHERE id_ped=:ped");
+    $baja->execute(array(':ped'=>$id_ped));   
+}
 ?>

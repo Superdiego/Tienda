@@ -236,6 +236,16 @@ if(isset($_POST['bajart'])){
     }
 }
 ?>
+<?php
+if(isset($_SESSION['autenticado'])){
+    if (($admin->getRol_usr() == 4) || ($admin->getRol_usr() == 3)){
+    echo "<div class='row mt-3 justify-content-center'>
+        <form action='almacen.php' method='POST'>
+        <input type='hidden' name='articulo' value='$idart'>
+        <input class='m-3' type='submit'  name='detalle' value='Almacén'></form></div>";
+    }
+}
+?>
 
 
 
