@@ -3,17 +3,17 @@ session_start();
 
 include_once("funciones.php");
 include_once("validaciones.php");
-/*
+
 if (! isset($_SESSION['autenticado'])) {
     header("location:index.php");
 } else {
     $usr = $_SESSION['autenticado'];
     $admin = datos_usuario($usr);
-    if (($admin->getRol_usr() != 4) && ($admin->getRol_usr() != 3) && ($admin->getRol_usr() != 2)) {
+    if (($admin->getRol_usr() != 4) && ($admin->getRol_usr() != 3)) {
         header("location:index.php");
     }
 }
-*/
+
 
 
 
@@ -125,6 +125,7 @@ include('Nuevolateral.php');
 ?>
 
 <div class='col-md-8'>
+<!-- 
 <p class='text-danger'><?php echo $mostrar?></p>
 <h2><?php echo $err_pedido?></h2>
 <div >
@@ -141,11 +142,14 @@ include('Nuevolateral.php');
 ?>
 
  </div>
-<div>
+ 
+  -->
+<div class='mt-5'>
 <?php
 
-if($pedido){ echo "<h3>PEDIDO Nº $idpedido de fecha ".$fecha['mday']."/".$fecha['mon']."/".$fecha['year'].
-            " Cliente: ".$cliente->getNom_usr()." ".$cliente->getApe_usr()."</h3>";
+if($pedido){ echo "<h4>PEDIDO Nº $idpedido de fecha ".$fecha['mday']."/".$fecha['mon']."/".$fecha['year'].
+            " Cliente: ".$cliente->getNom_usr()." ".$cliente->getApe_usr()." - Estado: ".
+            devuelve_estado($pedido[3])[1]."</h4>";
     modificar_lineas($idpedido);
 }
 ?>

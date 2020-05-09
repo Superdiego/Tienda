@@ -12,6 +12,7 @@ include_once("Nuevolateral.php");
 <?php
 echo "<div class='col-md-8 '><div class='row justify-content-center'>";
 
+
 $datos = mostrar_articulos(6,'DESC');
 $art = $datos[0];
 

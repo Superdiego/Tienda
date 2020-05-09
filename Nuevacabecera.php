@@ -25,12 +25,13 @@
 		<div class="container-fluid text-white pt-5 pb-1">
 			<h1 class="display-4">Cachivaches</h1>
 			<div class="row">
-				<div class="col-md-10">
+				<div class="col-md-6">
 					<p class="lead">Bienvenid@s a la tienda de Diego</p>
 				</div>
-				<div class="col-md-2">
+				<div class="col-md-6">
+				<?php include ("carritopresente.php")?>
 					<a href="carro.php">
-						<button class=" bg-primary  rounded float-right ">
+						<button class=" bg-primary  rounded float-right ml-4">
 							<svg class="rounded float-right " viewBox="0 0 32 32" width="32"
 								height="32" fill="none" stroke="white" stroke-linecap="round"
 								stroke-linejoin="round" stroke-width="2">

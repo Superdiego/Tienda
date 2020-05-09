@@ -79,7 +79,7 @@ if (isset($_POST['modificar'])) {
     } else {
         $err_pre = ! is_numeric($pre) ? "<span class='text-danger'>El precio debe ser un número</span>" : '';
     }
-    if (empty(trim($act))) {
+    if (empty(trim($act)) && trim($act)!=0) {
         $err_act = "<span class='text-danger'>El campo activo está vacío</span>";
     } else if (! ctype_digit($act)) {
         $err_act = "<span class='text-danger'>El campo activo debe ser un número</span>";
@@ -165,9 +165,9 @@ echo "</select>$err_catsubcat</div></div>
         <div class='form-group row'><label class='col-sm-2 col-form-label'>Precio:</label><div class='col-sm-10'>
         <input class='form-control' type='text' name='precio' value='$pre'>$err_pre</div></div>
         <div class='form-group row'><label class='col-sm-2 col-form-label'>Activo:</label><div class='col-sm-10'>
-        <input class='form-control' type='bool' name='activo' value='$act'>$err_act</div></div>
+        <input class='form-control' type='text' name='activo' value='$act'>$err_act</div></div>
         <div class='form-group row'><label class='col-sm-2 col-form-label'>Stock:</label><div class='col-sm-10'>
-        <input class='form-control' type='text' readonly name='stock' value='$stock'>$err_stock</div></div>
+        <input class='form-control' type='bool' readonly name='stock' value='$stock'>$err_stock</div></div>
         <div class='form-group row'><label class='col-sm-5 col-form-label text-center'>Imagen (300px x 300px JPG):</label><div class='col-sm-7'>
         <input class='form-control' type='file' name='foto'></div>
         </div><p class='text-center text-danger'></p><br>       

@@ -53,7 +53,7 @@ if (isset($_POST['alta'])) {
     } else {
         $err_pre = ! is_numeric($pre) ? "<span class='text-danger'>El precio debe ser un número</span>" : '';
     }
-    if (empty(trim($act))) {
+    if (empty(trim($act)) && trim($act)!=0) {
         $err_act = "<span class='text-danger'>El campo activo está vacío</span>";
     } else if (! ctype_digit($act)) {
         $err_act = "<span class='text-danger'>El campo activo debe ser un número</span>";

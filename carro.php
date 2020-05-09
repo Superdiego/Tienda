@@ -77,6 +77,7 @@ echo "</tbody><tfoot><tr><th>Totales</th><th>".$_COOKIE['compra']."</th><th>Impo
 <br><br>
 <div  class="row justify-content-center" ><a href="pedidos.php"><button class="bg-success p-2 text-white">Confirmar pedido</button></a></div>
 
+
 			<div class="container text-center text-danger"><?php echo $aviso?></div> </div>
 
 			<?php include ("Nuevaautentificacion.php");

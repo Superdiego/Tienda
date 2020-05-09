@@ -45,7 +45,11 @@ if (isset($_POST['ver'])) {
         $err_id = (empty(busca_cliente($idcliente))) ? "<div class='text-danger'>No existe ningún cliente con el Id introducido</div>" : "";
     }
     $err_inicio = (empty(trim($inicio))) ? "<div class='text-danger'>El campo fecha de inicio está vacío</div>" : "";
-    $err_final = (empty(trim($final))) ? "<div class='text-danger'>El campo fecha final está vacío</div>" : "";
+    if($inicio>$final){
+        $err_final = "<div class='text-danger'>La fecha final no puede ser inferior a la de inicio</div>";
+    }else{
+        $err_final = (empty(trim($final))) ? "<div class='text-danger'>El campo fecha final está vacío</div>" : "";
+    }
     if(empty($err_id) && empty($err_inicio) && empty($err_final)){
         $final += (60 * 60 * 24) ;
         $mostrar = "hidden";
@@ -55,7 +59,11 @@ if (isset($_POST['ver'])) {
 }
 if (isset($_POST['vertotal'])) {
     $err_iniciot = (empty(trim($iniciot))) ? "<div class='text-danger'>El campo fecha de inicio está vacío</div>" : "";
-    $err_finalt = (empty(trim($finalt))) ? "<div class='text-danger'>El campo fecha final está vacío</div>" : "";
+    if($iniciot>$finalt){
+        $err_finalt = "<div class='text-danger'>La fecha final no puede ser inferior a la de inicio</div>";
+    }else{
+        $err_finalt = (empty(trim($finalt))) ? "<div class='text-danger'>El campo fecha final está vacío</div>" : "";
+    }
     if(empty($err_iniciot) && empty($err_finalt)){
         $finalt += (60 * 60 * 24);
         $mostrar = "hidden";

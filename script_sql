@@ -47,10 +47,15 @@ sto_art INT(6),
 PRIMARY KEY(id_art),
 FOREIGN KEY(cat_art, sub_art) REFERENCES subcategorias(cat_sub,id_sub)
 )ENGINE=MyISAM;
+CREATE TABLE IF NOT EXISTS estados (
+id_est INT(1) PRIMARY KEY AUTO_INCREMENT,
+nom_est CHAR(12)
+);
 CREATE TABLE IF NOT EXISTS pedidos (
 id_ped INT PRIMARY KEY AUTO_INCREMENT,
 usr_ped INT REFERENCES usuarios(id_usr),
-fec_ped INT
+fec_ped INT,
+est_ped INT REFERENCES estados (id_est)
 );
 CREATE TABLE IF NOT EXISTS lineas (
 ped_lin INT,
@@ -137,10 +142,14 @@ VALUES
 ("Stock inicial","2020/01/01",9,20),
 ("Stock inicial","2020/01/01",10,20);
 
-INSERT INTO pedidos (usr_ped, fec_ped)
+INSERT INTO estados (nom_est)
 VALUES
-(1,1588244888),(2,1588250500),(3,1588251000),(4,1588252000),
-(1,1588052500),(2,1588144888),(3,1588254000),(4,1588274888);
+("pedido"),("enviado"),("recibido"),("pagado");
+
+INSERT INTO pedidos (usr_ped, fec_ped, est_ped)
+VALUES
+(1,1588244888,1),(2,1588250500,1),(3,1588251000,2),(4,1588252000,2),
+(1,1588052500,2),(2,1588144888,1),(3,1588254000,3),(4,1588274888,4);
 
 INSERT INTO lineas (ped_lin, id_lin, art_lin, can_lin, pre_lin)
 VALUES

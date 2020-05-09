@@ -20,6 +20,13 @@ if (isset($_GET['art'])) {
     $id = $_GET['art'];
     $producto = buscar_articulo($id);
 }
+$descat = "";
+$msg_descat = "";
+if($producto->getAct_art() == 0){
+    $descat = "style='display:none'";
+    $msg_descat ="<div class='col-3 bg-secondary'><p class='text-white pt-2' >Producto descatalogado</p></div>";
+}
+
 
 echo "<div class='col-md-8'>";
 ?>
@@ -29,8 +36,8 @@ echo "<div class='col-md-8'>";
 </div>
 <h3 class="text-center py-5 text-success"><?php echo $producto->getPre_art()?>&nbsp;Eur</h3>
 <p class='text-center'><?php echo $producto->getDes_art();?></p>
-<div class="row container-fluid justify-content-center">
-		<form method="GET" action="carro.php">
+<div class="row container-fluid justify-content-center"><?php echo $msg_descat?>
+		<form method="GET" action="carro.php"  <?php echo $descat?> >
 			<label>Cantidad: </label> <input type="number" name="cant" value=1
 				min=1 style="width: 3em">
 			<button class=" bg-primary  rounded float-center align-middle"

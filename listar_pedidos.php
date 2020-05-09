@@ -15,8 +15,7 @@ include('Nuevolateral.php');
 
 echo "<div class='col-md-8'>";
 
-//if(datos_user($user)->getRol_usr() == 2){
-//mis_pedidos($user);}
+
 
 if(isset($_POST['mispedidos'])){
     mis_pedidos("$user");

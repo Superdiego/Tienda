@@ -636,13 +636,13 @@ function editar_usuario($dni, $rol, $nom, $ape, $dir, $cop, $loc, $pro, $ema, $t
     }
 }
 
-// Genera un nuevo pedido para el cliente que se encuentre autentificado
+// Genera un nuevo pedido para el  que se encuentre autentificado
 function crear_pedido($cliente)
 {
     $fecha = time();
     $usr = datos_usuario($cliente)->getId_usr();
     $conex = conectar();
-    $insertar = $conex->prepare("INSERT INTO pedidos (usr_ped, fec_ped) VALUES (:cli, :fecha)");
+    $insertar = $conex->prepare("INSERT INTO pedidos (usr_ped, fec_ped, est_ped) VALUES (:cli, :fecha, 1)");
     $fila = $insertar->execute(array(
         ':cli' => $usr,
         ':fecha' => $fecha
@@ -875,8 +875,8 @@ function mostrar_pedidos($inicio,$final){
         $dia = $fecha["mday"];
         $mes = $fecha['mon'];
         $anyo = $fecha['year'];
-        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo - Cliente: ". datos_user($fila[1])->getNom_usr(). " " .
-        datos_user($fila[1])->getApe_usr()."</h5>";
+        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo - Cliente: ". datos_user($fila[1])->getNom_usr().
+        " ".datos_user($fila[1])->getApe_usr()."  - Estado: " .devuelve_estado($fila[3])[1]."</h5>";
         mostrar_lineas($fila[0]);
     }
     echo "<h5 class='bg-light'>Total en el periodo: &nbsp;".number_format($totalperiodo,2)." €</h5>";
@@ -890,7 +890,8 @@ function mis_pedidos($cliente){
         $dia = $fecha["mday"];
         $mes = $fecha['mon'];
         $anyo = $fecha['year'];
-        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo - Cliente: ". datos_user($fila[1])->getNom_usr(). " " .
+        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo - Cliente: ".
+                datos_user($fila[1])->getNom_usr(). "  &nbsp;&nbsp;&nbsp;&nbsp;Estado: " . devuelve_estado($fila[3])[1];
             datos_user($fila[1])->getApe_usr()."</h5>";
             mostrar_lineas($fila[0]);
     }
@@ -912,7 +913,7 @@ function informe_pedidos($cliente, $inicio, $final){
         $dia = $fecha["mday"];
         $mes = $fecha['mon'];
         $anyo = $fecha['year'];
-        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo </h5>";
+        echo "<h5 class='pt-5'>Pedido nº $fila[0] -  Fecha: $dia/$mes/$anyo - - Estado: ".devuelve_estado($fila[3])[1] . "</h5>";
         mostrar_lineas($fila[0]);
     }
     echo "<h5 class='bg-light'>Total en el periodo: ".number_format($totalperiodo,2)." €</h5>";
@@ -1107,20 +1108,28 @@ function modificar_lineas($ped)
     ));
     $consulta->setFetchMode(PDO::FETCH_CLASS, "lineas");
     $total = 0;
-    echo "<table class='table bg-light'><tr><th>Linea</th><th>Id.Art.</th><th>Articulo</th><th>Cantidad</th><th>Precio(IVA incluido)</th><th>Importe</th></tr>";
+    $pedido = mostrar_pedido($ped);
+    echo "<table class='table bg-light'><tr><th>Linea</th><th>Id.Art.</th><th>Articulo</th><th>Cantidad</th>
+            <th>Precio(IVA incluido)</th><th>Importe</th></tr>";
+    $sololectura = '';
+    $anulaboton = '';
+    if($pedido[3]!=1){
+        $sololectura = "readonly";
+        $anulaboton = "disabled='true'";
+    }
     while ($fila = $consulta->fetch()) {        
         $art = buscar_articulo($fila->getArt_lin());
         $total += ($fila->getPre_lin() * $fila->getCan_lin());
         echo "<form method='POST' action='modificarPedidos.php'><tr class='text-center'><td>" . $fila->getId_lin() . "</td>
-            <td><input type='text' size=4 name='idart' value=".$art->getId_art()."></td>
+            <td><input type='text' size=4 name='idart' $sololectura value=".$art->getId_art()."></td>
             <td>" . $art->getNom_art() . "</td>
-            <td><input type='text' size=4 name='cantart' value=" . $fila->getCan_lin() . "></td>
-            <td><input type='text' size=4 name='preart' value=" . $fila->getPre_lin() . " €></td>
+            <td><input type='text' size=4 name='cantart' $sololectura value=" . $fila->getCan_lin() . "></td>
+            <td><input type='text' size=4 name='preart' $sololectura value=" . $fila->getPre_lin() . " €></td>
             <td class='text-right'>" .number_format(($fila->getPre_lin() * $fila->getCan_lin()),2) . " €</td>
             <input type='hidden' name='idpedido' value=$ped>
             <input type='hidden' name='idlinea' value=".$fila->getId_lin().">
-            <td><input type='submit' value='Modificar' class='btn btn-primary btn-sm' name='modiflin'></td>
-            <td><input type='submit' value='Baja' class='btn btn-danger btn-sm' name='bajalin'></td>
+            <td><input type='submit' $anulaboton value='Modificar' class='btn btn-primary btn-sm' name='modiflin'></td>
+            <td><input type='submit' $anulaboton value='Baja' class='btn btn-danger btn-sm' name='bajalin'></td>
             </tr></form>";
     }
     echo "<tr><td colspan='5' class='text-right'>Base Imponible</td>
@@ -1162,5 +1171,31 @@ function baja_pedido($id_ped){
     $conexion =conectar();
     $baja = $conexion->prepare("DELETE FROM pedidos WHERE id_ped=:ped");
     $baja->execute(array(':ped'=>$id_ped));   
+}
+function devuelve_estado($id_estado){
+    $conexion =conectar();
+    $consulta = $conexion->prepare("SELECT * FROM estados WHERE id_est = :id");
+    $consulta->execute(array(':id'=>$id_estado));
+    $dato = $consulta->fetch();
+    return $dato;
+}
+function cambiar_estado($id_pedido, $id_estado){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("UPDATE pedidos SET est_ped = :est WHERE id_ped = :id");
+    $consulta->execute(array(':est'=>$id_estado, ':id'=>$id_pedido));
+}
+function articulos_categoria($id_cat){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT COUNT(*) FROM articulos WHERE cat_art = :cat");
+    $consulta->execute(array(':cat'=>$id_cat));
+    $catart = $consulta->fetch();
+    return $catart[0];
+}
+function articulos_subcategoria($id_cat, $id_sub){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT COUNT(*) FROM articulos WHERE cat_art = :cat AND sub_art = :sub");
+    $consulta->execute(array(':cat'=>$id_cat, ':sub'=>$id_sub));
+    $subart = $consulta->fetch();
+    return $subart[0];
 }
 ?>
