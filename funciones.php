@@ -53,7 +53,7 @@ function registrar_clientes($nic, $dni, $nom, $ape, $dir, $loc, $pro, $cop, $ema
 function registrar_categoria($nom)
 {
     $conex = conectar();
-    $codigo = "INSERT INTO categorias (nom_cat) VALUES (:nom);";
+    $codigo = "INSERT INTO categorias (nom_cat, act_cat) VALUES (:nom, '1');";
     $insert = $conex->prepare($codigo);
     try {
         $fila = $insert->execute(array(
@@ -789,13 +789,14 @@ function devuelve_categoria($id_cat)
     return $cat;
 }
 
-function modificar_categoria($nom, $id)
+function modificar_categoria($nom, $id, $actcat)
 {
     $conex = conectar();
-    $consulta = $conex->prepare("UPDATE categorias SET nom_cat = :nom WHERE id_cat = :id");
+    $consulta = $conex->prepare("UPDATE categorias SET nom_cat = :nom, act_cat = :act WHERE id_cat = :id");
     $actualiza = $consulta->execute(array(
         ':nom' => $nom,
-        ':id' => $id
+        ':id' => $id,
+        ':act' => $actcat
     ));
     if ($actualiza == 1) {
         return true;
@@ -1197,5 +1198,19 @@ function articulos_subcategoria($id_cat, $id_sub){
     $consulta->execute(array(':cat'=>$id_cat, ':sub'=>$id_sub));
     $subart = $consulta->fetch();
     return $subart[0];
+}
+function repe_categoria($nomCateg){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT COUNT(*) FROM categorias WHERE nom_cat = :cat");
+    $consulta->execute(array(':cat'=>$nomCateg));
+    $cat = $consulta->fetch();
+    return $cat[0];
+}
+function repe_subcategoria($idcat, $nomSub){
+    $conexion = conectar();
+    $consulta = $conexion->prepare("SELECT COUNT(*) FROM subcategorias WHERE cat_sub= :cat AND nom_sub = :sub");
+    $consulta->execute(array(':cat'=>$idcat, ':sub'=>$nomSub));
+    $sub = $consulta->fetch();
+    return $sub[0];
 }
 ?>

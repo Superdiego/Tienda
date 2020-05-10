@@ -26,6 +26,7 @@ FOREIGN KEY (rol_usr) REFERENCES roles(id_rol)
 CREATE TABLE IF NOT EXISTS categorias (
 id_cat INT(2) AUTO_INCREMENT,
 nom_cat CHAR(50) UNIQUE,
+act_cat BOOLEAN,
 PRIMARY KEY(id_cat)
 );
 CREATE TABLE IF NOT EXISTS subcategorias (
@@ -100,12 +101,12 @@ VALUES
 ("65412387c",4,"diego","Diego","Candela","C/ La sabiduria,24","Elche",
 "Alicante","diego@hotmail.com","987456321","123",true);
 
-INSERT INTO categorias (nom_cat)
+INSERT INTO categorias (nom_cat, act_cat)
 VALUES
-("ORDENADORES"),
-("CAFETERAS"),
-("IMAGEN"),
-("SONIDO");
+("ORDENADORES",1),
+("CAFETERAS",1),
+("IMAGEN",1),
+("SONIDO",1);
 
 INSERT INTO subcategorias (cat_sub,nom_sub)
 VALUES

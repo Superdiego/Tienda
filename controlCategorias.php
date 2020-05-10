@@ -3,12 +3,16 @@ include_once('validaciones.php');
 include_once('funciones.php');
 
 if(isset($_POST['solocat'])){
-    if(!val_texto($_POST['solocat'])){
+    if(empty(trim($_POST['solocat']))){
+        header('location:registroCategorias.php?emptycat=cat');
+    }else if(!val_texto($_POST['solocat'])){
         header('location:registroCategorias.php?errcat=cat');
+    }else if(repe_categoria($_POST['solocat'])){
+        header('location:registroCategorias.php?repecat=cat');
     }else{
         $nombre = $_POST['solocat'];
         $registro = registrar_categoria($nombre);
-        header('location:registroCategorias.php?reg=cat');
+        header("location:registroCategorias.php?reg=cat");
     }
 }
 
@@ -21,8 +25,12 @@ if(isset($_POST['subcategoria'])){
     if(!empty($_POST['categoria']) && !empty($_POST['subcategoria'])){
         $subcategoria = $_POST['subcategoria'];
         $categoria = $_POST['categoria'];
-        $registro = registrar_subcategoria($categoria,$subcategoria);
-        header("location:registroCategorias.php?reg=sub");
+        if(repe_subcategoria($categoria, $subcategoria)){
+            header("location:registroCategorias.php?errsub=repe");
+        }else{
+            $registro = registrar_subcategoria($categoria,$subcategoria);
+            header("location:registroCategorias.php?reg=sub");
+        }
     }
 }
 
@@ -39,11 +47,12 @@ if(isset($_POST['bodificat'])){
 if(isset($_POST['confmodif'])){
     $nommodif = $_POST['confmodif'];
     $idcat = $_POST['idcat'];
+    $actcat = $_POST['activ'];
     if(!val_texto($nommodif)){
         header("location:registroCategorias.php?modifcat=$idcat&errnommodif=cat");
     }else{
-        $registrar = modificar_categoria($nommodif,$idcat);
-        header("location:registroCategorias.php");
+        $registrar = modificar_categoria($nommodif,$idcat,$actcat);
+        header("location:registroCategorias.php?regiscat=$idcat");
     }
 }
 

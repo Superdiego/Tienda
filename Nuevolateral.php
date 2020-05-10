@@ -8,7 +8,7 @@
 include_once ("funciones.php");
 $categ = mostrar_categorias();
 foreach ($categ as $cat) {
-    if(articulos_categoria($cat[0])>0){
+    if(articulos_categoria($cat[0])>0 && $cat[2]==1){
         echo '<li class="nav-item">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"
 						role="button" aria-haspopup="true" aria-expanded="false">' . $cat[1] . '</a>

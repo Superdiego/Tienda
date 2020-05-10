@@ -17,11 +17,14 @@ $datos = mostrar_articulos(6,'DESC');
 $art = $datos[0];
 
 foreach($art as $articulo){
-    echo "<div class='col-md-6 col-xl-4 p-3'>
-          <div style='text-align:center'><a class href='detalleArticulo.php?art=".$articulo->getId_art()."'>
+    $cat = $articulo->getCat_art();
+    if(devuelve_categoria($cat)[2]==1){
+        echo "<div class='col-md-6 col-xl-4 p-3'>
+            <div style='text-align:center'><a class href='detalleArticulo.php?art=".$articulo->getId_art()."'>
             <img src='imgProductos/".$articulo->getId_art().".jpg' width='100' height='100'></a>
-          <div>".$articulo->getNom_art(). " ".$articulo->getPre_art()."</div></div>
-          </div>";
+            <div>".$articulo->getNom_art(). " ".$articulo->getPre_art()."</div></div>
+            </div>";
+    }
 }
 
 ?>

@@ -16,7 +16,10 @@ echo "<div class='col-md-8'>";
 <?php 
 $categ = listadesubcategorias();
 foreach($categ as $cat) {
+    $categoria = devuelve_categoria($cat[0]);
+    if($categoria[2]==1){
     echo "<div class='card py-5'><h2 class='text-center'><a href='Subcategorias.php?sub=".$cat[2]."'>".leer_categoria($cat[0])."<br>".$cat[2]."</a></h2></div>";
+    }
 }
 ?>
 
